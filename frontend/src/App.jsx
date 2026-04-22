@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import Login from './forms/login/Login';
+import Register from './forms/signup/Register';
 import AuthLayout from './layouts/auth-layout/AuthLayout';
 import MainLayout from './layouts/main-layout/MainLayout';
 import Error404 from './pages/error404/Error404';
@@ -16,8 +17,8 @@ function App() {
         </Route>
 
         <Route element={<AuthLayout />}>
-          <Route path="/iniciar-sesion" element={<Login />} />
-          {/* <Route path="/crear-cuenta" element={<Registro />} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Register />} />
         </Route>
 
         <Route path="/404" element={<Error404 />} />

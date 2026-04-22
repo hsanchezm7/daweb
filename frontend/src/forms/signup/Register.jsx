@@ -8,11 +8,16 @@ import { Link } from 'react-router-dom';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import './Login.css';
+import './Register.css';
 
-function Login() {
+function Register() {
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const toggleVisibilidad = () => setMostrarPassword(!mostrarPassword);
+
+  const [mostrarPasswordConfirmar, setMostrarPasswordConfirmar] =
+    useState(false);
+  const toggleVisibilidadConfirmar = () =>
+    setMostrarPasswordConfirmar(!mostrarPasswordConfirmar);
 
   const [validated, setValidated] = useState(false);
 
@@ -32,7 +37,7 @@ function Login() {
   return (
     <>
       {/* título */}
-      <h2 className="mb-5 fw-bold">Iniciar sesión</h2>
+      <h2 className="mb-5 fw-bold">Crear cuenta</h2>
 
       {/* github OAuth2. TODO: usar React Bootstrap button */}
       <Button
@@ -40,7 +45,7 @@ function Login() {
         className="w-100 mb-4 py-2 d-inline-flex gap-2 align-items-center justify-content-center"
       >
         <FontAwesomeIcon icon={faGithub} />
-        Iniciar sesión con GitHub
+        Accede con GitHub
       </Button>
 
       {/* separador */}
@@ -55,8 +60,29 @@ function Login() {
         <hr className="flex-grow-1" />
       </div>
 
-      {/* formulario. TODO: usar https://react-bootstrap.netlify.app/docs/forms/overview */}
+      {/* formulario */}
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form.Group
+          className="mb-4 needs-validation"
+          controlId="formNombre"
+          novalidate
+        >
+          <Form.Control
+            type="text"
+            className="py-2 px-3 mb-1"
+            placeholder="nombre*"
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-4" controlId="formApellidos">
+          <Form.Control
+            type="text"
+            className="py-2 px-3 mb-1"
+            placeholder="apellidos"
+          />
+        </Form.Group>
+
         <Form.Group className="mb-4" controlId="formEmail">
           <Form.Control
             type="email"
@@ -83,6 +109,27 @@ function Login() {
           </InputGroup>
         </Form.Group>
 
+        <Form.Group className="mb-4" controlId="formConfirmarPassword">
+          <InputGroup>
+            <Form.Control
+              type={mostrarPasswordConfirmar ? 'text' : 'password'}
+              className="py-2 px-3"
+              placeholder="confirmar contraseña*"
+              required
+            />
+            <InputGroup.Text
+              onClick={toggleVisibilidadConfirmar}
+              style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
+            >
+              {mostrarPasswordConfirmar ? (
+                <EyeSlash size={20} />
+              ) : (
+                <Eye size={20} />
+              )}
+            </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+
         {/* contraseña olvidada */}
         {/* 
         <div className="mb-4 text-start">
@@ -92,28 +139,28 @@ function Login() {
         </div>
         */}
 
-        {/* botón principal login */}
+        {/* botón principal registro */}
         <div className="mb-4 text-center">
           <Button variant="primary" type="submit" className="py-2 px-4">
-            Iniciar sesión
+            Crear cuenta
           </Button>
         </div>
       </Form>
 
-      {/* botón secundario crear cuenta */}
+      {/* botón secundario iniciar sesión */}
       <div className="mt-5 text-center">
-        <p className="fw-bold mb-3 small">¿No tienes cuenta?</p>
+        <p className="fw-bold mb-3 small">¿Ya tienes cuenta?</p>
         <Button
           as={Link}
-          to="/signup"
+          to="/login"
           variant="outline-dark"
           className="py-2 px-4"
         >
-          Crear cuenta
+          Iniciar sesión
         </Button>
       </div>
     </>
   );
 }
 
-export default Login;
+export default Register;
