@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { InputGroup } from 'react-bootstrap';
-import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import { ArrowRightCircle, Eye, EyeSlash } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
@@ -65,7 +65,6 @@ function Register() {
         <Form.Group
           className="mb-4 needs-validation"
           controlId="formNombre"
-          novalidate
         >
           <Form.Control
             type="text"
@@ -141,8 +140,13 @@ function Register() {
 
         {/* botón principal registro */}
         <div className="mb-4 text-center">
-          <Button variant="primary" type="submit" className="py-2 px-4">
+          <Button
+            variant="primary"
+            type="submit"
+            className="py-2 px-4 align-items-center d-inline-flex gap-2"
+          >
             Crear cuenta
+            <ArrowRightCircle size={18} />
           </Button>
         </div>
       </Form>

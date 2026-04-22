@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { InputGroup } from 'react-bootstrap';
-import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import { ArrowRightCircle, Eye, EyeSlash } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
@@ -94,8 +94,13 @@ function Login() {
 
         {/* botón principal login */}
         <div className="mb-4 text-center">
-          <Button variant="primary" type="submit" className="py-2 px-4">
+          <Button
+            variant="primary"
+            type="submit"
+            className="py-2 px-4 align-items-center d-inline-flex gap-2"
+          >
             Iniciar sesión
+            <ArrowRightCircle size={18} />
           </Button>
         </div>
       </Form>
