@@ -1,0 +1,18 @@
+@import '../../node_modules/bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/variables';
+
+$custom-colors: (
+  'dust-grey': #dad7cd,
+  'dry-sage': #a3b18a,
+  'fern': #588157,
+  'hunter-green': #3a5a40,
+  'pine-teal': #344e41,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+$btn-border-radius: 100px;
+
+$input-border-radius: 100px;
+
+@import 'bootstrap/scss/bootstrap';
