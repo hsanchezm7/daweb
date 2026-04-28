@@ -20,7 +20,6 @@ function Footer() {
           </svg>
         </a>
 
-        {/* Quitamos la clase "nav" porque el componente ya la pone */}
         <Nav className="col-md-4 justify-content-end">
           <Nav.Item>
             <Nav.Link href="/" className="px-2 text-body-secondary">

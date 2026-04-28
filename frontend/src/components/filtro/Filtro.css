@@ -1,0 +1,16 @@
+.accordion {
+  --bs-accordion-btn-focus-box-shadow: none !important;
+  --bs-accordion-btn-focus-border-color: #fff !important;
+  --bs-accordion-active-bg: #fff !important;
+  --bs-accordion-active-color: #212529 !important;
+}
+
+.accordion-button:not(.collapsed) {
+  color: none !important;
+  background-color: none !important;
+  box-shadow: none !important;
+}
+
+.form-label {
+  margin-bottom: 16px !important;
+}

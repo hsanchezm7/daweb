@@ -4,7 +4,7 @@ import './Header.css';
 
 function Header() {
   return (
-    <header className="py-3 mb-3 border-bottom">
+    <header className="py-3 border-bottom">
       <Container
         fluid
         className="d-grid gap-3 align-items-center"

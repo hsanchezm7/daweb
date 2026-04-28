@@ -5,6 +5,7 @@ import Login from './forms/login/Login';
 import Register from './forms/signup/Register';
 import AuthLayout from './layouts/auth-layout/AuthLayout';
 import MainLayout from './layouts/main-layout/MainLayout';
+import Buscar from './pages/buscar/Buscar';
 import Error404 from './pages/error404/Error404';
 import Inicio from './pages/inicio/Inicio';
 
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Inicio />} />
+          <Route path="/buscar" element={<Buscar />} />
         </Route>
 
         <Route element={<AuthLayout />}>

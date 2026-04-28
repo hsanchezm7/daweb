@@ -5,9 +5,9 @@ import Header from '../../components/header/Header';
 
 function MainLayout() {
   return (
-    <div className="main-layout">
+    <div className="d-flex flex-column min-vh-100">
       <Header></Header>
-      <main className="main-content">
+      <main className="main-content flex-grow-1">
         <Outlet />
       </main>
       <Footer></Footer>
