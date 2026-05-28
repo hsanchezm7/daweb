@@ -1,0 +1,5 @@
+@media (min-width: 992px) {
+  .buscar-body {
+    max-width: 1600px !important;
+  }
+}

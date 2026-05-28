@@ -1,5 +1,8 @@
 import { Container, Dropdown, Form, Image } from 'react-bootstrap';
 
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import './Header.css';
 
 function Header() {
@@ -62,7 +65,13 @@ function Header() {
               <Dropdown.Item href="#/settings">Settings</Dropdown.Item>
               <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item href="#/signout">Sign out</Dropdown.Item>
+              <Dropdown.Item href="#/signout">
+                <FontAwesomeIcon
+                  icon={faArrowRightFromBracket}
+                  className="me-2"
+                />
+                Cerrar sesión
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>

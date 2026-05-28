@@ -1,0 +1,29 @@
+.menu-title {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: small;
+  color: gray;
+}
+
+.menu-list {
+  gap: 8px;
+}
+
+.menu-link {
+  display: flex !important;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  color: #111111 !important;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.menu-link:hover {
+  background: #e9ecef;
+}
+
+.menu-link.active {
+  background-color: #111111;
+  color: #ffffff !important;
+}

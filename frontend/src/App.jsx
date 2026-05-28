@@ -5,28 +5,40 @@ import Login from './forms/login/Login';
 import Register from './forms/signup/Register';
 import AuthLayout from './layouts/auth-layout/AuthLayout';
 import MainLayout from './layouts/main-layout/MainLayout';
+import PanelLayout from './layouts/panel-layout/PanelLayout';
+import Compraventas from './pages/admin/compraventas/Compraventas';
+import Usuarios from './pages/admin/usuarios/Usuarios';
 import Buscar from './pages/buscar/Buscar';
 import Error404 from './pages/error404/Error404';
 import Inicio from './pages/inicio/Inicio';
+import MiCuenta from './pages/mi-cuenta/MiCuenta';
+import MisProductos from './pages/mis-productos/MisProductos';
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/buscar" element={<Buscar />} />
-        </Route>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Inicio />} />
+        <Route path="/buscar" element={<Buscar />} />
+      </Route>
 
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
-        </Route>
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Register />} />
+      </Route>
 
-        <Route path="/404" element={<Error404 />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
-      </Routes>
-    </>
+      <Route path="/panel" element={<PanelLayout />}>
+        <Route index element={<Navigate to="mi-cuenta" replace />} />
+        <Route path="/panel/mi-cuenta" element={<MiCuenta />} />
+        <Route path="/panel/productos" element={<MisProductos />} />
+
+        <Route path="/panel/admin/usuarios" element={<Usuarios />} />
+        <Route path="/panel/admin/compraventas" element={<Compraventas />} />
+      </Route>
+
+      <Route path="/404" element={<Error404 />} />
+      <Route path="*" element={<Navigate to="/404" replace />} />
+    </Routes>
   );
 }
 
