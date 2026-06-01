@@ -11,13 +11,12 @@ const PersistLogin = () => {
 
   useEffect(() => {
     let isMounted = true;
-
     const verifyRefreshToken = async () => {
       try {
         await refresh();
       } catch {
-        // El refresh falló — el usuario no tiene sesión activa.
       } finally {
+        // fallo en refresh
         if (isMounted) setIsLoading(false);
       }
     };

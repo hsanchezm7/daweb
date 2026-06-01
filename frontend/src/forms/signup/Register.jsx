@@ -24,21 +24,10 @@ import {
 } from '@/config/datepicker';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import authService from '@/services/authService';
+import { AUTH_MESSAGES, VALIDATION_MESSAGES, getPhoneErrorMessage } from '@/config/messages';
 
 import './Register.css';
 
-const getPhoneErrorMessage = (errorCode) => {
-  switch (errorCode) {
-    case 'INVALID_COUNTRY_CODE':
-      return 'Código de país inválido';
-    case 'TOO_SHORT':
-      return 'El número es demasiado corto';
-    case 'TOO_LONG':
-      return 'El número es demasiado largo';
-    default:
-      return 'Número de teléfono inválido';
-  }
-};
 
 function Register() {
   useDocumentTitle('Crear cuenta');
@@ -128,7 +117,7 @@ function Register() {
       setErrMsg(
         err.response?.data?.message ||
           err.response?.data?.error ||
-          'No se ha podido conectar con el servidor'
+          AUTH_MESSAGES.SERVER_ERROR
       );
     }
   };
@@ -142,7 +131,7 @@ function Register() {
         className="w-100 mb-4 py-2 d-inline-flex gap-2 align-items-center justify-content-center"
       >
         <FontAwesomeIcon icon={faGithub} />
-        Accede con GitHub
+        Acceder con GitHub
       </Button>
 
       <div className="d-flex align-items-center mb-4">
@@ -161,7 +150,7 @@ function Register() {
 
         {success && (
           <Alert variant="success">
-            Registro exitoso.{' '}
+            {AUTH_MESSAGES.REGISTER_SUCCESS}{' '}
             <Link to="/login" className="alert-link">
               Iniciar sesión
             </Link>
@@ -180,7 +169,7 @@ function Register() {
           />
           <label htmlFor="formNombre">Nombre</label>
           <Form.Control.Feedback type="invalid">
-            Por favor, completa este campo.
+            {VALIDATION_MESSAGES.REQUIRED}
           </Form.Control.Feedback>
         </Form.Floating>
 
@@ -206,7 +195,7 @@ function Register() {
           />
           <label htmlFor="formEmail">Email</label>
           <Form.Control.Feedback type="invalid">
-            Por favor, completa este campo.
+            {VALIDATION_MESSAGES.REQUIRED}
           </Form.Control.Feedback>
         </Form.Floating>
 
@@ -234,8 +223,8 @@ function Register() {
           </InputGroup.Text>
           <Form.Control.Feedback type="invalid">
             {passwordMismatch
-              ? 'Las contraseñas no coinciden.'
-              : 'Por favor, completa este campo.'}
+              ? VALIDATION_MESSAGES.PASSWORD_MISMATCH
+              : VALIDATION_MESSAGES.REQUIRED}
           </Form.Control.Feedback>
         </InputGroup>
 
@@ -267,8 +256,8 @@ function Register() {
           </InputGroup.Text>
           <Form.Control.Feedback type="invalid">
             {passwordMismatch
-              ? 'Las contraseñas no coinciden.'
-              : 'Por favor, completa este campo.'}
+              ? VALIDATION_MESSAGES.PASSWORD_MISMATCH
+              : VALIDATION_MESSAGES.REQUIRED}
           </Form.Control.Feedback>
         </InputGroup>
 
@@ -314,7 +303,7 @@ function Register() {
             {(!telefono || !telefonoValido) && validated && (
               <div className="invalid-feedback d-block mt-1">
                 {!telefono
-                  ? 'Por favor, completa este campo.'
+                  ? VALIDATION_MESSAGES.REQUIRED
                   : getPhoneErrorMessage(telefonoErrorCode)}
               </div>
             )}

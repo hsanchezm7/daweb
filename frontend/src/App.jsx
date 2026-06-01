@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PersistLogin from '@/components/auth/PersistLogin';
 import RequireAuth from '@/components/auth/RequireAuth';
-import { Roles } from '@/context/AuthProvider';
+import { Roles } from '@/config/roles';
 import Login from '@/forms/login/Login';
 import Register from '@/forms/signup/Register';
 import AuthLayout from '@/layouts/auth-layout/AuthLayout';

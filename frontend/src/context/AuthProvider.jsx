@@ -2,11 +2,6 @@ import { createContext, useState } from 'react';
 
 const AuthContext = createContext({});
 
-export const Roles = {
-  USUARIO: 'USUARIO',
-  ADMIN: 'ADMINISTRADOR',
-};
-
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
 

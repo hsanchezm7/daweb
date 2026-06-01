@@ -24,21 +24,9 @@ import useApiPrivate from '@/hooks/useApiPrivate';
 import useAuth from '@/hooks/useAuth';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createUserService from '@/services/userService';
+import { ACCOUNT_MESSAGES, VALIDATION_MESSAGES, getPhoneErrorMessage } from '@/config/messages';
 
 import './MiCuenta.css';
-
-const getPhoneErrorMessage = (errorCode) => {
-  switch (errorCode) {
-    case 'INVALID_COUNTRY_CODE':
-      return 'Código de país inválido';
-    case 'TOO_SHORT':
-      return 'El número es demasiado corto';
-    case 'TOO_LONG':
-      return 'El número es demasiado largo';
-    default:
-      return 'Número de teléfono inválido';
-  }
-};
 
 function MiCuenta() {
   useDocumentTitle('Mi cuenta');
@@ -138,7 +126,7 @@ function MiCuenta() {
       };
 
       await userService.updateUser(auth.usuario, payload);
-      setSuccessMsg('Tus datos se han actualizado correctamente');
+      setSuccessMsg(ACCOUNT_MESSAGES.UPDATE_SUCCESS);
 
       setPlaceholders({
         nombre: payload.nombre,
@@ -158,7 +146,7 @@ function MiCuenta() {
       setErrMsg(
         err.response?.data?.message ||
           err.response?.data?.error ||
-          'No se han podido guardar los cambios'
+          ACCOUNT_MESSAGES.UPDATE_ERROR
       );
     }
   };
@@ -186,7 +174,7 @@ function MiCuenta() {
                 isInvalid={isNombreInvalido && validated}
               />
               <Form.Control.Feedback type="invalid">
-                Por favor, completa este campo.
+                {VALIDATION_MESSAGES.REQUIRED}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
@@ -260,7 +248,7 @@ function MiCuenta() {
                 {isTelefonoInvalido && validated && (
                   <div className="invalid-feedback d-block mt-1">
                     {!telefono && !placeholders.telefono
-                      ? 'Por favor, completa este campo.'
+                      ? VALIDATION_MESSAGES.REQUIRED
                       : getPhoneErrorMessage(telefonoErrorCode)}
                   </div>
                 )}

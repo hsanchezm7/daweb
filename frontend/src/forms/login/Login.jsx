@@ -13,6 +13,7 @@ import useAuth from '@/hooks/useAuth';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import authService from '@/services/authService';
 import mapAuthResponse from '@/services/mapAuthResponse';
+import { AUTH_MESSAGES, VALIDATION_MESSAGES } from '@/config/messages';
 
 import './Login.css';
 
@@ -55,7 +56,7 @@ function Login() {
       setErrMsg(
         err.response?.data?.message ||
           err.response?.data ||
-          'No se ha podido conectar con el servidor'
+          AUTH_MESSAGES.SERVER_ERROR
       );
     }
   };
@@ -71,7 +72,7 @@ function Login() {
         className="w-100 mb-4 py-2 d-inline-flex gap-2 align-items-center justify-content-center"
       >
         <FontAwesomeIcon icon={faGithub} />
-        Iniciar sesión con GitHub
+        Acceder con GitHub
       </Button>
 
       {/* separador */}
@@ -106,8 +107,8 @@ function Login() {
           <label htmlFor="formEmail">Email</label>
           <Form.Control.Feedback type="invalid">
             {loginError
-              ? 'El email o la contraseña son incorrectos.'
-              : 'Por favor, completa este campo.'}
+              ? AUTH_MESSAGES.LOGIN_ERROR
+              : VALIDATION_MESSAGES.REQUIRED}
           </Form.Control.Feedback>
         </Form.Floating>
 
@@ -135,8 +136,8 @@ function Login() {
           </InputGroup.Text>
           <Form.Control.Feedback type="invalid">
             {loginError
-              ? 'El email o la contraseña son incorrectos.'
-              : 'Por favor, completa este campo.'}
+              ? AUTH_MESSAGES.LOGIN_ERROR
+              : VALIDATION_MESSAGES.REQUIRED}
           </Form.Control.Feedback>
         </InputGroup>
 
