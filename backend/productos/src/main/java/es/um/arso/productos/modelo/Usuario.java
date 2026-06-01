@@ -1,16 +1,14 @@
 package es.um.arso.productos.modelo;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 @Entity
 public class Usuario {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     private String email;
@@ -55,5 +53,13 @@ public class Usuario {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validarId() {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalStateException("id obligatorio");
+        }
     }
 }

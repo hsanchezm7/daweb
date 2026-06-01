@@ -25,15 +25,15 @@ Accesibles para todos los visitantes.
     - Botón de "Comprar" (solo visible si el usuario no es el dueño). Si no está registrado,
     redirige a "Login/Registro"
     
-- [ ] **Login (`/iniciar-sesion`)**: Formulario de acceso.
+- [X] **Login (`/iniciar-sesion`)**: Formulario de acceso.
 
-- [ ] **Registro (`/registro`)**: Formulario de alta.
+- [X] **Registro (`/registro`)**: Formulario de alta.
 
 ### vistas de usuario (privadas)
 
 Requieren autenticación. Usar [React Router Private Routes](https://www.robinwieruch.de/react-router-private-routes/).
 
-- [ ] **Mi Cuenta (`/mi-cuenta`)**: Vista para editar los datos personales del perfil.
+- [X] **Mi Cuenta (`/mi-cuenta`)**: Vista para editar los datos personales del perfil.
 
 - [ ] **Mis Productos (`/mis-productos`)**: 
     - Botón para "Crear Producto".
@@ -74,15 +74,15 @@ Sección de gestión global dentro del menú de usuario.
 
 ### producto
 
-- [ ] **Card Producto**: Visualización de imagen, precio, nombre y etiquetas de estado.
+- [X] **Card Producto**: Visualización de imagen, precio, nombre y etiquetas de estado.
 
-- [ ] **Menú de Filtros**: Sidebar con Slider de precio (Bootstrap Range) y Checkboxes de categorías.
+- [X] **Menú de Filtros**: Sidebar con Slider de precio (Bootstrap Range) y Checkboxes de categorías.
 
 ### formulario
 
 - [ ] **Formulario Producto**: Componente dual para creación y edición (recibe `initialData` como prop).
 
-- [ ] **Formulario de Perfil**: Edición de datos de usuario.
+- [X] **Formulario de Perfil**: Edición de datos de usuario.
 
 ---
 

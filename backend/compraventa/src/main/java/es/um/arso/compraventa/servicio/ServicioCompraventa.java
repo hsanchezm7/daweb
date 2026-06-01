@@ -3,6 +3,7 @@ package es.um.arso.compraventa.servicio;
 import es.um.arso.compraventa.modelo.Compraventa;
 import es.um.arso.compraventa.modelo.eventos.EventoCompraventaCreada;
 import es.um.arso.compraventa.puertos.out.PublicadorEventos;
+import es.um.arso.compraventa.repositorio.EntidadNoEncontrada;
 import es.um.arso.compraventa.repositorio.RepositorioCompraventas;
 import es.um.arso.compraventa.servicio.puertos.out.IServicioProductosExterno;
 import es.um.arso.compraventa.servicio.puertos.out.IServicioUsuariosExterno;
@@ -21,53 +22,53 @@ public class ServicioCompraventa implements IServicioCompraventa {
 
     private static final Logger log = LoggerFactory.getLogger(ServicioCompraventa.class);
 
-    @Autowired private RepositorioCompraventas repositorioCompraventas;
+    @Autowired
+    private RepositorioCompraventas repositorioCompraventas;
 
-    @Autowired private IServicioProductosExterno servicioProductosExterno;
+    @Autowired
+    private IServicioProductosExterno servicioProductosExterno;
 
-    @Autowired private IServicioUsuariosExterno servicioUsuariosExterno;
+    @Autowired
+    private IServicioUsuariosExterno servicioUsuariosExterno;
 
-    @Autowired private PublicadorEventos publicadorEventos;
+    @Autowired
+    private PublicadorEventos publicadorEventos;
 
     @Override
     public String realizarCompraventa(String idProducto, String idComprador) throws Exception {
 
-        if (idProducto == null || idProducto.isEmpty()) {
+        if (idProducto == null || idProducto.isEmpty())
             throw new IllegalArgumentException("El ID del producto es obligatorio");
-        }
-        if (idComprador == null || idComprador.isEmpty()) {
+
+        if (idComprador == null || idComprador.isEmpty())
             throw new IllegalArgumentException("El ID del comprador es obligatorio");
-        }
 
         ProductoInfo producto = servicioProductosExterno.getProducto(idProducto);
-        if (producto == null) {
-            throw new RuntimeException("Producto no encontrado: " + idProducto);
-        }
+
+        // comprobar disponibilidad del producto
+        if (!producto.isDisponible()) throw new IllegalArgumentException("El producto no está disponible");
 
         UsuarioInfo comprador = servicioUsuariosExterno.getUsuario(idComprador);
-        if (comprador == null) {
-            throw new RuntimeException("Comprador no encontrado: " + idComprador);
-        }
 
         String idVendedor = producto.getIdVendedor();
-        UsuarioInfo vendedor = servicioUsuariosExterno.getUsuario(idVendedor);
-        if (vendedor == null) {
-            throw new RuntimeException("Vendedor no encontrado: " + idVendedor);
+        if (idVendedor.equals(idComprador)) {
+            throw new IllegalArgumentException("No se puede comprar un producto propio");
         }
+
+        UsuarioInfo vendedor = servicioUsuariosExterno.getUsuario(idVendedor);
 
         String recogidaString =
                 producto.getRecogida() != null ? producto.getRecogida().toString() : null;
 
-        Compraventa compraventa =
-                new Compraventa(
-                        idProducto,
-                        producto.getTitulo(),
-                        producto.getPrecio(),
-                        recogidaString,
-                        idVendedor,
-                        vendedor.getNombre(),
-                        idComprador,
-                        comprador.getNombre());
+        Compraventa compraventa = new Compraventa(
+                idProducto,
+                producto.getTitulo(),
+                producto.getPrecio(),
+                recogidaString,
+                idVendedor,
+                vendedor.getNombre(),
+                idComprador,
+                comprador.getNombre());
 
         compraventa = repositorioCompraventas.save(compraventa);
 
@@ -75,8 +76,7 @@ public class ServicioCompraventa implements IServicioCompraventa {
 
         // TODO: como idProducto es la entidad afectada, se podría eliminar
         // el campo idProducto de la clase Java.
-        EventoCompraventaCreada evento =
-                new EventoCompraventaCreada(idProducto, idProducto, idVendedor, idComprador);
+        EventoCompraventaCreada evento = new EventoCompraventaCreada(idProducto, idProducto, idVendedor, idComprador);
 
         publicadorEventos.emitirEvento(evento);
 
@@ -99,26 +99,45 @@ public class ServicioCompraventa implements IServicioCompraventa {
     }
 
     @Override
-    public Page<Compraventa> getComprasUsuarioPaginado(String idComprador, Pageable pageable) {
-        return repositorioCompraventas.findByIdComprador(idComprador, pageable);
+    public Page<CompraventaResumen> getComprasUsuarioPaginado(String idComprador, Pageable pageable) {
+        Page<Compraventa> compraventas = repositorioCompraventas.findByIdComprador(idComprador, pageable);
+        return compraventas.map(this::toCompraventaResumen);
     }
 
     @Override
-    public Page<Compraventa> getVentasUsuarioPaginado(String idVendedor, Pageable pageable) {
-        return repositorioCompraventas.findByIdVendedor(idVendedor, pageable);
+    public Page<CompraventaResumen> getVentasUsuarioPaginado(String idVendedor, Pageable pageable) {
+        Page<Compraventa> compraventas = repositorioCompraventas.findByIdVendedor(idVendedor, pageable);
+        return compraventas.map(this::toCompraventaResumen);
     }
 
     @Override
-    public Page<Compraventa> getCompraventasEntreUsuariosPaginado(
+    public Page<CompraventaResumen> getCompraventasEntreUsuariosPaginado(
             String idComprador, String idVendedor, Pageable pageable) {
-        return repositorioCompraventas.findByIdCompradorAndIdVendedor(
-                idComprador, idVendedor, pageable);
+        Page<Compraventa> compraventas =
+                repositorioCompraventas.findByIdCompradorAndIdVendedor(idComprador, idVendedor, pageable);
+        return compraventas.map(this::toCompraventaResumen);
     }
 
     @Override
-    public Compraventa getCompraventa(String id) {
+    public Compraventa getCompraventa(String id) throws EntidadNoEncontrada {
+        if (id == null || id.isEmpty()) throw new IllegalArgumentException("El ID de la compraventa no debe ser nulo.");
+
         return repositorioCompraventas
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Compraventa no encontrada: " + id));
+                .orElseThrow(() -> new EntidadNoEncontrada("Compraventa no encontrada: " + id));
+    }
+
+    private CompraventaResumen toCompraventaResumen(Compraventa compraventa) {
+        CompraventaResumen resumen = new CompraventaResumen();
+        resumen.setId(compraventa.getId());
+        resumen.setIdProducto(compraventa.getIdProducto());
+        resumen.setTitulo(compraventa.getTitulo());
+        resumen.setPrecio(compraventa.getPrecio());
+        resumen.setIdVendedor(compraventa.getIdVendedor());
+        resumen.setNombreVendedor(compraventa.getNombreVendedor());
+        resumen.setIdComprador(compraventa.getIdComprador());
+        resumen.setNombreComprador(compraventa.getNombreComprador());
+        resumen.setFecha(compraventa.getFecha());
+        return resumen;
     }
 }

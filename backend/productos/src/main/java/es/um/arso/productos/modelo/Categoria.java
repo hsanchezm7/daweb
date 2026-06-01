@@ -4,14 +4,20 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Categoria {
 
-    @Id private String id;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
+
     private String nombre;
     private String descripcion;
     private String ruta;
@@ -19,7 +25,8 @@ public class Categoria {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Categoria> subcategorias = new LinkedList<>();
 
-    @ManyToOne private Categoria parent;
+    @ManyToOne
+    private Categoria parent;
 
     public Categoria() {}
 

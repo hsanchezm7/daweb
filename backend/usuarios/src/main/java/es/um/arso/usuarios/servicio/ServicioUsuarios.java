@@ -1,10 +1,16 @@
 package es.um.arso.usuarios.servicio;
 
+import es.um.arso.especificacion.Especificacion;
 import es.um.arso.repositorio.EntidadNoEncontrada;
 import es.um.arso.repositorio.FactoriaRepositorios;
 import es.um.arso.repositorio.Repositorio;
 import es.um.arso.repositorio.RepositorioException;
+import es.um.arso.usuarios.adaptadores.out.PublicadorRabbitMq;
 import es.um.arso.usuarios.modelo.Usuario;
+import es.um.arso.usuarios.modelo.eventos.EventoUsuarioCreado;
+import es.um.arso.usuarios.modelo.eventos.EventoUsuarioModificado;
+import es.um.arso.usuarios.puertos.out.PublicadorEventos;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,22 +21,22 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
     private static final Logger log = LoggerFactory.getLogger(ServicioUsuarios.class);
 
-    private Repositorio<Usuario, String> repoUsuarios =
-            FactoriaRepositorios.getRepositorio(Usuario.class);
+    private Repositorio<Usuario, String> repoUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
+
+    private PublicadorEventos publicadorEventos;
 
     @Override
     public String alta(
-            String nombre,
-            String apellidos,
-            String email,
-            String clave,
-            LocalDate fechaNacimiento,
-            String telefono)
+            String nombre, String apellidos, String email, String clave, LocalDate fechaNacimiento, String telefono)
             throws RepositorioException {
-        if (email == null || email.isEmpty())
-            throw new IllegalArgumentException("email obligatorio");
-        if (clave == null || clave.isEmpty())
-            throw new IllegalArgumentException("clave obligatoria");
+        if (email == null || email.isEmpty()) throw new IllegalArgumentException("email obligatorio");
+        if (clave == null || clave.isEmpty()) throw new IllegalArgumentException("clave obligatoria");
+
+        Usuario usuarioExistente = recuperarPorEmail(email); // email único
+        if (usuarioExistente != null) {
+            throw new IllegalArgumentException("El email " + email + " ya está en uso");
+        }
+
         Usuario u = new Usuario(email, nombre, apellidos);
         u.setClave(clave);
         u.setFechaNacimiento(fechaNacimiento);
@@ -39,36 +45,98 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
         log.info("Usuario creado: id={} email={}", id, email);
 
+        emitirEventoUsuarioCreado(id, email, nombre, apellidos);
+
         return id;
     }
 
     @Override
-    public void modificar(String id, Usuario usuario)
-            throws RepositorioException, EntidadNoEncontrada {
+    public String altaOauth(String nombre, String email, String githubId) throws RepositorioException {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("email obligatorio");
+        }
+        if (githubId == null || githubId.isEmpty()) {
+            throw new IllegalArgumentException("githubId obligatorio");
+        }
+
+        Usuario existenteGithub = recuperarPorGithubId(githubId); // verificar usuario existente por githubId
+        if (existenteGithub != null) {
+            log.info("Usuario OAuth ya existe: id={} githubId={}", existenteGithub.getId(), githubId);
+            return existenteGithub.getId();
+        }
+
+        Usuario existente = recuperarPorEmail(email); // verificar usuario existente por email
+        if (existente != null) {
+            if (existente.getGithubId() != null && !existente.getGithubId().isEmpty()) {
+                throw new IllegalArgumentException("El email " + email + " ya está vinculado a otro githubId");
+            }
+            existente.setGithubId(githubId);
+            try {
+                repoUsuarios.update(existente);
+            } catch (EntidadNoEncontrada e) {
+                throw new RepositorioException("Error al vincular githubId al usuario " + email, e);
+            }
+            log.info("Usuario OAuth vinculado: id={} email={} githubId={}", existente.getId(), email, githubId);
+            return existente.getId();
+        }
+
+        Usuario u = new Usuario(email, nombre);
+        u.setGithubId(githubId);
+        String id = repoUsuarios.add(u);
+
+        log.info("Usuario OAuth creado: id={} email={} githubId={}", id, email, githubId);
+
+        emitirEventoUsuarioCreado(id, email, nombre, null);
+
+        return id;
+    }
+
+    @Override
+    public void modificar(String id, Usuario usuario) throws RepositorioException, EntidadNoEncontrada {
         Usuario u = repoUsuarios.getById(id);
 
-        if (usuario.getNombre() != null && !usuario.getNombre().isEmpty())
-            u.setNombre(usuario.getNombre());
-        if (usuario.getApellidos() != null && !usuario.getApellidos().isEmpty())
-            u.setApellidos(usuario.getApellidos());
-        if (usuario.getClave() != null && !usuario.getClave().isEmpty())
-            u.setClave(usuario.getClave());
-        if (usuario.getFechaNacimiento() != null)
-            u.setFechaNacimiento(usuario.getFechaNacimiento());
+        if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) u.setNombre(usuario.getNombre());
+        if (usuario.getApellidos() != null && !usuario.getApellidos().isEmpty()) u.setApellidos(usuario.getApellidos());
+        if (usuario.getClave() != null && !usuario.getClave().isEmpty()) u.setClave(usuario.getClave());
+        if (usuario.getFechaNacimiento() != null) u.setFechaNacimiento(usuario.getFechaNacimiento());
         if (usuario.getTelefono() != null) u.setTelefono(usuario.getTelefono());
 
         u.setAdministrador(usuario.isAdministrador());
         u.setNumeroCompras(usuario.getNumeroCompras());
         u.setNumeroVentas(usuario.getNumeroVentas());
+        u.setNumeroValoracionesAsComprador(usuario.getNumeroValoracionesAsComprador());
+        u.setNumeroValoracionesAsVendedor(usuario.getNumeroValoracionesAsVendedor());
+        u.setPuntuacionAsComprador(usuario.getPuntuacionAsComprador());
+        u.setPuntuacionAsVendedor(usuario.getPuntuacionAsVendedor());
 
         repoUsuarios.update(u);
 
         log.info("Usuario modificado: id={}", id);
+
+        emitirEventoUsuarioModificado(u.getId(), u.getEmail(), u.getNombre(), u.getApellidos());
     }
 
     @Override
     public Usuario recuperar(String id) throws RepositorioException, EntidadNoEncontrada {
         return repoUsuarios.getById(id);
+    }
+
+    @Override
+    public Usuario recuperarPorEmail(String email) throws RepositorioException {
+        Especificacion<Usuario> spec = new Especificacion<>(usuario -> email.equals(usuario.getEmail()));
+
+        List<Usuario> resultados = repoUsuarios.getByEspecificacion(spec);
+
+        return resultados.isEmpty() ? null : resultados.get(0);
+    }
+
+    @Override
+    public Usuario recuperarPorGithubId(String githubId) throws RepositorioException {
+        Especificacion<Usuario> spec = new Especificacion<>(usuario -> githubId.equals(usuario.getGithubId()));
+
+        List<Usuario> resultados = repoUsuarios.getByEspecificacion(spec);
+
+        return resultados.isEmpty() ? null : resultados.get(0);
     }
 
     @Override
@@ -104,5 +172,29 @@ public class ServicioUsuarios implements IServicioUsuarios {
         }
 
         return null;
+    }
+
+    private void emitirEventoUsuarioCreado(String idUsuario, String email, String nombre, String apellidos) {
+        EventoUsuarioCreado evento = new EventoUsuarioCreado(idUsuario, email, nombre, apellidos);
+        try {
+            if (publicadorEventos == null) {
+                publicadorEventos = new PublicadorRabbitMq();
+            }
+            publicadorEventos.emitirEvento(evento);
+        } catch (IOException | RuntimeException e) {
+            log.error("Error enviando evento usuario-creado id={}", idUsuario, e);
+        }
+    }
+
+    private void emitirEventoUsuarioModificado(String idUsuario, String email, String nombre, String apellidos) {
+        EventoUsuarioModificado evento = new EventoUsuarioModificado(idUsuario, email, nombre, apellidos);
+        try {
+            if (publicadorEventos == null) {
+                publicadorEventos = new PublicadorRabbitMq();
+            }
+            publicadorEventos.emitirEvento(evento);
+        } catch (IOException | RuntimeException e) {
+            log.error("Error enviando evento usuario-modificado id={}", idUsuario, e);
+        }
     }
 }

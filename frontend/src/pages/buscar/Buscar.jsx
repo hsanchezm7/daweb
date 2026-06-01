@@ -1,10 +1,13 @@
 import { Col, Container, Row } from 'react-bootstrap';
 
+import useDocumentTitle from '@/hooks/useDocumentTitle';
+
 import Filtro from '../../components/filtro/Filtro';
 import GridProductos from '../../components/grid-productos/GridProductos';
 import './Buscar.css';
 
 function Buscar() {
+  useDocumentTitle('Buscar');
   return (
     <Container className="py-5 mt-0 buscar-body">
       <Row className="g-5">

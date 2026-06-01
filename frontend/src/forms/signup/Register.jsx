@@ -1,16 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { InputGroup } from 'react-bootstrap';
-import { ArrowRightCircle, Eye, EyeSlash } from 'react-bootstrap-icons';
+import {
+  ArrowRightCircle,
+  CalendarFill,
+  Eye,
+  EyeSlash,
+} from 'react-bootstrap-icons';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import IntlTelInput from '@intl-tel-input/react';
+import { es as esPhoneLocale } from 'intl-tel-input/locale';
+import 'intl-tel-input/styles';
+
+import {
+  createBirthDatePicker,
+  formatDateForDisplay,
+  formatDateForPayload,
+} from '@/config/datepicker';
+import useDocumentTitle from '@/hooks/useDocumentTitle';
+import authService from '@/services/authService';
 
 import './Register.css';
 
+const getPhoneErrorMessage = (errorCode) => {
+  switch (errorCode) {
+    case 'INVALID_COUNTRY_CODE':
+      return 'Código de país inválido';
+    case 'TOO_SHORT':
+      return 'El número es demasiado corto';
+    case 'TOO_LONG':
+      return 'El número es demasiado largo';
+    default:
+      return 'Número de teléfono inválido';
+  }
+};
+
 function Register() {
+  useDocumentTitle('Crear cuenta');
+
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const toggleVisibilidad = () => setMostrarPassword(!mostrarPassword);
 
@@ -20,26 +52,91 @@ function Register() {
     setMostrarPasswordConfirmar(!mostrarPasswordConfirmar);
 
   const [validated, setValidated] = useState(false);
+  const [nombre, setNombre] = useState('');
+  const [apellidos, setApellidos] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmarPassword, setConfirmarPassword] = useState('');
+  const [fechaNacimiento, setFechaNacimiento] = useState('');
 
-  {
-    /* TODO: lógica de submit */
-  }
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+  const [telefono, setTelefono] = useState('');
+  const [telefonoValido, setTelefonoValido] = useState(true);
+  const [telefonoErrorCode, setTelefonoErrorCode] = useState(null);
+
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [passwordMismatch, setPasswordMismatch] = useState(false);
+
+  const fechaRef = useRef(null);
+  const datepickerRef = useRef(null);
+
+  useEffect(() => {
+    if (!fechaRef.current) return;
+
+    const picker = createBirthDatePicker(fechaRef.current);
+    datepickerRef.current = picker;
+
+    const handleChange = (event) => {
+      const date = event.detail?.date;
+      setFechaNacimiento(date ? formatDateForDisplay(date) : '');
+    };
+
+    fechaRef.current.addEventListener('change.td', handleChange);
+    const el = fechaRef.current;
+
+    return () => {
+      el.removeEventListener('change.td', handleChange);
+      picker.dispose();
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrMsg('');
+    setSuccess(false);
+    setPasswordMismatch(false);
+
+    if (!e.currentTarget.checkValidity()) {
+      setValidated(true);
+      return;
     }
 
-    setValidated(true);
+    if (password !== confirmarPassword) {
+      setPasswordMismatch(true);
+      setValidated(true);
+      return;
+    }
+
+    if (!telefono || !telefonoValido) {
+      setValidated(true);
+      return;
+    }
+
+    try {
+      await authService.register({
+        nombre,
+        apellidos: apellidos || undefined,
+        email,
+        clave: password,
+        fechaNacimiento: formatDateForPayload(fechaNacimiento) || undefined,
+        telefono: telefono || undefined,
+      });
+
+      setSuccess(true);
+    } catch (err) {
+      setValidated(false);
+      setErrMsg(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          'No se ha podido conectar con el servidor'
+      );
+    }
   };
 
   return (
     <>
-      {/* título */}
       <h2 className="mb-5 fw-bold">Crear cuenta</h2>
 
-      {/* github OAuth2. TODO: usar React Bootstrap button */}
       <Button
         variant="dark"
         className="w-100 mb-4 py-2 d-inline-flex gap-2 align-items-center justify-content-center"
@@ -48,7 +145,6 @@ function Register() {
         Accede con GitHub
       </Button>
 
-      {/* separador */}
       <div className="d-flex align-items-center mb-4">
         <hr className="flex-grow-1" />
         <span
@@ -60,85 +156,171 @@ function Register() {
         <hr className="flex-grow-1" />
       </div>
 
-      {/* formulario */}
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group
-          className="mb-4 needs-validation"
-          controlId="formNombre"
-        >
+        {errMsg && <Alert variant="danger">{errMsg}</Alert>}
+
+        {success && (
+          <Alert variant="success">
+            Registro exitoso.{' '}
+            <Link to="/login" className="alert-link">
+              Iniciar sesión
+            </Link>
+            .
+          </Alert>
+        )}
+
+        <Form.Floating className="mb-4">
           <Form.Control
+            id="formNombre"
             type="text"
-            className="py-2 px-3 mb-1"
-            placeholder="nombre*"
+            placeholder="Nombre"
             required
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
           />
-        </Form.Group>
+          <label htmlFor="formNombre">Nombre</label>
+          <Form.Control.Feedback type="invalid">
+            Por favor, completa este campo.
+          </Form.Control.Feedback>
+        </Form.Floating>
 
-        <Form.Group className="mb-4" controlId="formApellidos">
+        <Form.Floating className="mb-4">
           <Form.Control
+            id="formApellidos"
             type="text"
-            className="py-2 px-3 mb-1"
-            placeholder="apellidos"
+            placeholder="Apellidos"
+            value={apellidos}
+            onChange={(e) => setApellidos(e.target.value)}
           />
-        </Form.Group>
+          <label htmlFor="formApellidos">Apellidos</label>
+        </Form.Floating>
 
-        <Form.Group className="mb-4" controlId="formEmail">
+        <Form.Floating className="mb-4">
           <Form.Control
+            id="formEmail"
             type="email"
-            className="py-2 px-3 mb-1"
-            placeholder="email*"
+            placeholder="Email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-        </Form.Group>
+          <label htmlFor="formEmail">Email</label>
+          <Form.Control.Feedback type="invalid">
+            Por favor, completa este campo.
+          </Form.Control.Feedback>
+        </Form.Floating>
 
-        <Form.Group className="mb-4" controlId="formPassword">
-          <InputGroup>
+        <InputGroup className="mb-4" hasValidation>
+          <Form.Floating>
             <Form.Control
+              id="formPassword"
               type={mostrarPassword ? 'text' : 'password'}
-              className="py-2 px-3"
-              placeholder="contraseña*"
+              placeholder="Contraseña"
               required
+              isInvalid={passwordMismatch}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordMismatch(false);
+              }}
             />
-            <InputGroup.Text
-              onClick={toggleVisibilidad}
-              style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
-            >
-              {mostrarPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
-            </InputGroup.Text>
-          </InputGroup>
-        </Form.Group>
+            <label htmlFor="formPassword">Contraseña</label>
+          </Form.Floating>
+          <InputGroup.Text
+            onClick={toggleVisibilidad}
+            style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
+          >
+            {mostrarPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
+          </InputGroup.Text>
+          <Form.Control.Feedback type="invalid">
+            {passwordMismatch
+              ? 'Las contraseñas no coinciden.'
+              : 'Por favor, completa este campo.'}
+          </Form.Control.Feedback>
+        </InputGroup>
 
-        <Form.Group className="mb-4" controlId="formConfirmarPassword">
-          <InputGroup>
+        <InputGroup className="mb-4" hasValidation>
+          <Form.Floating>
             <Form.Control
+              id="formConfirmarPassword"
               type={mostrarPasswordConfirmar ? 'text' : 'password'}
-              className="py-2 px-3"
-              placeholder="confirmar contraseña*"
+              placeholder="Confirmar contraseña"
               required
+              isInvalid={passwordMismatch}
+              value={confirmarPassword}
+              onChange={(e) => {
+                setConfirmarPassword(e.target.value);
+                setPasswordMismatch(false);
+              }}
             />
-            <InputGroup.Text
-              onClick={toggleVisibilidadConfirmar}
-              style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
-            >
-              {mostrarPasswordConfirmar ? (
-                <EyeSlash size={20} />
-              ) : (
-                <Eye size={20} />
-              )}
-            </InputGroup.Text>
-          </InputGroup>
+            <label htmlFor="formConfirmarPassword">Confirmar contraseña</label>
+          </Form.Floating>
+          <InputGroup.Text
+            onClick={toggleVisibilidadConfirmar}
+            style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
+          >
+            {mostrarPasswordConfirmar ? (
+              <EyeSlash size={20} />
+            ) : (
+              <Eye size={20} />
+            )}
+          </InputGroup.Text>
+          <Form.Control.Feedback type="invalid">
+            {passwordMismatch
+              ? 'Las contraseñas no coinciden.'
+              : 'Por favor, completa este campo.'}
+          </Form.Control.Feedback>
+        </InputGroup>
+
+        <InputGroup className="mb-4">
+          <Form.Floating>
+            <Form.Control
+              ref={fechaRef}
+              id="formFechaNacimiento"
+              type="text"
+              placeholder="dd/MM/aaaa"
+              value={fechaNacimiento}
+              onChange={(e) => setFechaNacimiento(e.target.value)}
+            />
+            <label htmlFor="formFechaNacimiento">Fecha de nacimiento</label>
+          </Form.Floating>
+          <InputGroup.Text
+            onClick={() => datepickerRef.current?.toggle()}
+            style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
+          >
+            <CalendarFill size={20} />
+          </InputGroup.Text>
+        </InputGroup>
+
+        <Form.Group className="mb-4">
+          <div dir="ltr">
+            <IntlTelInput
+              initialCountry="es"
+              countryNameLocale="es"
+              uiTranslations={esPhoneLocale}
+              loadUtils={() => import('intl-tel-input/utils')}
+              value={telefono}
+              onChangeNumber={setTelefono}
+              onChangeValidity={setTelefonoValido}
+              onChangeErrorCode={setTelefonoErrorCode}
+              placeholderNumberType="MOBILE"
+              placeholderNumberPolicy="AGGRESSIVE"
+              inputProps={{
+                id: 'formTelefono',
+                required: true,
+                className: `form-control w-100 py-3 ${(!telefono || !telefonoValido) && validated ? 'is-invalid' : ''}`,
+              }}
+            />
+            {(!telefono || !telefonoValido) && validated && (
+              <div className="invalid-feedback d-block mt-1">
+                {!telefono
+                  ? 'Por favor, completa este campo.'
+                  : getPhoneErrorMessage(telefonoErrorCode)}
+              </div>
+            )}
+          </div>
         </Form.Group>
 
-        {/* contraseña olvidada */}
-        {/* 
-        <div className="mb-4 text-start">
-          <Link to="/recuperar-password" className="text-decoration-underline text-muted small">
-            He olvidado mi contraseña
-          </Link>
-        </div>
-        */}
-
-        {/* botón principal registro */}
         <div className="mb-4 text-center">
           <Button
             variant="primary"
@@ -151,7 +333,6 @@ function Register() {
         </div>
       </Form>
 
-      {/* botón secundario iniciar sesión */}
       <div className="mt-5 text-center">
         <p className="fw-bold mb-3 small">¿Ya tienes cuenta?</p>
         <Button

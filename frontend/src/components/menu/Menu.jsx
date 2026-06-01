@@ -1,8 +1,8 @@
 import { Nav } from 'react-bootstrap';
 import {
-  Grid,
   BagCheckFill,
   BoxSeam,
+  Grid,
   PeopleFill,
   PersonFill,
   Wallet2,
@@ -17,7 +17,7 @@ function Menu() {
       {/* usuario */}
       <h6 className="menu-title">Usuario</h6>
       <Nav className="flex-column menu-list mb-4">
-        <Nav.Item >
+        <Nav.Item>
           <Nav.Link as={NavLink} to="/panel/mi-cuenta" className="menu-link">
             <PersonFill className="me-2" aria-hidden="true" />
             <span>Mi cuenta</span>
@@ -52,13 +52,21 @@ function Menu() {
       <h6 className="menu-title">Administración</h6>
       <Nav className="flex-column menu-list">
         <Nav.Item>
-          <Nav.Link as={NavLink} to="/panel/admin/usuarios" className="menu-link">
+          <Nav.Link
+            as={NavLink}
+            to="/panel/admin/usuarios"
+            className="menu-link"
+          >
             <PeopleFill className="me-2" aria-hidden="true" />
             <span>Usuarios</span>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={NavLink} to="/panel/admin/compraventas" className="menu-link">
+          <Nav.Link
+            as={NavLink}
+            to="/panel/admin/compraventas"
+            className="menu-link"
+          >
             <BoxSeam className="me-2" aria-hidden="true" />
             <span>Compraventas</span>
           </Nav.Link>

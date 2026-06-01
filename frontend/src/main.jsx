@@ -4,18 +4,18 @@ import { BrowserRouter } from 'react-router-dom';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+import { AuthProvider } from '@/context/AuthProvider';
+
 import App from './App.jsx';
 import './index.css';
 import './scss/custom.scss';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {' '}
-    {/* solo prod */}
     <BrowserRouter>
-      {' '}
-      {/* https://reactrouter.com/start/declarative/routing */}
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );

@@ -1,18 +1,23 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import PersistLogin from '@/components/auth/PersistLogin';
+import RequireAuth from '@/components/auth/RequireAuth';
+import { Roles } from '@/context/AuthProvider';
+import Login from '@/forms/login/Login';
+import Register from '@/forms/signup/Register';
+import AuthLayout from '@/layouts/auth-layout/AuthLayout';
+import MainLayout from '@/layouts/main-layout/MainLayout';
+import PanelLayout from '@/layouts/panel-layout/PanelLayout';
+import Compraventas from '@/pages/admin/compraventas/Compraventas';
+import Usuarios from '@/pages/admin/usuarios/Usuarios';
+import Buscar from '@/pages/buscar/Buscar';
+import Error404 from '@/pages/error404/Error404';
+import Inicio from '@/pages/inicio/Inicio';
+import MiCuenta from '@/pages/mi-cuenta/MiCuenta';
+import MisProductos from '@/pages/mis-productos/MisProductos';
+import Unauthorized from '@/pages/unauthorized/Unauthorized';
+
 import './App.css';
-import Login from './forms/login/Login';
-import Register from './forms/signup/Register';
-import AuthLayout from './layouts/auth-layout/AuthLayout';
-import MainLayout from './layouts/main-layout/MainLayout';
-import PanelLayout from './layouts/panel-layout/PanelLayout';
-import Compraventas from './pages/admin/compraventas/Compraventas';
-import Usuarios from './pages/admin/usuarios/Usuarios';
-import Buscar from './pages/buscar/Buscar';
-import Error404 from './pages/error404/Error404';
-import Inicio from './pages/inicio/Inicio';
-import MiCuenta from './pages/mi-cuenta/MiCuenta';
-import MisProductos from './pages/mis-productos/MisProductos';
 
 function App() {
   return (
@@ -27,16 +32,27 @@ function App() {
         <Route path="/signup" element={<Register />} />
       </Route>
 
-      <Route path="/panel" element={<PanelLayout />}>
-        <Route index element={<Navigate to="mi-cuenta" replace />} />
-        <Route path="/panel/mi-cuenta" element={<MiCuenta />} />
-        <Route path="/panel/productos" element={<MisProductos />} />
+      <Route element={<PersistLogin />}>
+        <Route
+          element={<RequireAuth allowedRoles={[Roles.USUARIO, Roles.ADMIN]} />}
+        >
+          <Route path="/panel" element={<PanelLayout />}>
+            <Route index element={<Navigate to="mi-cuenta" replace />} />
+            <Route path="mi-cuenta" element={<MiCuenta />} />
+            <Route path="productos" element={<MisProductos />} />
+          </Route>
+        </Route>
 
-        <Route path="/panel/admin/usuarios" element={<Usuarios />} />
-        <Route path="/panel/admin/compraventas" element={<Compraventas />} />
+        <Route element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}>
+          <Route path="/panel" element={<PanelLayout />}>
+            <Route path="admin/usuarios" element={<Usuarios />} />
+            <Route path="admin/compraventas" element={<Compraventas />} />
+          </Route>
+        </Route>
       </Route>
 
       <Route path="/404" element={<Error404 />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );

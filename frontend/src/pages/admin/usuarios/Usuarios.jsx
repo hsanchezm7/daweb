@@ -1,6 +1,8 @@
 import { Badge, Container, Pagination, Table } from 'react-bootstrap';
 import { Github } from 'react-bootstrap-icons';
 
+import useDocumentTitle from '@/hooks/useDocumentTitle';
+
 import './Usuarios.css';
 
 const usuariosMock = [
@@ -97,6 +99,8 @@ const usuariosMock = [
 ];
 
 function Usuarios() {
+  useDocumentTitle('Usuarios');
+
   return (
     <Container className="usuarios" fluid>
       <div className="mb-4">

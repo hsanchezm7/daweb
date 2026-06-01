@@ -28,11 +28,14 @@ public class ServicioProductos implements IServicioProductos {
 
     private static final Logger log = LoggerFactory.getLogger(ServicioProductos.class);
 
-    @Autowired private RepositorioProductos repositorioProductos;
+    @Autowired
+    private RepositorioProductos repositorioProductos;
 
-    @Autowired private RepositorioCategorias repositorioCategorias;
+    @Autowired
+    private RepositorioCategorias repositorioCategorias;
 
-    @Autowired private RepositorioUsuarios repositorioUsuarios;
+    @Autowired
+    private RepositorioUsuarios repositorioUsuarios;
 
     @Override
     public String crear(
@@ -45,29 +48,22 @@ public class ServicioProductos implements IServicioProductos {
             String vendedorId)
             throws EntidadNoEncontrada {
 
-        if (titulo == null || titulo.isEmpty())
-            throw new IllegalArgumentException("titulo obligatorio");
+        if (titulo == null || titulo.isEmpty()) throw new IllegalArgumentException("titulo obligatorio");
         if (precio == null || precio < 0) throw new IllegalArgumentException("precio no válido");
         if (estado == null) throw new IllegalArgumentException("estado obligatorio");
 
-        Categoria categoria =
-                repositorioCategorias
-                        .findById(categoriaId)
-                        .orElseThrow(
-                                () ->
-                                        new EntidadNoEncontrada(
-                                                "Categoria " + categoriaId + " no encontrada"));
-        Usuario vendedor =
-                repositorioUsuarios
-                        .findById(vendedorId)
-                        .orElseThrow(
-                                () ->
-                                        new EntidadNoEncontrada(
-                                                "Vendedor " + vendedorId + " no encontrado"));
+        if (vendedorId == null || vendedorId.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no autenticado");
+        }
 
-        Producto producto =
-                new Producto(
-                        titulo, descripcion, precio, estado, categoria, envioDisponible, vendedor);
+        Categoria categoria = repositorioCategorias
+                .findById(categoriaId)
+                .orElseThrow(() -> new EntidadNoEncontrada("Categoria " + categoriaId + " no encontrada"));
+        Usuario vendedor = repositorioUsuarios
+                .findById(vendedorId)
+                .orElseThrow(() -> new EntidadNoEncontrada("Vendedor " + vendedorId + " no encontrado"));
+
+        Producto producto = new Producto(titulo, descripcion, precio, estado, categoria, envioDisponible, vendedor);
         producto = repositorioProductos.save(producto);
         log.info("Producto creado: id={}", producto.getId());
         return producto.getId();
@@ -75,12 +71,12 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     public void asignarLugarRecogida(
-            String productoId, String descripcion, Double longitud, Double latitud)
+            String productoId, String descripcion, Double longitud, Double latitud, String vendedorId)
             throws EntidadNoEncontrada {
-        Producto producto =
-                repositorioProductos
-                        .findById(productoId)
-                        .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
+        Producto producto = repositorioProductos
+                .findById(productoId)
+                .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
+        validarPropietario(producto, vendedorId);
         producto.asignarLugarRecogida(descripcion, longitud, latitud);
         repositorioProductos.save(producto);
         log.info("Lugar recogida asignado producto={}", productoId);
@@ -88,12 +84,12 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     public void modificar(
-            String productoId, Double nuevoPrecio, String nuevaDescripcion, boolean estaDisponible)
+            String productoId, Double nuevoPrecio, String nuevaDescripcion, boolean estaDisponible, String vendedorId)
             throws EntidadNoEncontrada {
-        Producto producto =
-                repositorioProductos
-                        .findById(productoId)
-                        .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
+        Producto producto = repositorioProductos
+                .findById(productoId)
+                .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
+        validarPropietario(producto, vendedorId);
         if (nuevoPrecio != null) {
             if (nuevoPrecio < 0) throw new IllegalArgumentException("precio no válido");
             producto.setPrecio(nuevoPrecio);
@@ -110,21 +106,28 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     public void anadirVisualizacion(String productoId) throws EntidadNoEncontrada {
-        Producto producto =
-                repositorioProductos
-                        .findById(productoId)
-                        .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
+        Producto producto = repositorioProductos
+                .findById(productoId)
+                .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
         producto.incrementarVisualizaciones();
         repositorioProductos.save(producto);
         log.info("Visualizacion añadida producto={}", productoId);
     }
 
     @Override
+    public void marcarNoDisponible(String productoId) throws EntidadNoEncontrada {
+        Producto producto = repositorioProductos
+                .findById(productoId)
+                .orElseThrow(() -> new EntidadNoEncontrada(productoId + " no existe"));
+        producto.setDisponible(false);
+        repositorioProductos.save(producto);
+        log.info("Producto marcado no disponible id={}", productoId);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Producto getProducto(String id) throws EntidadNoEncontrada {
-        return repositorioProductos
-                .findById(id)
-                .orElseThrow(() -> new EntidadNoEncontrada(id + " no existe"));
+        return repositorioProductos.findById(id).orElseThrow(() -> new EntidadNoEncontrada(id + " no existe"));
     }
 
     @Override
@@ -134,62 +137,45 @@ public class ServicioProductos implements IServicioProductos {
         LocalDateTime fin = inicio.plusMonths(1);
         return repositorioProductos.getByPublicadosEntre(inicio, fin).stream()
                 .sorted((a, b) -> Integer.compare(b.getVisualizaciones(), a.getVisualizaciones()))
-                .map(
-                        p -> {
-                            ProductoResumen r = new ProductoResumen();
-                            r.setId(p.getId());
-                            r.setTitulo(p.getTitulo());
-                            r.setPrecio(p.getPrecio());
-                            r.setFechaPublicacion(p.getFechaPublicacion());
-                            r.setNombreCategoria(
-                                    p.getCategoria() != null ? p.getCategoria().getNombre() : null);
-                            r.setVisualizaciones(p.getVisualizaciones());
-                            return r;
-                        })
+                .map(p -> {
+                    ProductoResumen r = new ProductoResumen();
+                    r.setId(p.getId());
+                    r.setTitulo(p.getTitulo());
+                    r.setPrecio(p.getPrecio());
+                    r.setFechaPublicacion(p.getFechaPublicacion());
+                    r.setNombreCategoria(
+                            p.getCategoria() != null ? p.getCategoria().getNombre() : null);
+                    r.setVisualizaciones(p.getVisualizaciones());
+                    return r;
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Producto> buscar(
-            String categoriaId, String texto, EstadoProducto estadoMinimo, Double precioMaximo) {
+    public List<Producto> buscar(String categoriaId, String texto, EstadoProducto estadoMinimo, Double precioMaximo) {
         java.util.Set<String> categoriasPermitidas = new java.util.HashSet<>();
         if (categoriaId != null) {
-            repositorioCategorias
-                    .findById(categoriaId)
-                    .ifPresent(
-                            cat -> {
-                                categoriasPermitidas.add(categoriaId);
-                                for (Categoria d : cat.getDescendientes())
-                                    categoriasPermitidas.add(d.getId());
-                            });
+            repositorioCategorias.findById(categoriaId).ifPresent(cat -> {
+                categoriasPermitidas.add(categoriaId);
+                for (Categoria d : cat.getDescendientes()) categoriasPermitidas.add(d.getId());
+            });
         }
 
         java.util.stream.Stream<Producto> stream =
                 StreamSupport.stream(repositorioProductos.findAll().spliterator(), false);
 
         if (!categoriasPermitidas.isEmpty()) {
-            stream =
-                    stream.filter(
-                            p ->
-                                    p.getCategoria() != null
-                                            && categoriasPermitidas.contains(
-                                                    p.getCategoria().getId()));
+            stream = stream.filter(p -> p.getCategoria() != null
+                    && categoriasPermitidas.contains(p.getCategoria().getId()));
         }
         if (texto != null && !texto.isEmpty()) {
             String t = texto.toLowerCase();
-            stream =
-                    stream.filter(
-                            p ->
-                                    p.getDescripcion() != null
-                                            && p.getDescripcion().toLowerCase().contains(t));
+            stream = stream.filter(p -> p.getDescripcion() != null
+                    && p.getDescripcion().toLowerCase().contains(t));
         }
         if (estadoMinimo != null) {
-            stream =
-                    stream.filter(
-                            p ->
-                                    p.getEstado() != null
-                                            && p.getEstado().esIgualOMejorQue(estadoMinimo));
+            stream = stream.filter(p -> p.getEstado() != null && p.getEstado().esIgualOMejorQue(estadoMinimo));
         }
         if (precioMaximo != null) {
             stream = stream.filter(p -> p.getPrecio() != null && p.getPrecio() <= precioMaximo);
@@ -212,35 +198,36 @@ public class ServicioProductos implements IServicioProductos {
     @Override
     @Transactional(readOnly = true)
     public Page<ProductoResumen> buscarPaginado(
-            String categoriaId,
-            String texto,
-            EstadoProducto estadoMinimo,
-            Double precioMaximo,
-            Pageable paginacion) {
+            String categoriaId, String texto, EstadoProducto estadoMinimo, Double precioMaximo, Pageable paginacion) {
         List<Producto> productos = buscar(categoriaId, texto, estadoMinimo, precioMaximo);
         int start = (int) paginacion.getOffset();
         int end = Math.min((start + paginacion.getPageSize()), productos.size());
-        List<Producto> pageContent =
-                start > productos.size() ? Collections.emptyList() : productos.subList(start, end);
+        List<Producto> pageContent = start > productos.size() ? Collections.emptyList() : productos.subList(start, end);
 
-        List<ProductoResumen> resumenes =
-                pageContent.stream()
-                        .map(
-                                p -> {
-                                    ProductoResumen r = new ProductoResumen();
-                                    r.setId(p.getId());
-                                    r.setTitulo(p.getTitulo());
-                                    r.setPrecio(p.getPrecio());
-                                    r.setFechaPublicacion(p.getFechaPublicacion());
-                                    r.setNombreCategoria(
-                                            p.getCategoria() != null
-                                                    ? p.getCategoria().getNombre()
-                                                    : null);
-                                    r.setVisualizaciones(p.getVisualizaciones());
-                                    return r;
-                                })
-                        .collect(Collectors.toList());
+        List<ProductoResumen> resumenes = pageContent.stream()
+                .map(p -> {
+                    ProductoResumen r = new ProductoResumen();
+                    r.setId(p.getId());
+                    r.setTitulo(p.getTitulo());
+                    r.setPrecio(p.getPrecio());
+                    r.setFechaPublicacion(p.getFechaPublicacion());
+                    r.setNombreCategoria(
+                            p.getCategoria() != null ? p.getCategoria().getNombre() : null);
+                    r.setVisualizaciones(p.getVisualizaciones());
+                    return r;
+                })
+                .collect(Collectors.toList());
 
         return new PageImpl<>(resumenes, paginacion, productos.size());
+    }
+
+    private void validarPropietario(Producto producto, String vendedorId) {
+        if (vendedorId == null || vendedorId.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no autenticado");
+        }
+        if (producto.getVendedor() == null
+                || !vendedorId.equals(producto.getVendedor().getId())) {
+            throw new SecurityException("Solo el propietario puede modificar este producto");
+        }
     }
 }

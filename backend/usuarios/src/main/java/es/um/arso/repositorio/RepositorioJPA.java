@@ -4,7 +4,6 @@ import es.um.arso.utils.EntityManagerHelper;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
@@ -50,8 +49,7 @@ public abstract class RepositorioJPA<T extends Identificable> implements Reposit
 
             em.getTransaction().commit();
         } catch (RuntimeException e) {
-            throw new RepositorioException(
-                    "Error al actualizar la entidad con id " + entity.getId(), e);
+            throw new RepositorioException("Error al actualizar la entidad con id " + entity.getId(), e);
         } finally {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -78,8 +76,7 @@ public abstract class RepositorioJPA<T extends Identificable> implements Reposit
 
             em.getTransaction().commit();
         } catch (RuntimeException e) {
-            throw new RepositorioException(
-                    "Error al borrar la entidad con id " + entity.getId(), e);
+            throw new RepositorioException("Error al borrar la entidad con id " + entity.getId(), e);
         } finally {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();

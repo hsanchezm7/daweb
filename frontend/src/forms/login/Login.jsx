@@ -1,32 +1,63 @@
 import { useState } from 'react';
 import { InputGroup } from 'react-bootstrap';
 import { ArrowRightCircle, Eye, EyeSlash } from 'react-bootstrap-icons';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import useAuth from '@/hooks/useAuth';
+import useDocumentTitle from '@/hooks/useDocumentTitle';
+import authService from '@/services/authService';
+import mapAuthResponse from '@/services/mapAuthResponse';
+
 import './Login.css';
 
 function Login() {
+  useDocumentTitle('Iniciar sesión');
+
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // navegación hacia atrás
+  const from = location.state?.from?.pathname || '/';
+
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const toggleVisibilidad = () => setMostrarPassword(!mostrarPassword);
 
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errMsg, setErrMsg] = useState('');
+  const [loginError, setLoginError] = useState(false);
 
-  {
-    /* TODO: lógica de submit */
-  }
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrMsg('');
+    setLoginError(false);
+
+    if (!e.currentTarget.checkValidity()) {
+      setValidated(true);
+      return;
     }
 
-    setValidated(true);
+    try {
+      const data = await authService.login(email, password);
+      setAuth(mapAuthResponse(data, { email }));
+      navigate(from, { replace: true });
+    } catch (err) {
+      setValidated(false);
+      setLoginError(true);
+      setErrMsg(
+        err.response?.data?.message ||
+          err.response?.data ||
+          'No se ha podido conectar con el servidor'
+      );
+    }
   };
 
   return (
@@ -34,7 +65,7 @@ function Login() {
       {/* título */}
       <h2 className="mb-5 fw-bold">Iniciar sesión</h2>
 
-      {/* github OAuth2. TODO: usar React Bootstrap button */}
+      {/* github OAuth2 */}
       <Button
         variant="dark"
         className="w-100 mb-4 py-2 d-inline-flex gap-2 align-items-center justify-content-center"
@@ -55,33 +86,59 @@ function Login() {
         <hr className="flex-grow-1" />
       </div>
 
-      {/* formulario. TODO: usar https://react-bootstrap.netlify.app/docs/forms/overview */}
+      {/* formulario */}
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="mb-4" controlId="formEmail">
-          <Form.Control
-            type="email"
-            className="py-2 px-3 mb-1"
-            placeholder="email*"
-            required
-          />
-        </Form.Group>
+        {errMsg && <Alert variant="danger">{errMsg}</Alert>}
 
-        <Form.Group className="mb-4" controlId="formPassword">
-          <InputGroup>
+        <Form.Floating className="mb-4">
+          <Form.Control
+            id="formEmail"
+            type="email"
+            placeholder="Email"
+            required
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setLoginError(false);
+            }}
+            isInvalid={loginError}
+          />
+          <label htmlFor="formEmail">Email</label>
+          <Form.Control.Feedback type="invalid">
+            {loginError
+              ? 'El email o la contraseña son incorrectos.'
+              : 'Por favor, completa este campo.'}
+          </Form.Control.Feedback>
+        </Form.Floating>
+
+        <InputGroup className="mb-4" hasValidation>
+          <Form.Floating>
             <Form.Control
+              id="formPassword"
               type={mostrarPassword ? 'text' : 'password'}
-              className="py-2 px-3"
-              placeholder="contraseña*"
+              placeholder="Contraseña"
               required
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setLoginError(false);
+              }}
+              isInvalid={loginError}
             />
-            <InputGroup.Text
-              onClick={toggleVisibilidad}
-              style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
-            >
-              {mostrarPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
-            </InputGroup.Text>
-          </InputGroup>
-        </Form.Group>
+            <label htmlFor="formPassword">Contraseña</label>
+          </Form.Floating>
+          <InputGroup.Text
+            onClick={toggleVisibilidad}
+            style={{ cursor: 'pointer', backgroundColor: 'transparent' }}
+          >
+            {mostrarPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
+          </InputGroup.Text>
+          <Form.Control.Feedback type="invalid">
+            {loginError
+              ? 'El email o la contraseña son incorrectos.'
+              : 'Por favor, completa este campo.'}
+          </Form.Control.Feedback>
+        </InputGroup>
 
         {/* contraseña olvidada */}
         {/* 

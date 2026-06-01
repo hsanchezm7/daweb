@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "@/assets": ["./src/assets/*"],
+      "@/components": ["./src/components/*"],
+      "@/context": ["./src/context/*"],
+      "@/forms": ["./src/forms/*"],
+      "@/layouts": ["./src/layouts/*"],
+      "@/hooks": ["./src/hooks/*"],
+      "@/pages": ["./src/pages/*"],
+      "@/scss": ["./src/scss/*"],
+      "@/services": ["./src/services/*"]
+    }
+  }
+}

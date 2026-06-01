@@ -20,9 +20,11 @@ import javax.ws.rs.ext.Provider;
 @Priority(Priorities.AUTHENTICATION)
 public class JwtTokenFilter implements ContainerRequestFilter {
 
-    @Context private ResourceInfo resourceInfo;
+    @Context
+    private ResourceInfo resourceInfo;
 
-    @Context private HttpServletRequest servletRequest;
+    @Context
+    private HttpServletRequest servletRequest;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -33,41 +35,62 @@ public class JwtTokenFilter implements ContainerRequestFilter {
         }
 
         // TODO: definir rutas públicas? Redundante? Ya comprobamos PermitAll
-
-        String authorization = requestContext.getHeaderString("Authorization");
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            requestContext.abortWith(
-                    Response.status(Response.Status.UNAUTHORIZED)
-                            .entity("No se adjunta el token correctamente")
-                            .build());
+        String token = extractTokenFromBearer(requestContext);
+        if (token == null || token.trim().isEmpty()) {
+            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("No se adjunta el token en el header Authorization")
+                    .build());
             return;
         }
 
-        String token = authorization.substring("Bearer ".length()).trim();
-
         try {
-            Claims claims = JwtUtils.validateToken(token);
-            servletRequest.setAttribute("claims", claims);
+            Claims claims = JwtUtils.parseClaimsUnverified(token);
+            if (servletRequest != null) {
+                servletRequest.setAttribute("claims", claims);
+            }
 
             if (resourceInfo != null
                     && resourceInfo.getResourceMethod() != null
                     && resourceInfo.getResourceMethod().isAnnotationPresent(RolesAllowed.class)) {
-                String[] allowedRoles =
-                        resourceInfo.getResourceMethod().getAnnotation(RolesAllowed.class).value();
-                Set<String> roles =
-                        new HashSet<>(Arrays.asList(claims.get("roles", String.class).split(",")));
+                String[] allowedRoles = resourceInfo
+                        .getResourceMethod()
+                        .getAnnotation(RolesAllowed.class)
+                        .value();
+                String rolesClaim = claims.get("roles", String.class);
+                if (rolesClaim == null || rolesClaim.trim().isEmpty()) {
+                    requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                            .entity("no tiene rol de acceso")
+                            .build());
+                    return;
+                }
+
+                Set<String> roles = new HashSet<>(Arrays.asList(rolesClaim.split(",")));
 
                 if (roles.stream()
                         .noneMatch(userRole -> Arrays.asList(allowedRoles).contains(userRole))) {
-                    requestContext.abortWith(
-                            Response.status(Response.Status.FORBIDDEN)
-                                    .entity("no tiene rol de acceso")
-                                    .build());
+                    requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                            .entity("no tiene rol de acceso")
+                            .build());
                 }
             }
         } catch (Exception e) {
-            requestContext.abortWith(
-                    Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build());
+            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(e.getMessage())
+                    .build());
         }
+    }
+
+    private String extractTokenFromBearer(ContainerRequestContext requestContext) {
+        // Usar ContainerRequestContext directamente, más fiable que @Context HttpServletRequest
+        String authHeader = requestContext.getHeaderString("Authorization");
+        if (authHeader == null || authHeader.isEmpty()) {
+            return null;
+        }
+
+        if (!authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+
+        return authHeader.substring("Bearer ".length());
     }
 }

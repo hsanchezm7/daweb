@@ -11,7 +11,7 @@ function PanelLayout() {
     <div className="d-flex flex-column min-vh-100">
       <Header></Header>
       <main className="main-content flex-grow-1">
-        <Container className="panel-body py-5 mt-0" >
+        <Container className="panel-body py-5 mt-0">
           <Row className="g-5 panel-sidebar">
             <Col
               xs={12}

@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { Card, Container, Modal } from 'react-bootstrap';
 import { PlusCircleDotted } from 'react-bootstrap-icons';
 
+import useDocumentTitle from '@/hooks/useDocumentTitle';
+
 import GridProductos from '../../components/grid-productos/GridProductos';
 import CrearProducto from '../../forms/producto/CrearProducto';
 import './MisProductos.css';
 
 function MisProductos() {
+  useDocumentTitle('Mis productos');
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => setShowModal(true);

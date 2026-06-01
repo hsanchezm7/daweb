@@ -1,5 +1,7 @@
 import { Container, Pagination, Table } from 'react-bootstrap';
 
+import useDocumentTitle from '@/hooks/useDocumentTitle';
+
 import './Compraventas.css';
 
 const comprasMock = [
@@ -96,6 +98,8 @@ const comprasMock = [
 ];
 
 function Compraventas() {
+  useDocumentTitle('Compraventas');
+
   return (
     <Container className="compraventas" fluid>
       <div className="mb-4">
@@ -106,7 +110,12 @@ function Compraventas() {
       </div>
 
       {/* Se puede usar size sm si es muy grande */}
-      <Table striped hover responsive className="compraventas-table align-middle">
+      <Table
+        striped
+        hover
+        responsive
+        className="compraventas-table align-middle"
+      >
         <thead>
           <tr>
             <th>ID</th>

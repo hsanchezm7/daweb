@@ -17,3 +17,10 @@
     gap: 72px;
   }
 }
+
+/* forzar validación en input-group */
+.input-group.is-invalid > .invalid-feedback,
+.was-validated .input-group:has(.form-control:invalid) > .invalid-feedback,
+.input-group:has(.is-invalid) > .invalid-feedback {
+  display: block;
+}

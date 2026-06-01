@@ -85,7 +85,9 @@ function GridProductos({ className = '', nuevoProductoCard = null }) {
   return (
     <Container fluid className={className}>
       <Row xs={1} sm={1} md={2} lg={2} xl={3} xxl={4} className="g-4">
-        {nuevoProductoCard ? <Col key="lead-card">{nuevoProductoCard}</Col> : null}
+        {nuevoProductoCard ? (
+          <Col key="lead-card">{nuevoProductoCard}</Col>
+        ) : null}
         {PRODUCTOS.map((producto) => (
           <Col key={producto.id}>
             <Card className="h-100 rounded-5 overflow-hidden shadow-sm">

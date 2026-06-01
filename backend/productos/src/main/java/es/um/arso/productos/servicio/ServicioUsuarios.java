@@ -3,7 +3,6 @@ package es.um.arso.productos.servicio;
 import es.um.arso.productos.modelo.Usuario;
 import es.um.arso.productos.repositorio.RepositorioUsuarios;
 import es.um.arso.repositorio.EntidadNoEncontrada;
-import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,39 +15,24 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
     private static final Logger log = LoggerFactory.getLogger(ServicioUsuarios.class);
 
-    @Autowired private RepositorioUsuarios repositorioUsuarios;
+    @Autowired
+    private RepositorioUsuarios repositorioUsuarios;
 
     @Override
-    public String alta(
-            String nombre,
-            String apellidos,
-            String email,
-            String clave,
-            LocalDate fechaNacimiento,
-            String telefono) {
-
+    public void altaConId(String id, String nombre, String apellidos, String email) {
         Usuario usuario = new Usuario(email, nombre, apellidos);
-        usuario = repositorioUsuarios.save(usuario);
-        log.info("Usuario creado: id={}", usuario.getId());
-        return usuario.getId();
+        usuario.setId(id);
+        repositorioUsuarios.save(usuario);
+        log.info("Usuario creado: id={}", id);
     }
 
     @Override
-    public void modificar(
-            String id,
-            String nombre,
-            String apellidos,
-            String clave,
-            LocalDate fechaNacimiento,
-            String telefono)
-            throws EntidadNoEncontrada {
-
+    public void modificar(String id, String nombre, String apellidos, String email) throws EntidadNoEncontrada {
         Usuario usuario =
-                repositorioUsuarios
-                        .findById(id)
-                        .orElseThrow(() -> new EntidadNoEncontrada(id + " no existe"));
-        if (nombre != null) usuario.setNombre(nombre);
-        if (apellidos != null) usuario.setApellidos(apellidos);
+                repositorioUsuarios.findById(id).orElseThrow(() -> new EntidadNoEncontrada(id + " no existe"));
+        if (nombre != null && !nombre.isEmpty()) usuario.setNombre(nombre);
+        if (apellidos != null && !apellidos.isEmpty()) usuario.setApellidos(apellidos);
+        if (email != null && !email.isEmpty()) usuario.setEmail(email);
         repositorioUsuarios.save(usuario);
         log.info("Usuario modificado: id={}", id);
     }
@@ -56,8 +40,6 @@ public class ServicioUsuarios implements IServicioUsuarios {
     @Override
     @Transactional(readOnly = true)
     public Usuario get(String id) throws EntidadNoEncontrada {
-        return repositorioUsuarios
-                .findById(id)
-                .orElseThrow(() -> new EntidadNoEncontrada(id + " no existe"));
+        return repositorioUsuarios.findById(id).orElseThrow(() -> new EntidadNoEncontrada(id + " no existe"));
     }
 }
