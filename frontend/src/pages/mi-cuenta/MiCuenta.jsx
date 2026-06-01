@@ -8,7 +8,7 @@ import {
   InputGroup,
   Row,
 } from 'react-bootstrap';
-import { CalendarFill } from 'react-bootstrap-icons';
+import { CalendarFill, CheckCircle } from 'react-bootstrap-icons';
 
 import IntlTelInput from '@intl-tel-input/react';
 import { es as esPhoneLocale } from 'intl-tel-input/locale';
@@ -20,11 +20,11 @@ import {
   formatDateForPayload,
   formatDateFromBackend,
 } from '@/config/datepicker';
+import { ACCOUNT_MESSAGES, VALIDATION_MESSAGES, getPhoneErrorMessage } from '@/config/messages';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useAuth from '@/hooks/useAuth';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createUserService from '@/services/userService';
-import { ACCOUNT_MESSAGES, VALIDATION_MESSAGES, getPhoneErrorMessage } from '@/config/messages';
 
 import './MiCuenta.css';
 
@@ -96,7 +96,7 @@ function MiCuenta() {
     };
 
     loadUser();
-  }, [auth?.usuario, userService]);
+  }, [auth?.usuario]);
 
   const isNombreInvalido = !nombre && !placeholders.nombre;
   const isTelefonoInvalido =
@@ -259,6 +259,7 @@ function MiCuenta() {
 
         <div className="d-flex justify-content-end mt-4">
           <Button variant="dark" type="submit">
+            <CheckCircle className="me-2" />
             Guardar cambios
           </Button>
         </div>

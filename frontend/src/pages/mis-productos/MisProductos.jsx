@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Card, Container, Modal } from 'react-bootstrap';
 import { PlusCircleDotted } from 'react-bootstrap-icons';
 
+import GridProductos from '@/components/grid-productos/GridProductos';
+import CrearProducto from '@/forms/producto/CrearProducto';
+
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 
-import GridProductos from '../../components/grid-productos/GridProductos';
-import CrearProducto from '../../forms/producto/CrearProducto';
 import './MisProductos.css';
 
 function MisProductos() {

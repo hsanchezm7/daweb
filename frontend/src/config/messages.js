@@ -7,6 +7,7 @@ export const VALIDATION_MESSAGES = {
     TOO_LONG: 'El número es demasiado largo',
     INVALID: 'Introduce un número de teléfono válido',
   },
+  PRECIO_NEGATIVO: 'El precio del producto no puede ser negativo',
 };
 
 export const AUTH_MESSAGES = {
