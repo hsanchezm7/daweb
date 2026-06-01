@@ -68,7 +68,7 @@ const useApiPrivate = () => {
       instancePrivate.interceptors.request.eject(requestId);
       instancePrivate.interceptors.response.eject(responseId);
     };
-  }, [navigate, setAuth]); // deps estables, se registra solo 1 vez
+  }, [navigate, setAuth]);
 
   return instancePrivate;
 };
