@@ -211,10 +211,10 @@ function Compraventas() {
                   <td>{c.id}</td>
                   <td>{c.titulo}</td>
                   <td>{c.idProducto}</td>
-                  <td>{c.vendedor}</td>
-                  <td>{c.comprador}</td>
+                  <td>{c.nombreVendedor}</td>
+                  <td>{c.nombreComprador}</td>
                   <td>{formatDateTimeFromBackend(c.fecha)}</td>
-                  <td>{c.precio}</td>
+                  <td>{`${c.precio} \u20AC`}</td>
                 </tr>
               ))
             ) : (
