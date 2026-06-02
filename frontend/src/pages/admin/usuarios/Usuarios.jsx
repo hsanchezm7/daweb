@@ -1,105 +1,38 @@
-import { Badge, Container, Pagination, Table } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Alert, Badge, Container, Table } from 'react-bootstrap';
 import { Github } from 'react-bootstrap-icons';
 
+import { formatDateFromBackend } from '@/config/datepicker';
+import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
+import createUserService from '@/services/userService';
 
 import './Usuarios.css';
 
-const usuariosMock = [
-  {
-    id: 1,
-    nombre: 'Alejandro',
-    apellidos: 'García Martínez',
-    email: 'alejandro.garcia@example.com',
-    githubId: true,
-    fechaNacimiento: '14/03/1995',
-    telefono: '600123456',
-  },
-  {
-    id: 2,
-    nombre: 'María Carmen',
-    apellidos: 'Rodríguez López',
-    email: 'mamen.rod@example.com',
-    githubId: false,
-    fechaNacimiento: '22/11/1988',
-    telefono: null,
-  },
-  {
-    id: 3,
-    nombre: 'David',
-    apellidos: 'Sánchez Fernández',
-    email: null,
-    githubId: true,
-    fechaNacimiento: '05/08/2001',
-    telefono: '611987654',
-  },
-  {
-    id: 4,
-    nombre: 'Lucía',
-    apellidos: 'Gómez Pérez',
-    email: 'lucia.gomez@example.com',
-    githubId: false,
-    fechaNacimiento: '30/01/1993',
-    telefono: '655443322',
-  },
-  {
-    id: 5,
-    nombre: 'Sergio',
-    apellidos: 'González Ruiz',
-    email: 'sergio.gonz@example.com',
-    githubId: true,
-    fechaNacimiento: '17/05/1997',
-    telefono: null,
-  },
-  {
-    id: 6,
-    nombre: 'Elena',
-    apellidos: 'Navarro Silva',
-    email: null,
-    githubId: true,
-    fechaNacimiento: '12/10/2000',
-    telefono: null,
-  },
-  {
-    id: 7,
-    nombre: 'Carlos',
-    apellidos: 'Castro Romero',
-    email: 'carlos.castro@example.com',
-    githubId: false,
-    fechaNacimiento: '25/07/1985',
-    telefono: '622334455',
-  },
-  {
-    id: 8,
-    nombre: 'Sofía',
-    apellidos: 'Rubio Blanco',
-    email: 'sofia.rubio@example.com',
-    githubId: true,
-    fechaNacimiento: '09/02/2004',
-    telefono: '677889900',
-  },
-  {
-    id: 9,
-    nombre: 'Javier',
-    apellidos: 'Marín Díaz',
-    email: 'javier.marin@example.com',
-    githubId: false,
-    fechaNacimiento: '18/06/1991',
-    telefono: null,
-  },
-  {
-    id: 10,
-    nombre: 'Paula',
-    apellidos: 'Alonso Torres',
-    email: 'paula.alonso@example.com',
-    githubId: false,
-    fechaNacimiento: '03/12/1998',
-    telefono: '688554433',
-  },
-];
-
 function Usuarios() {
   useDocumentTitle('Usuarios');
+
+  const apiPrivate = useApiPrivate();
+  const userService = createUserService(apiPrivate);
+
+  const [usuarios, setUsuarios] = useState([]);
+  const [errMsg, setErrMsg] = useState('');
+
+  useEffect(() => {
+    const loadUsuarios = async () => {
+      try {
+        const data = await userService.getUsers();
+        // tratar HATEOAS
+        const usuarios = (data.usuario || []).map((u) => u.resumen);
+        setUsuarios(usuarios);
+      } catch (error) {
+        console.error('Error al cargar los usuarios:', error);
+        setErrMsg('Error al cargar los usuarios');
+      }
+    };
+
+    loadUsuarios();
+  }, []);
 
   return (
     <Container className="usuarios" fluid>
@@ -107,54 +40,63 @@ function Usuarios() {
         <h2 className="mb-2">Usuarios</h2>
         <p className="text-muted m-0">Gestiona los usuarios registrados.</p>
       </div>
-
-      {/* Se puede usar size sm si es muy grande */}
-      <Table striped hover responsive className="usuarios-table align-middle">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre completo</th>
-            <th>Email</th>
-            <th className="text-center align-middle">
-              <Github className="me-2" title="Enlazado con GitHub" />
-              <span>GitHub</span>
-            </th>
-            <th>Fecha Nacimiento</th>
-            <th>Teléfono</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuariosMock.map((usuario) => (
-            <tr key={usuario.id}>
-              <td>{usuario.id}</td>
-              <td>{`${usuario.nombre} ${usuario.apellidos}`}</td>
-              <td>{usuario.email || <span className="text-muted">-</span>}</td>
-              <td className="text-center">
-                {usuario.githubId ? (
-                  <Badge className="badge bg-success">Sí</Badge>
-                ) : (
-                  <Badge className="badge bg-secondary">No</Badge>
-                )}
-              </td>
-              <td>{usuario.fechaNacimiento}</td>
-              <td>
-                {usuario.telefono || <span className="text-muted">-</span>}
-              </td>
+      {/* el flujo es el siguiente: si hay un error (errMsg), sólo mostrar el error. si no: si no hay usuarios,
+      mostrar una única fila No Data. Si los hay, mostrar la lista de usuarios */}
+      {errMsg ? (
+        <Alert variant="danger">{errMsg}</Alert>
+      ) : (
+        <Table striped hover responsive className="usuarios-table align-middle" size='sm'>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre completo</th>
+              <th>Email</th>
+              <th className="text-center align-middle">
+                <Github className="me-2" title="Enlazado con GitHub" />
+                <span>GitHub</span>
+              </th>
+              <th>Fecha de nacimiento</th>
+              <th>Teléfono</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      {/* TODO: Crear componente Paginador para reusar en todo el frontend */}
-      <Pagination className="usuarios-pagination mt-4">
-        <Pagination.First />
-        <Pagination.Prev />
-        <Pagination.Ellipsis />
-        <Pagination.Item>{1}</Pagination.Item>
-        <Pagination.Ellipsis />
-        <Pagination.Next />
-        <Pagination.Last />
-      </Pagination>
+          </thead>
+          <tbody>
+            {usuarios.length > 0 ? (
+              usuarios.map((usuario) => (
+                <tr key={usuario.id}>
+                  <td>{usuario.id}</td>
+                  <td>{usuario.nombreCompleto}</td>
+                  <td>
+                    {usuario.email || <span className="text-muted">-</span>}
+                  </td>
+                  <td className="text-center">
+                    {usuario.githubId ? (
+                      <Badge className="badge bg-success">Sí</Badge>
+                    ) : (
+                      <Badge className="badge bg-secondary">No</Badge>
+                    )}
+                  </td>
+                  <td>
+                    {usuario.fechaNacimiento ? (
+                      formatDateFromBackend(usuario.fechaNacimiento)
+                    ) : (
+                      <span className="text-muted">-</span>
+                    )}
+                  </td>
+                  <td>
+                    {usuario.telefono || <span className="text-muted">-</span>}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center text-muted">
+                  Sin datos.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      )}
     </Container>
   );
 }

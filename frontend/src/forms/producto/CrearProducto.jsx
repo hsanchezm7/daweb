@@ -1,12 +1,11 @@
-import useDocumentTitle from '@/hooks/useDocumentTitle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Button, Form, InputGroup, Modal } from 'react-bootstrap';
-
 import { CheckCircle, XCircle } from 'react-bootstrap-icons';
-
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 import { VALIDATION_MESSAGES } from '@/config/messages';
 import useApiPrivate from '@/hooks/useApiPrivate';
+import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
 
 function CrearProducto({ onSubmit, onCancel }) {
@@ -22,10 +21,37 @@ function CrearProducto({ onSubmit, onCancel }) {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [estado, setEstado] = useState('');
+  const [opcionesCategoria, setOpcionesCategoria] = useState([]);
+  const [opcionesEstado, setOpcionesEstado] = useState({});
   const [categoriaId, setCategoriaId] = useState('');
   const [envioDisponible, setEnvioDisponible] = useState(false);
 
   const [precioNegativo, setPrecioNegativo] = useState(false);
+
+  useEffect(() => {
+    const loadCategorias = async () => {
+      try {
+        const categorias = await productService.getCategoriasProductos();
+        console.log(categorias);
+        setOpcionesCategoria(categorias);
+      } catch (error) {
+        console.error('Error al cargar las categorias de productos:', error);
+      }
+    };
+
+    const loadEstados = async () => {
+      try {
+        const estadosValor = await productService.getEstadosProducto();
+        console.log(estadosValor);
+        setOpcionesEstado(estadosValor);
+      } catch (error) {
+        console.error('Error al cargar los estados de producto:', error);
+      }
+    };
+
+    loadCategorias();
+    loadEstados();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +70,6 @@ function CrearProducto({ onSubmit, onCancel }) {
     }
 
     try {
-      const estado = "COMO_NUEVO";
       const payload = {
         titulo,
         descripcion,
@@ -133,29 +158,32 @@ function CrearProducto({ onSubmit, onCancel }) {
           </InputGroup>
         </Form.Group>
 
-        {/*
         <Form.Group className="mb-3" controlId="productoCategoria">
           <Form.Label>Categoría</Form.Label>
-          <Form.Select defaultValue="">
-            <option value="" disabled>
-              Selecciona una categoria
-            </option>
-            <option value="tecnologia">Tecnología</option>
-            <option value="hogar">Hogar</option>
-            <option value="moda">Moda</option>
-            <option value="deporte">Deporte</option>
-          </Form.Select>
-        </Form.Group>
-        */}
-
-        <Form.Group className="mb-3" controlId="productoCategoriaId">
-          <Form.Label>Categoría</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Identificador de la categoría"
-            required
-            value={categoriaId}
-            onChange={(e) => setCategoriaId(e.target.value)}
+          <Typeahead
+            id="producto-categoria-typeahead"
+            labelKey="nombre"
+            onChange={(selected) => {
+              if (selected.length > 0) {
+                setCategoriaId(selected[0].id);
+              } else {
+                setCategoriaId('');
+              }
+            }}
+            options={opcionesCategoria}
+            placeholder="Selecciona una categoría..."
+            selected={opcionesCategoria.filter((c) => c.id === categoriaId)}
+            clearButton
+            renderMenuItemChildren={(p) => (
+              <div>
+                {p.nombre}
+                <div className="text-muted">
+                  <small>{p.descripcion}</small>
+                </div>
+              </div>
+            )}
+            inputProps={{ required: true }}
+            isInvalid={validated && !categoriaId}
           />
           <Form.Control.Feedback type="invalid">
             {VALIDATION_MESSAGES.REQUIRED}
@@ -172,11 +200,13 @@ function CrearProducto({ onSubmit, onCancel }) {
             <option value="" disabled>
               Selecciona un estado
             </option>
-            <option value="A_ESTRENAR">A estrenar</option>
-            <option value="COMO_NUEVO">Como nuevo</option>
-            <option value="BUEN_ESTADO">Buen estado</option>
-            <option value="ACEPTABLE">Aceptable</option>
-            <option value="PARA_PIEZAS">Para piezas</option>
+            {Object.entries(opcionesEstado).map(([key, value]) => {
+              return (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              );
+            })}
           </Form.Select>
           <Form.Control.Feedback type="invalid">
             {VALIDATION_MESSAGES.REQUIRED}

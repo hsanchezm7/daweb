@@ -37,9 +37,31 @@ export const formatDateForPayload = (displayDate) => {
 // convierte yyyy-MM-dd -> dd/MM/yyyy
 export const formatDateFromBackend = (isoDate) => {
   if (!isoDate) return '';
-  const [year, month, day] = isoDate.split('-');
+  const datePart = isoDate.split('T')[0];
+  const [year, month, day] = datePart.split('-');
   if (!year || !month || !day) return '';
   return `${day}/${month}/${year}`;
+};
+
+// convierte yyyy-MM-ddThh:mm:ss -> dd/MM/yyyy hh:mm
+export const formatDateTimeFromBackend = (isoDate) => {
+  if (!isoDate) return '';
+  try {
+    const date = new Date(isoDate);
+    if (isNaN(date.getTime())) return isoDate;
+
+    const displayFormatter = new Intl.DateTimeFormat('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return displayFormatter.format(date);
+    // eslint-disable-next-line no-unused-vars
+  } catch (e) {
+    return isoDate;
+  }
 };
 
 export const createBirthDatePicker = (element) => {

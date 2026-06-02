@@ -2,9 +2,11 @@ package es.um.arso.productos.servicio;
 
 import es.um.arso.productos.modelo.Categoria;
 import es.um.arso.productos.repositorio.RepositorioCategorias;
+import es.um.arso.productos.rest.dto.CategoriaDto;
 import es.um.arso.productos.servicio.xml.CategoriaXML;
 import es.um.arso.repositorio.EntidadNoEncontrada;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 import javax.xml.bind.JAXBContext;
@@ -94,5 +96,23 @@ public class ServicioCategorias implements IServicioCategorias {
                 .findById(categoriaId)
                 .orElseThrow(() -> new EntidadNoEncontrada(categoriaId + " no existe"));
         return c.getDescendientes();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CategoriaDto> getCategorias() {
+
+        List<CategoriaDto> categorias = new ArrayList<>();
+
+        repositorioCategorias.findAll().forEach(categoria -> {
+            CategoriaDto dto = new CategoriaDto();
+            dto.setId(categoria.getId());
+            dto.setNombre(categoria.getNombre());
+            dto.setDescripcion(categoria.getDescripcion());
+
+            categorias.add(dto);
+        });
+
+        return categorias;
     }
 }

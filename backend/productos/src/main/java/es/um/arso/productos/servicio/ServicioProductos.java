@@ -9,6 +9,7 @@ import es.um.arso.productos.repositorio.RepositorioProductos;
 import es.um.arso.productos.repositorio.RepositorioUsuarios;
 import es.um.arso.repositorio.EntidadNoEncontrada;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -229,5 +230,10 @@ public class ServicioProductos implements IServicioProductos {
                 || !vendedorId.equals(producto.getVendedor().getId())) {
             throw new SecurityException("Solo el propietario puede modificar este producto");
         }
+    }
+    
+    @Override
+    public List<EstadoProducto> getEstadosProducto() {
+        return Arrays.asList(EstadoProducto.values());
     }
 }

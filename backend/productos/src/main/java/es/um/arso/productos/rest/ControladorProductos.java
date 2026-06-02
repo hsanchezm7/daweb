@@ -1,17 +1,26 @@
 package es.um.arso.productos.rest;
 
+import es.um.arso.productos.modelo.Categoria;
 import es.um.arso.productos.modelo.EstadoProducto;
 import es.um.arso.productos.modelo.Producto;
+import es.um.arso.productos.rest.dto.CategoriaDto;
 import es.um.arso.productos.rest.dto.LugarRecogidaDto;
 import es.um.arso.productos.rest.dto.ModificarProductoDto;
 import es.um.arso.productos.rest.dto.NuevoProductoDto;
 import es.um.arso.productos.rest.dto.ProductoDto;
+import es.um.arso.productos.servicio.IServicioCategorias;
 import es.um.arso.productos.servicio.IServicioProductos;
 import es.um.arso.productos.servicio.ProductoResumen;
+import es.um.arso.productos.servicio.ServicioCategorias;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.security.Principal;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +46,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/productos")
 public class ControladorProductos {
 
+
     private static final Logger log = LoggerFactory.getLogger(ControladorProductos.class);
 
     private final IServicioProductos servicioProductos;
+
+    private final IServicioCategorias servicioCategorias;
 
     private final PagedResourcesAssembler<ProductoResumen> pagedResourcesAssembler;
 
@@ -48,10 +60,11 @@ public class ControladorProductos {
     public ControladorProductos(
             IServicioProductos servicioProductos,
             PagedResourcesAssembler<ProductoResumen> pagedResourcesAssembler,
-            ProductoResumenAssembler productoResumenAssembler) {
+            ProductoResumenAssembler productoResumenAssembler, IServicioCategorias servicioCategorias) {
         this.servicioProductos = servicioProductos;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.productoResumenAssembler = productoResumenAssembler;
+        this.servicioCategorias = servicioCategorias;
     }
 
     @PostMapping
@@ -202,5 +215,25 @@ public class ControladorProductos {
                 this.servicioProductos.buscarPaginado(categoriaId, texto, estadoMinimo, precioMaximo, paginacion);
 
         return this.pagedResourcesAssembler.toModel(resultado, productoResumenAssembler);
+    }
+
+    @GetMapping("/categorias")
+    @Operation(summary = "Categorías", description = "Obtiene las categorías de productos")
+    public List<CategoriaDto> getCategorias() {
+        log.info("GET /productos/categorias");
+
+        return servicioCategorias.getCategorias();
+    }
+
+    @GetMapping("/estados")
+    @Operation(summary = "Estados de un producto", description = "Obtiene los posibles estados de un producto")
+    public Map<EstadoProducto, String> getEstadosProducto() {
+        log.info("GET /productos/estados");
+
+        List<EstadoProducto> estados = servicioProductos.getEstadosProducto();
+
+        Map<EstadoProducto, String> estadoValor = estados.stream().collect(Collectors.toMap(e -> e, EstadoProducto::getValor, (e1, e2) -> e1, LinkedHashMap::new)) ;
+
+        return estadoValor;
     }
 }

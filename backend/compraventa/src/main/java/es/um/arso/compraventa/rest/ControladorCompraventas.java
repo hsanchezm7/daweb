@@ -123,10 +123,13 @@ public class ControladorCompraventas {
     @GetMapping
     @Operation(
             summary = "Buscar compraventas",
-            description = "Obtiene un listado paginado de compraventas entre dos usuarios específicos.")
+            description = "Obtiene un listado paginado de compraventas. Permite filtrar por comprador, vendedor o ambos.")
     @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public PagedModel<EntityModel<CompraventaResumen>> getCompraventasEntreUsuarios(
-            @RequestParam String idComprador, @RequestParam String idVendedor, Pageable paginacion) throws Exception {
+            @RequestParam(required = false) String idComprador,
+            @RequestParam(required = false) String idVendedor,
+            Pageable paginacion)
+            throws Exception {
 
         log.info("GET /compraventas idComprador={}, idVendedor={}", idComprador, idVendedor);
 

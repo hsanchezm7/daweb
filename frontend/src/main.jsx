@@ -1,4 +1,5 @@
 import { StrictMode } from 'react';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 

@@ -1,3 +1,5 @@
+import { api } from './api';
+
 // factoría
 const createProductService = (apiInstance) => ({
   getProduct: async (id) => {
@@ -20,6 +22,33 @@ const createProductService = (apiInstance) => ({
     } catch (error) {
       console.error(
         'Error al crear el producto:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
+
+  // rutas públicas
+  getEstadosProducto: async () => {
+    try {
+      const response = await api.get(`/productos/estados`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al obtener los estados de producto:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
+
+  getCategoriasProductos: async () => {
+    try {
+      const response = await api.get(`/productos/categorias`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al obtener las categorias de productos:',
         error.response?.data || error.message
       );
       throw error;

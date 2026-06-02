@@ -33,14 +33,14 @@ Accesibles para todos los visitantes.
 
 Requieren autenticación. Usar [React Router Private Routes](https://www.robinwieruch.de/react-router-private-routes/).
 
-- [X] **Mi Cuenta (`/mi-cuenta`)**: Vista para editar los datos personales del perfil.
+- [X] ~~**Mi Cuenta (`/mi-cuenta`)**: Vista para editar los datos personales del perfil.~~
 
-- [ ] **Mis Productos (`/mis-productos`)**: 
+- [X] **Mis Productos (`/mis-productos`)**: **TODO**: llamar a API y mapear a cards. 
     - Botón para "Crear Producto".
     - Debe permitir para cada producto: "Editar" y "Eliminar". Implementar con botones o iconos, por ejemplo.
     - Pestañas para: *En venta*, *Vendidos* (opcional).
     
-- [ ] **Nuevo Producto (`/nuevo-producto`)**: Formulario de creación.
+- [X] ~~**Nuevo Producto (`/nuevo-producto`)**: Formulario de creación.~~
 
 - [ ] **Editar Producto (`/editar-producto/:id`)**: Variante del formulario de creación con datos precargados.
 
@@ -48,8 +48,8 @@ Requieren autenticación. Usar [React Router Private Routes](https://www.robinwi
 
 Sección de gestión global dentro del menú de usuario.
 
-- [ ] **Usuarios Registrados (`/admin/usuarios`)**: Tabla de gestión de usuarios.
-- [ ] **Compraventas Realizadas (`/admin/transacciones`)**.
+- [X] ~~**Usuarios Registrados (`/admin/usuarios`)**: Tabla de gestión de usuarios.~~
+- [X] ~~**Compraventas Realizadas (`/admin/transacciones`)**~~.
 
 ---
 
@@ -62,15 +62,15 @@ Sección de gestión global dentro del menú de usuario.
     - Buscador integrado (redirige a `/buscar`).
     - Icono de usuario con trigger para menú lateral.
     
-- [ ] **Menú de Usuario (Sidebar)**:
+- [X] ~~**Menú de Usuario (Sidebar)**:~~ **TODO**: offcanvas.
     - Reutilizable: Se muestra a la derecha en el Inicio y a la izquierda en las vistas de gestión.
     - Secciones y enlaces: 
         - Productos: Mis productos, Historial de pedidos. 
         - Mi cuenta: Datos de cuenta.
         - Administración (si es admin). 
-        - Cerrar sesión.
+        - Cerrar sesión. 
     
-- [ ] **Footer**: Enlaces de interés, RRSS y copyright.
+- [X] **Footer**: Enlaces de interés, RRSS y copyright.
 
 ### producto
 
@@ -80,12 +80,12 @@ Sección de gestión global dentro del menú de usuario.
 
 ### formulario
 
-- [ ] **Formulario Producto**: Componente dual para creación y edición (recibe `initialData` como prop).
+- [X] ~~**Formulario Producto**: Componente dual para creación y edición (recibe `initialData` como prop).~~
 
-- [X] **Formulario de Perfil**: Edición de datos de usuario.
+- [X] ~~**Formulario de Perfil**: Edición de datos de usuario.~~
 
 ---
 
 ## notas
 
-- [ ] **Ruteo**: Las rutas deben gestionarse con `react-router-dom`. Instalar.
+- [X] ~~**Ruteo**: Las rutas deben gestionarse con `react-router-dom`. Instalar.~~

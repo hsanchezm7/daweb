@@ -13,6 +13,19 @@ const createUserService = (apiInstance) => ({
     }
   },
 
+  getUsers: async () => {
+    try {
+      const response = await apiInstance.get(`/usuarios/`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al obtener todos los usuarios:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
+
   updateUser: async (id, data) => {
     try {
       const response = await apiInstance.put(`/usuarios/${id}`, data);

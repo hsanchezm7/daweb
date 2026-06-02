@@ -40,4 +40,6 @@ public interface IServicioProductos {
 
     Page<ProductoResumen> buscarPaginado(
             String categoriaId, String texto, EstadoProducto estadoMinimo, Double precioMaximo, Pageable paginacion);
+
+   List<EstadoProducto> getEstadosProducto();
 }

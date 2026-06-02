@@ -148,8 +148,16 @@ public class ServicioUsuarios implements IServicioUsuarios {
                 Usuario usuario = recuperar(id);
                 UsuarioResumen resumen = new UsuarioResumen();
                 resumen.setId(usuario.getId());
-                resumen.setNombre(usuario.getNombre());
+                resumen.setNombre(
+                    usuario.getNombre() +
+                    (usuario.getApellidos() != null && !usuario.getApellidos().isEmpty()
+                        ? " " + usuario.getApellidos()
+                        : "")
+                );
                 resumen.setEmail(usuario.getEmail());
+                resumen.setFechaNacimiento(usuario.getFechaNacimiento());
+                resumen.setTelefono(usuario.getTelefono());
+                resumen.setGithubId(usuario.getGithubId());
                 resultado.add(resumen);
             } catch (EntidadNoEncontrada e) {
                 log.warn("Usuario no encontrado al recuperar todos: id={}", id);

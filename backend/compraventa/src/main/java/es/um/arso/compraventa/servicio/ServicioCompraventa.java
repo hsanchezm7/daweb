@@ -113,8 +113,20 @@ public class ServicioCompraventa implements IServicioCompraventa {
     @Override
     public Page<CompraventaResumen> getCompraventasEntreUsuariosPaginado(
             String idComprador, String idVendedor, Pageable pageable) {
-        Page<Compraventa> compraventas =
-                repositorioCompraventas.findByIdCompradorAndIdVendedor(idComprador, idVendedor, pageable);
+        String comprador = normalizarId(idComprador);
+        String vendedor = normalizarId(idVendedor);
+
+        Page<Compraventa> compraventas;
+        if (comprador != null && vendedor != null) {
+            compraventas = repositorioCompraventas.findByIdCompradorAndIdVendedor(comprador, vendedor, pageable);
+        } else if (comprador != null) {
+            compraventas = repositorioCompraventas.findByIdComprador(comprador, pageable);
+        } else if (vendedor != null) {
+            compraventas = repositorioCompraventas.findByIdVendedor(vendedor, pageable);
+        } else {
+            compraventas = repositorioCompraventas.findAll(pageable);
+        }
+
         return compraventas.map(this::toCompraventaResumen);
     }
 
@@ -139,5 +151,14 @@ public class ServicioCompraventa implements IServicioCompraventa {
         resumen.setNombreComprador(compraventa.getNombreComprador());
         resumen.setFecha(compraventa.getFecha());
         return resumen;
+    }
+
+    private String normalizarId(String id) {
+        if (id == null) {
+            return null;
+        }
+
+        String trimmed = id.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 }
