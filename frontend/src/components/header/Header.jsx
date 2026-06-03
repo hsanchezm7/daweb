@@ -1,11 +1,44 @@
 import { Container, Dropdown, Form, Image } from 'react-bootstrap';
+import { List } from 'react-bootstrap-icons';
 
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+
+
+import { faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 
 import './Header.css';
 
-function Header() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Header({ onMenuToggle }) {
   return (
     <header className="py-3 border-bottom">
       <Container
@@ -15,6 +48,15 @@ function Header() {
       >
         {/* col-1: logo brand */}
         <div className="d-flex align-items-center">
+          {onMenuToggle && (
+            <button
+              onClick={onMenuToggle}
+              className="btn btn-link link-body-emphasis p-0 me-3 d-lg-none d-flex align-items-center"
+              aria-label="Abrir menú"
+            >
+              <List className="mx-2" size={28} />
+            </button>
+          )}
           <a
             href="/"
             className="d-flex align-items-center link-body-emphasis text-decoration-none"

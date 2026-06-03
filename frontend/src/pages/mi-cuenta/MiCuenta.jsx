@@ -162,7 +162,7 @@ function MiCuenta() {
         {errMsg && <Alert variant="danger">{errMsg}</Alert>}
         {successMsg && <Alert variant="success">{successMsg}</Alert>}
 
-        <Row className="g-3">
+        <Row className="gy-2 gx-4">
           <Col md={6}>
             <Form.Group controlId="accountNombre" className="mb-3">
               <Form.Label>Nombre</Form.Label>
