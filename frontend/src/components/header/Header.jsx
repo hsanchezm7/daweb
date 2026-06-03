@@ -1,44 +1,32 @@
 import { Container, Dropdown, Form, Image } from 'react-bootstrap';
 import { List } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 
-
-
-import { faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
+import useAuth from '@/hooks/useAuth';
+import authService from '@/services/authService';
 
 import './Header.css';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function Header({ onMenuToggle }) {
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+    } finally {
+      console.log('Cerrando sesión...');
+
+      setAuth({});
+      navigate('/login', { replace: true });
+    }
+  };
+
   return (
     <header className="py-3 border-bottom">
       <Container
@@ -107,7 +95,7 @@ function Header({ onMenuToggle }) {
               <Dropdown.Item href="#/settings">Settings</Dropdown.Item>
               <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item href="#/signout">
+              <Dropdown.Item onClick={handleLogout}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="me-2"

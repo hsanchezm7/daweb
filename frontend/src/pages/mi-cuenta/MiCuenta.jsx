@@ -20,7 +20,11 @@ import {
   formatDateForPayload,
   formatDateFromBackend,
 } from '@/config/datepicker';
-import { ACCOUNT_MESSAGES, VALIDATION_MESSAGES, getPhoneErrorMessage } from '@/config/messages';
+import {
+  ACCOUNT_MESSAGES,
+  VALIDATION_MESSAGES,
+  getPhoneErrorMessage,
+} from '@/config/messages';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useAuth from '@/hooks/useAuth';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
@@ -90,8 +94,8 @@ function MiCuenta() {
           fechaNacimiento: formatDateFromBackend(user.fechaNacimiento),
           telefono: user.telefono ?? '',
         });
-      } catch (error) {
-        console.error('Error al cargar los datos de MiCuenta:', error);
+      } catch (err) {
+        console.error('Error al cargar los datos de MiCuenta:', err);
       }
     };
 

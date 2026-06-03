@@ -25,6 +25,15 @@ $btn-border-radius: 100px;
   margin-top: 0 !important;
 }
 
+/* reducir weights del texto de las tablas */
+.table th {
+  font-weight: 600 !important;
+}
+
+.table td {
+  font-weight: 300 !important;
+}
+
 .iti {
   width: 100%;
 }

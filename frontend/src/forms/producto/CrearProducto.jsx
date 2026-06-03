@@ -34,8 +34,8 @@ function CrearProducto({ onSubmit, onCancel }) {
         const categorias = await productService.getCategoriasProductos();
         console.log(categorias);
         setOpcionesCategoria(categorias);
-      } catch (error) {
-        console.error('Error al cargar las categorias de productos:', error);
+      } catch (err) {
+        console.error('Error al cargar las categorias de productos:', err);
       }
     };
 
@@ -44,8 +44,8 @@ function CrearProducto({ onSubmit, onCancel }) {
         const estadosValor = await productService.getEstadosProducto();
         console.log(estadosValor);
         setOpcionesEstado(estadosValor);
-      } catch (error) {
-        console.error('Error al cargar los estados de producto:', error);
+      } catch (err) {
+        console.error('Error al cargar los estados de producto:', err);
       }
     };
 
