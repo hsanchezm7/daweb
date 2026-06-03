@@ -2,6 +2,19 @@ import { api } from './api';
 
 // factoría
 const createProductService = (apiInstance) => ({
+  getProductos: async (params = {}) => {
+    try {
+      const response = await apiInstance.get(`/productos/`, { params });
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al obtener todos los prodcutos:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
+
   getProduct: async (id) => {
     try {
       const response = await apiInstance.get(`/productos/${id}`);

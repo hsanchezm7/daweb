@@ -1,16 +1,20 @@
-import { Accordion, Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Accordion, Button, Col, Form, Row } from 'react-bootstrap';
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 import './Filtro.css';
 
-function Filtro() {
+function Filtro({
+  opcionesCategoria = [],
+  opcionesEstado = {},
+  filtros = {},
+  onFiltroChange,
+}) {
+  const { categoriaId = '', estado = '' } = filtros;
+
   return (
-    <Container className="d-flex flex-column gap-4" fluid>
+    <div className="filtro p-3 d-flex flex-column gap-4">
       {/* TODO: lógica de botones */}
       <div className="d-flex gap-2 align-self-center">
-        <Button variant="primary" className="d-lg-none py-2 px-4 text-nowrap">
-          <span className="small">Mostrar/Ocultar filtros</span>
-        </Button>
         <Button variant="outline-dark" className="py-2 px-4 text-nowrap">
           <span className="small">Limpiar filtros</span>
         </Button>
@@ -38,13 +42,21 @@ function Filtro() {
                 <Form.Label>
                   Selecciona el estado mínimo del producto
                 </Form.Label>
-                <Form.Select aria-label="Default select example">
-                  <option>Selecciona un estado</option>
-                  <option value="1">A estrenar</option>
-                  <option value="2">Como nuevo</option>
-                  <option value="3">Buen estado</option>
-                  <option value="4">Aceptable</option>
-                  <option value="5">Para piezas</option>
+                <Form.Select
+                  aria-label="Filtro de estado"
+                  value={estado}
+                  onChange={(e) =>
+                    onFiltroChange && onFiltroChange('estado', e.target.value)
+                  }
+                >
+                  <option value="">Cualquier estado</option>
+                  {Object.entries(opcionesEstado).map(([key, value]) => {
+                    return (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    );
+                  })}
                 </Form.Select>
               </Accordion.Body>
             </Accordion.Item>
@@ -52,30 +64,38 @@ function Filtro() {
               <Accordion.Header>Categoría</Accordion.Header>
               <Accordion.Body>
                 <Form.Label>Selecciona la categoría del producto</Form.Label>
-                <Form.Check
-                  type="radio"
-                  id="categoria-1"
-                  name="categoria"
-                  label="Categoría 1"
-                />
-                <Form.Check
-                  type="radio"
-                  id="categoria-2"
-                  name="categoria"
-                  label="Categoría 2"
-                />
-                <Form.Check
-                  type="radio"
-                  id="categoria-3"
-                  name="categoria"
-                  label="Categoría 3"
+                <Typeahead
+                  id="filtro-categoria-typeahead"
+                  labelKey="nombre"
+                  onChange={(selected) => {
+                    if (selected.length > 0) {
+                      onFiltroChange &&
+                        onFiltroChange('categoriaId', selected[0].id);
+                    } else {
+                      onFiltroChange && onFiltroChange('categoriaId', '');
+                    }
+                  }}
+                  options={opcionesCategoria}
+                  placeholder="Selecciona una categoría..."
+                  selected={opcionesCategoria.filter(
+                    (c) => c.id === categoriaId
+                  )}
+                  clearButton
+                  renderMenuItemChildren={(p) => (
+                    <div>
+                      {p.nombre}
+                      <div className="text-muted">
+                        <small>{p.descripcion}</small>
+                      </div>
+                    </div>
+                  )}
                 />
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 }
 

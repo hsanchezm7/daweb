@@ -1,8 +1,51 @@
-.card {
-  position: relative;
+.card-3d-wrapper {
+  perspective: 1000px;
 }
 
-.card .card-icon {
+.card-producto {
+  position: relative;
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.2s ease-out;
+  transform-style: preserve-3d;
+  --x-rotation: 0deg;
+  --y-rotation: 0deg;
+}
+
+.card-producto:hover {
+  transform: rotateX(var(--x-rotation)) rotateY(var(--y-rotation)) scale(1.02);
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.15) !important;
+  z-index: 1;
+}
+
+/* Brillo dinámico superpuesto en la tarjeta */
+.card-producto::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--card-x, 50%) var(--card-y, 50%),
+    rgba(255, 255, 255, 0.2) 10%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.card-producto:hover::after {
+  opacity: 1;
+}
+
+.card-producto .card-body {
+  margin-top: 220px;
+  position: relative;
+  z-index: 2;
+}
+
+.card-producto .card-icon {
   position: absolute;
   top: 15px;
   right: 20px;
@@ -10,9 +53,66 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.card-producto .btn-primary.btn-dynamic-hover {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.card-producto .btn-primary.btn-dynamic-hover::before {
+  content: '';
+  position: absolute;
+  top: var(--y, 50%);
+  left: var(--x, 50%);
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card-producto:hover .btn-primary.btn-dynamic-hover {
+  box-shadow: 5px 5px 40px rgba(0, 102, 255, 0.4);
+}
+
+.card-producto:hover .btn-primary.btn-dynamic-hover:hover::before {
+  width: 250px;
+  height: 250px;
+}
+
+.card-producto .btn-primary.btn-dynamic-hover:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-producto .card-img-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  z-index: 0;
+  transition: all 0.4s ease-in-out;
+}
+
+.card-producto:hover .card-img-top {
+  height: 100%;
+  opacity: 0.4;
 }

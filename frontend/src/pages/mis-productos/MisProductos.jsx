@@ -1,17 +1,33 @@
-import { useState } from 'react';
-import { Card, Container, Modal } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Alert, Card, Modal } from 'react-bootstrap';
 import { PlusCircleDotted } from 'react-bootstrap-icons';
 
-import GridProductos from '@/components/grid-productos/GridProductos';
+import GridProductos, {
+  VISTAS_GRID,
+} from '@/components/grid-productos/GridProductos';
 import CrearProducto from '@/forms/producto/CrearProducto';
-
+import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
+import createProductService from '@/services/productService';
 
 import './MisProductos.css';
 
 function MisProductos() {
   useDocumentTitle('Mis productos');
   const [showModal, setShowModal] = useState(false);
+
+  const apiPrivate = useApiPrivate();
+  const productService = createProductService(apiPrivate);
+
+  const [misProductos, setMisProductos] = useState([]);
+  const [pageInfo, setPageInfo] = useState({
+    size: 0,
+    totalElements: 0,
+    totalPages: 0,
+    number: 0,
+  });
+
+  const [errMsg, setErrMsg] = useState('');
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -20,6 +36,32 @@ function MisProductos() {
     event.preventDefault();
     handleCloseModal();
   };
+
+  useEffect(() => {
+    const loadMisProductos = async () => {
+      try {
+        const params = {};
+        // if (idVendedor) params.idVendedor = idVendedor;
+        // if (idComprador) params.idComprador = idComprador;
+        // params.page y params.size se añadirán al hacer la paginación
+
+        const data = await productService.getProductos(params);
+
+        const productos = data._embedded?.productoResumenList || [];
+        const pageInfo = data.page;
+
+        console.log(productos);
+
+        setMisProductos(productos);
+        setPageInfo(pageInfo);
+      } catch (error) {
+        console.error('Error al cargar los productos:', error);
+        setErrMsg('Error al cargar los productos');
+      }
+    };
+
+    loadMisProductos();
+  }, []);
 
   const renderNuevoProductoCard = () => (
     <Card className="h-100 rounded-5 overflow-hidden shadow-sm mis-productos-nuevo">
@@ -48,15 +90,19 @@ function MisProductos() {
   );
 
   return (
-    <Container className="mis-productos" fluid>
+    <div className="mis-productos">
       <div className="mb-4">
         <h2 className="mb-2">Mis productos</h2>
         <p className="text-muted m-0">Consulta tus productos anunciados.</p>
       </div>
 
+      {errMsg && <Alert variant="danger">{errMsg}</Alert>}
+
       <GridProductos
         className="mis-productos-grid"
         nuevoProductoCard={renderNuevoProductoCard()}
+        productos={misProductos}
+        vista={VISTAS_GRID.MIS_PRODUCTOS}
       />
 
       <Modal
@@ -71,7 +117,7 @@ function MisProductos() {
         </Modal.Header>
         <CrearProducto onSubmit={handleSubmit} onCancel={handleCloseModal} />
       </Modal>
-    </Container>
+    </div>
   );
 }
 

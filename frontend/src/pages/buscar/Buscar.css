@@ -1,5 +1,21 @@
+.buscar-sidebar-divider {
+  border-right: 1px solid var(--bs-border-color);
+}
+
+@media (min-width: 768px) {
+  .buscar-body {
+    max-width: 760px !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .buscar-sidebar-divider {
+    border-right: 0;
+  }
+}
+
 @media (min-width: 992px) {
   .buscar-body {
-    max-width: 1600px !important;
+    max-width: 1700px !important;
   }
 }

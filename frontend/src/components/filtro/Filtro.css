@@ -14,3 +14,7 @@
 .form-label {
   margin-bottom: 16px !important;
 }
+
+.filtro {
+  width: 300px;
+}

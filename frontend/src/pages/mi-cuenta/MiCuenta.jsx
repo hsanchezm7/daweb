@@ -1,13 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  Button,
-  Col,
-  Container,
-  Form,
-  InputGroup,
-  Row,
-} from 'react-bootstrap';
+import { Alert, Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { CalendarFill, CheckCircle } from 'react-bootstrap-icons';
 
 import IntlTelInput from '@intl-tel-input/react';
@@ -156,7 +148,7 @@ function MiCuenta() {
   };
 
   return (
-    <Container className="mi-cuenta" fluid>
+    <div className="mi-cuenta">
       <div className="mb-4">
         <h2 className="mb-2">Mi cuenta</h2>
         <p className="text-muted m-0">Actualiza tus datos de cuenta.</p>
@@ -268,7 +260,7 @@ function MiCuenta() {
           </Button>
         </div>
       </Form>
-    </Container>
+    </div>
   );
 }
 
