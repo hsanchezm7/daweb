@@ -16,6 +16,7 @@ import Inicio from '@/pages/inicio/Inicio';
 import MiCuenta from '@/pages/mi-cuenta/MiCuenta';
 import MisProductos from '@/pages/mis-productos/MisProductos';
 import Unauthorized from '@/pages/unauthorized/Unauthorized';
+import VerProducto from '@/pages/ver-producto/VerProducto';
 
 import './App.css';
 
@@ -25,6 +26,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Inicio />} />
         <Route path="/buscar" element={<Buscar />} />
+        <Route path="/producto/:id" element={<VerProducto />} />
       </Route>
 
       <Route element={<AuthLayout />}>

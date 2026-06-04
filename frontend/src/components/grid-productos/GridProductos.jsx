@@ -7,6 +7,7 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,6 +25,8 @@ function GridProductos({
   productos = [],
   vista = VISTAS_GRID.BUSCAR, // por defecto
 }) {
+  const navigate = useNavigate();
+
   // efecto del botón
   const handleMouseMove = (e) => {
     const btn = e.currentTarget;
@@ -111,6 +114,7 @@ function GridProductos({
                       variant="primary"
                       className="w-100 btn-dynamic-hover"
                       onMouseMove={handleMouseMove}
+                      onClick={() => navigate(`/producto/${producto.id}`)}
                     >
                       {vista === VISTAS_GRID.MIS_PRODUCTOS
                         ? 'Ver detalles'
