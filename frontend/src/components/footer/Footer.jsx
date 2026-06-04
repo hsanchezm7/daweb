@@ -1,26 +1,30 @@
 import { Container, Nav } from 'react-bootstrap';
 
+import swapitLogo from '@/assets/swapit-logo.svg';
+
 import './Footer.css';
 
 function Footer() {
   return (
     <Container>
-      <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p className="col-md-4 mb-0 text-body-secondary">
-          &copy; {new Date().getFullYear()} Daweb. Todos los derechos reservados
-        </p>
+      <footer className="d-flex flex-column flex-md-row justify-content-between align-items-center py-3 my-2 border-top w-100 gap-3 gap-md-0">
+        <div className="col-md-4 d-flex justify-content-center justify-content-md-start align-items-center">
+          <span className="mb-0 text-center text-md-start text-body-secondary lh-1">
+            &copy; {new Date().getFullYear()} swapIt. Todos los derechos reservados
+          </span>
+        </div>
 
-        <a
-          href="/"
-          className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-          aria-label="Bootstrap"
-        >
-          <svg className="bi me-2" width="40" height="32" aria-hidden="true">
-            <use xlinkHref="#bootstrap"></use>
-          </svg>
-        </a>
+        <div className="col-md-4 d-flex justify-content-center align-items-center">
+          <a
+            href="/"
+            className="link-body-emphasis text-decoration-none d-flex align-items-center justify-content-center"
+            style={{ height: '48px' }}
+          >
+            <img src={swapitLogo} alt="swapIt Logo" height="48" className="d-block" />
+          </a>
+        </div>
 
-        <Nav className="col-md-4 justify-content-end">
+        <Nav className="col-md-4 justify-content-center justify-content-md-end align-items-center">
           <Nav.Item>
             <Nav.Link href="/" className="px-2 text-body-secondary">
               Inicio

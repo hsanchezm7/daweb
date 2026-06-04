@@ -1,7 +1,7 @@
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 
 function Inicio() {
-  useDocumentTitle('Inicio');
+  useDocumentTitle();
 
   return (
     <div className="pagina-inicio">

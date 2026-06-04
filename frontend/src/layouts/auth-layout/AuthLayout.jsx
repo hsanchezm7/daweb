@@ -7,13 +7,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import swapitLockup from '@/assets/swapit-lockup.svg';
+
+
 import './AuthLayout.css';
 
 function AuthLayout() {
   return (
     <div className="min-vh-100 d-flex flex-column bg-light">
-      <header className="pt-lg-6 p-lg-5 p-3 text-start text-md-center bg-white shadow-sm no-shadow-lg">
-        <h3 className="mb-0">Brand</h3>
+      <header className="p-3 p-sm-4 text-start text-md-center bg-white shadow-sm no-shadow-lg">
+        <img src={swapitLockup} alt="swapIt Logo" height="64" className="lockup" />
       </header>
 
       <main className="container d-flex flex-grow-1 align-items-center justify-content-center">

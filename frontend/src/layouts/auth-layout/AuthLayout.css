@@ -24,3 +24,13 @@
 .input-group:has(.is-invalid) > .invalid-feedback {
   display: block;
 }
+
+.lockup {
+  height: 64px;
+}
+
+@media (max-width: 768px) {
+  .lockup {
+    height: 48px;
+  }
+}

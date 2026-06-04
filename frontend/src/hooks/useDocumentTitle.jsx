@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const SITE_NAME = 'Daweb';
+const SITE_NAME = 'swapIt';
 
 const useDocumentTitle = (title) => {
   useEffect(() => {
