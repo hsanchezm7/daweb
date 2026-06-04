@@ -9,11 +9,14 @@ import CrearProducto from '@/forms/producto/CrearProducto';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
+import useAuth from '@/hooks/useAuth';
 
 import './MisProductos.css';
 
 function MisProductos() {
   useDocumentTitle('Mis productos');
+
+  const { auth } = useAuth();
   const [showModal, setShowModal] = useState(false);
 
   const apiPrivate = useApiPrivate();
@@ -41,8 +44,7 @@ function MisProductos() {
     const loadMisProductos = async () => {
       try {
         const params = {};
-        // if (idVendedor) params.idVendedor = idVendedor;
-        // if (idComprador) params.idComprador = idComprador;
+        params.idVendedor = auth.usuario;
         // params.page y params.size se añadirán al hacer la paginación
 
         const data = await productService.getProductos(params);
