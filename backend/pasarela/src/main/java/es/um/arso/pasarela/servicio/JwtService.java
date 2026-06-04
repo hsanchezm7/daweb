@@ -1,8 +1,8 @@
 package es.um.arso.pasarela.servicio;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.Instant;
 import java.util.Date;
@@ -21,11 +21,11 @@ public class JwtService {
 
     @Value("${jwt.secret}")
     private String secret;
-    
-    @Value("${jwt.access.expirationSeconds:15}")
+
+    @Value("${jwt.access.expirationSeconds}")
     private int accessExpirationSeconds;
 
-    @Value("${jwt.refresh.expirationSeconds:2592000}")
+    @Value("${jwt.refresh.expirationSeconds}")
     private int refreshExpirationSeconds;
 
     public String generateAccessToken(String subject, String roles) {
@@ -41,8 +41,7 @@ public class JwtService {
 
         if (TOKEN_TYPE_ACCESS.equals(type))
             log.info("ACCESS TOKEN generado para user={} roles={} expiraEn={}s", subject, roles, expirationSeconds);
-        else
-            log.info("REFRESH TOKEN generado para user={} expiraEn={}s", subject, expirationSeconds);
+        else log.info("REFRESH TOKEN generado para user={} expiraEn={}s", subject, expirationSeconds);
 
         JwtBuilder builder = Jwts.builder()
                 .setSubject(subject)
@@ -59,10 +58,7 @@ public class JwtService {
 
     // TODO: comprobar JwtException
     public Claims validateToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     public boolean isAccessToken(Claims claims) {

@@ -6,7 +6,7 @@ public interface IServicioUsuariosExterno {
 
     UsuarioAuthInfo autenticarCredenciales(String username, String password);
 
-    UsuarioBusquedaInfo buscarUsuario(String githubId, String email);
+    UsuarioAuthInfo buscarUsuario(String githubId, String email);
 
     UsuarioAuthInfo crearUsuarioOauth(String nombre, String email, String githubId);
 }

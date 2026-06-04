@@ -1,6 +1,5 @@
 package es.um.arso.productos.rest;
 
-import es.um.arso.productos.modelo.Categoria;
 import es.um.arso.productos.modelo.EstadoProducto;
 import es.um.arso.productos.modelo.Producto;
 import es.um.arso.productos.rest.dto.CategoriaDto;
@@ -11,7 +10,6 @@ import es.um.arso.productos.rest.dto.ProductoDto;
 import es.um.arso.productos.servicio.IServicioCategorias;
 import es.um.arso.productos.servicio.IServicioProductos;
 import es.um.arso.productos.servicio.ProductoResumen;
-import es.um.arso.productos.servicio.ServicioCategorias;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
@@ -20,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +43,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/productos")
 public class ControladorProductos {
 
-
     private static final Logger log = LoggerFactory.getLogger(ControladorProductos.class);
 
     private final IServicioProductos servicioProductos;
@@ -60,7 +56,8 @@ public class ControladorProductos {
     public ControladorProductos(
             IServicioProductos servicioProductos,
             PagedResourcesAssembler<ProductoResumen> pagedResourcesAssembler,
-            ProductoResumenAssembler productoResumenAssembler, IServicioCategorias servicioCategorias) {
+            ProductoResumenAssembler productoResumenAssembler,
+            IServicioCategorias servicioCategorias) {
         this.servicioProductos = servicioProductos;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.productoResumenAssembler = productoResumenAssembler;
@@ -82,7 +79,7 @@ public class ControladorProductos {
                 nuevoProducto.getEstado(),
                 nuevoProducto.getCategoriaId(),
                 nuevoProducto.isEnvioDisponible(),
-                principal != null ? principal.getName() : null);
+                principal.getName());
 
         String id = this.servicioProductos.crear(
                 nuevoProducto.getTitulo(),
@@ -91,7 +88,7 @@ public class ControladorProductos {
                 nuevoProducto.getEstado(),
                 nuevoProducto.getCategoriaId(),
                 nuevoProducto.isEnvioDisponible(),
-                principal != null ? principal.getName() : null);
+                principal.getName());
 
         URI nuevaURL = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -138,7 +135,7 @@ public class ControladorProductos {
                 modificacion.getPrecio(),
                 modificacion.getDescripcion(),
                 modificacion.isDisponibilidad(),
-                principal != null ? principal.getName() : null);
+                principal.getName());
         return ResponseEntity.noContent().build();
     }
 
@@ -158,11 +155,7 @@ public class ControladorProductos {
                 recogida.getLatitud());
 
         this.servicioProductos.asignarLugarRecogida(
-                id,
-                recogida.getDescripcion(),
-                recogida.getLongitud(),
-                recogida.getLatitud(),
-                principal != null ? principal.getName() : null);
+                id, recogida.getDescripcion(), recogida.getLongitud(), recogida.getLatitud(), principal.getName());
         return ResponseEntity.noContent().build();
     }
 
@@ -200,29 +193,51 @@ public class ControladorProductos {
             @RequestParam(required = false) String categoriaId,
             @RequestParam(required = false) String texto,
             @RequestParam(required = false) EstadoProducto estadoMinimo,
+            @RequestParam(required = false) Double precioMinimo,
             @RequestParam(required = false) Double precioMaximo,
+            @RequestParam(required = false) String idVendedor,
             Pageable paginacion)
             throws Exception {
 
         log.info(
-                "GET /productos categoriaId={}, texto={}, estadoMinimo={}, precioMaximo={}",
+                "GET /productos categoriaId={}, texto={}, estadoMinimo={}, precioMinimo={}, precioMaximo={}, idVendedor={}",
                 categoriaId,
                 texto,
                 estadoMinimo,
-                precioMaximo);
+                precioMinimo,
+                precioMaximo,
+                idVendedor);
 
-        Page<ProductoResumen> resultado =
-                this.servicioProductos.buscarPaginado(categoriaId, texto, estadoMinimo, precioMaximo, paginacion);
+        Page<ProductoResumen> resultado = this.servicioProductos.buscarPaginado(
+                categoriaId, texto, estadoMinimo, precioMinimo, precioMaximo, idVendedor, paginacion);
 
         return this.pagedResourcesAssembler.toModel(resultado, productoResumenAssembler);
     }
 
     @GetMapping("/categorias")
-    @Operation(summary = "Categorías", description = "Obtiene las categorías de productos")
+    @Operation(summary = "Categorías", description = "Obtiene todas las categorías de productos")
     public List<CategoriaDto> getCategorias() {
         log.info("GET /productos/categorias");
 
         return servicioCategorias.getCategorias();
+    }
+
+    @GetMapping("/categorias/raices")
+    @Operation(summary = "Categorías raíz", description = "Obtiene las categorías de nivel raíz")
+    public List<CategoriaDto> getCategoriasRaiz() {
+        log.info("GET /productos/categorias/raices");
+
+        return servicioCategorias.getRaices();
+    }
+
+    @GetMapping("/categorias/{categoriaId}/descendientes")
+    @Operation(
+            summary = "Descendientes de una categoría",
+            description = "Obtiene todos los descendientes de la categoría indicada por su id")
+    public List<CategoriaDto> getDescendientes(@PathVariable String categoriaId) throws Exception {
+        log.info("GET /productos/categorias/{}/descendientes", categoriaId);
+
+        return servicioCategorias.getDescendientes(categoriaId);
     }
 
     @GetMapping("/estados")
@@ -232,7 +247,8 @@ public class ControladorProductos {
 
         List<EstadoProducto> estados = servicioProductos.getEstadosProducto();
 
-        Map<EstadoProducto, String> estadoValor = estados.stream().collect(Collectors.toMap(e -> e, EstadoProducto::getValor, (e1, e2) -> e1, LinkedHashMap::new)) ;
+        Map<EstadoProducto, String> estadoValor = estados.stream()
+                .collect(Collectors.toMap(e -> e, EstadoProducto::getValor, (e1, e2) -> e1, LinkedHashMap::new));
 
         return estadoValor;
     }

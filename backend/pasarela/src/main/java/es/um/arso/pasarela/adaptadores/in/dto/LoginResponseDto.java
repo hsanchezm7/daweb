@@ -13,6 +13,7 @@ public class LoginResponseDto {
         this.accessToken = accessToken;
         this.usuario = usuario;
     }
+
     public String getAccessToken() {
         return accessToken;
     }

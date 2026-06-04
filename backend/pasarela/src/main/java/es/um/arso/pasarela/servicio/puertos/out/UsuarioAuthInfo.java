@@ -1,14 +1,9 @@
 package es.um.arso.pasarela.servicio.puertos.out;
 
-import com.google.gson.annotations.SerializedName;
-
 public class UsuarioAuthInfo {
 
     private String id;
-
-    @SerializedName(value = "nombre", alternate = {"nombreCompleto"})
     private String nombre;
-
     private String roles;
 
     public UsuarioAuthInfo() {}

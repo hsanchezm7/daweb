@@ -1,7 +1,6 @@
 package es.um.arso.pasarela.client;
 
 import es.um.arso.pasarela.servicio.puertos.out.UsuarioAuthInfo;
-import es.um.arso.pasarela.servicio.puertos.out.UsuarioBusquedaInfo;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -21,7 +20,7 @@ public interface UsuariosRestClient {
 
     @Headers("Accept: application/json")
     @GET("api/usuarios/buscar")
-    Call<UsuarioBusquedaInfo> buscarUsuario(@Query("githubId") String githubId, @Query("email") String email);
+    Call<UsuarioAuthInfo> buscarUsuario(@Query("githubId") String githubId, @Query("email") String email);
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("api/usuarios/oauth")

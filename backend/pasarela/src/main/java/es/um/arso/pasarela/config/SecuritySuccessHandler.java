@@ -5,7 +5,6 @@ import es.um.arso.pasarela.adaptadores.in.dto.LoginResponseDto;
 import es.um.arso.pasarela.servicio.JwtService;
 import es.um.arso.pasarela.servicio.puertos.out.IServicioUsuariosExterno;
 import es.um.arso.pasarela.servicio.puertos.out.UsuarioAuthInfo;
-import es.um.arso.pasarela.servicio.puertos.out.UsuarioBusquedaInfo;
 import es.um.arso.pasarela.utils.JwtUtils;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -98,14 +97,14 @@ public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
         String nombreOAuth = firstNonBlank(name, login, email);
 
         log.info("Calling usuarios service to locate OAuth user");
-        UsuarioBusquedaInfo existente = servicioUsuarios.buscarUsuario(githubId, email);
+        UsuarioAuthInfo existente = servicioUsuarios.buscarUsuario(githubId, email);
 
         if (existente != null) {
             log.info("OAuth user found in usuarios service id={}", existente.getId());
 
             UsuarioAuthInfo usuariolocal = new UsuarioAuthInfo();
             usuariolocal.setId(existente.getId());
-            usuariolocal.setNombre(existente.getNombre() + existente.getApellidos());
+            usuariolocal.setNombre(existente.getNombre() != null ? existente.getNombre() : "");
             usuariolocal.setRoles(existente.getRoles());
 
             return usuariolocal;

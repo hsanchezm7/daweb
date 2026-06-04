@@ -97,17 +97,16 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
         if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) u.setNombre(usuario.getNombre());
         if (usuario.getApellidos() != null && !usuario.getApellidos().isEmpty()) u.setApellidos(usuario.getApellidos());
+        if (usuario.getEmail() != null && !usuario.getEmail().isEmpty() && !usuario.getEmail().equals(u.getEmail())) {
+            Usuario existente = recuperarPorEmail(usuario.getEmail());
+            if (existente != null) {
+                throw new IllegalArgumentException("El email " + usuario.getEmail() + " ya está en uso");
+            }
+            u.setEmail(usuario.getEmail());
+        }
         if (usuario.getClave() != null && !usuario.getClave().isEmpty()) u.setClave(usuario.getClave());
         if (usuario.getFechaNacimiento() != null) u.setFechaNacimiento(usuario.getFechaNacimiento());
         if (usuario.getTelefono() != null) u.setTelefono(usuario.getTelefono());
-
-        u.setAdministrador(usuario.isAdministrador());
-        u.setNumeroCompras(usuario.getNumeroCompras());
-        u.setNumeroVentas(usuario.getNumeroVentas());
-        u.setNumeroValoracionesAsComprador(usuario.getNumeroValoracionesAsComprador());
-        u.setNumeroValoracionesAsVendedor(usuario.getNumeroValoracionesAsVendedor());
-        u.setPuntuacionAsComprador(usuario.getPuntuacionAsComprador());
-        u.setPuntuacionAsVendedor(usuario.getPuntuacionAsVendedor());
 
         repoUsuarios.update(u);
 
@@ -148,12 +147,11 @@ public class ServicioUsuarios implements IServicioUsuarios {
                 Usuario usuario = recuperar(id);
                 UsuarioResumen resumen = new UsuarioResumen();
                 resumen.setId(usuario.getId());
-                resumen.setNombre(
-                    usuario.getNombre() +
-                    (usuario.getApellidos() != null && !usuario.getApellidos().isEmpty()
-                        ? " " + usuario.getApellidos()
-                        : "")
-                );
+                resumen.setNombre((usuario.getNombre() != null ? usuario.getNombre() : "")
+                        + (usuario.getApellidos() != null
+                                        && !usuario.getApellidos().isEmpty()
+                                ? " " + usuario.getApellidos()
+                                : ""));
                 resumen.setEmail(usuario.getEmail());
                 resumen.setFechaNacimiento(usuario.getFechaNacimiento());
                 resumen.setTelefono(usuario.getTelefono());

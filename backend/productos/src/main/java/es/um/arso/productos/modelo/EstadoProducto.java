@@ -5,7 +5,7 @@ public enum EstadoProducto {
     COMO_NUEVO("Como nuevo"),
     BUEN_ESTADO("Buen estado"),
     ACEPTABLE("Aceptable"),
-    PARA_PIEZAS_O_REPARAR ("Para piezas o reparar");
+    PARA_PIEZAS_O_REPARAR("Para piezas o reparar");
 
     private String valor;
 
@@ -20,6 +20,4 @@ public enum EstadoProducto {
     public boolean esIgualOMejorQue(EstadoProducto otro) {
         return this.ordinal() <= otro.ordinal();
     }
-
 }
-

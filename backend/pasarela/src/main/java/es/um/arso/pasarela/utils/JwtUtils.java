@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtils {
 
-    @Value("${jwt.refresh.cookie.name:refreshToken}")
+    @Value("${jwt.refresh.cookie.name}")
     private String refreshCookieName;
 
-    @Value("${jwt.refresh.cookie.maxAge:2592000}")
+    @Value("${jwt.refresh.cookie.maxAge}")
     private int refreshCookieMaxAge;
 
-    @Value("${jwt.refresh.cookie.path:/auth/refresh}")
+    @Value("${jwt.refresh.cookie.path}")
     private String refreshCookiePath;
 
-    @Value("${jwt.refresh.cookie.secure:true}")
+    @Value("${jwt.refresh.cookie.secure:false}")
     private boolean cookieSecure;
 
     public void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
@@ -34,7 +34,7 @@ public class JwtUtils {
 
     public void clearRefreshTokenCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie(refreshCookieName, "");
-        
+
         cookie.setHttpOnly(true);
         cookie.setSecure(cookieSecure);
         cookie.setPath(refreshCookiePath);
@@ -58,5 +58,4 @@ public class JwtUtils {
     public boolean isCookieSecure() {
         return cookieSecure;
     }
-
 }
