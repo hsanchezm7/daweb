@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+import { api } from './api';
+
 const createCompraventaService = (apiInstance) => ({
   getCompraventas: async (params = {}) => {
     try {
-      const response = await apiInstance.get(`/compraventas/`, { params });
+      const response = await api.get(`/compraventas/`, { params });
       return response.data;
     } catch (error) {
       console.error(

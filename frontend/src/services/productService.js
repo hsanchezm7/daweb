@@ -4,7 +4,7 @@ import { api } from './api';
 const createProductService = (apiInstance) => ({
   getProductos: async (params = {}) => {
     try {
-      const response = await apiInstance.get(`/productos/`, { params });
+      const response = await api.get(`/productos/`, { params });
       return response.data;
     } catch (error) {
       console.error(
@@ -17,7 +17,7 @@ const createProductService = (apiInstance) => ({
 
   getProduct: async (id) => {
     try {
-      const response = await apiInstance.get(`/productos/${id}`);
+      const response = await api.get(`/productos/${id}`);
       return response.data;
     } catch (error) {
       console.error(
