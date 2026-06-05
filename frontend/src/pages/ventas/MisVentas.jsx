@@ -4,7 +4,6 @@ import { Alert } from 'react-bootstrap';
 import { TIPO_CARD } from '@/components/card-producto/CardProducto';
 import GridProductos from '@/components/grid-productos/GridProductos';
 import useApiPrivate from '@/hooks/useApiPrivate';
-import useAuth from '@/hooks/useAuth';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createCompraventaService from '@/services/compraventaService';
 import createProductService from '@/services/productService';

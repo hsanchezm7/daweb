@@ -7,6 +7,8 @@ import es.um.arso.productos.modelo.Usuario;
 import es.um.arso.productos.repositorio.RepositorioCategorias;
 import es.um.arso.productos.repositorio.RepositorioProductos;
 import es.um.arso.productos.repositorio.RepositorioUsuarios;
+
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class DataInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
+    private static final Random random = new Random();
 
     private final RepositorioCategorias repositorioCategorias;
     private final RepositorioProductos repositorioProductos;
@@ -73,7 +76,8 @@ public class DataInitializer {
                 EstadoProducto.BUEN_ESTADO,
                 electronica,
                 true,
-                admin);
+                admin,
+                null);
         crearProducto(
                 "Laptop Pro",
                 "Portátil de alto rendimiento",
@@ -81,7 +85,8 @@ public class DataInitializer {
                 EstadoProducto.ACEPTABLE,
                 electronica,
                 false,
-                admin);
+                admin,
+                null);
         crearProducto(
                 "Auriculares Bluetooth",
                 "Auriculares inalámbricos premium",
@@ -89,10 +94,19 @@ public class DataInitializer {
                 EstadoProducto.COMO_NUEVO,
                 electronica,
                 true,
-                admin);
+                admin,
+                null);
 
         // Crear productos para Libros
-        crearProducto("Clean Code", "Manual de programación limpia", 49.99, EstadoProducto.NUEVO, libros, true, admin);
+        crearProducto(
+                "Clean Code",
+                "Manual de programación limpia",
+                49.99,
+                EstadoProducto.NUEVO,
+                libros,
+                true,
+                admin,
+                null);
         crearProducto(
                 "El Quijote",
                 "Obra maestra de la literatura española",
@@ -100,9 +114,17 @@ public class DataInitializer {
                 EstadoProducto.PARA_PIEZAS_O_REPARAR,
                 libros,
                 true,
-                admin);
+                admin,
+                null);
         crearProducto(
-                "1984", "Novela de ciencia ficción distópica", 15.99, EstadoProducto.COMO_NUEVO, libros, true, admin);
+                "1984",
+                "Novela de ciencia ficción distópica",
+                15.99,
+                EstadoProducto.COMO_NUEVO,
+                libros,
+                true,
+                admin,
+                null);
 
         // Crear productos para Ropa
         crearProducto(
@@ -112,17 +134,18 @@ public class DataInitializer {
                 EstadoProducto.PARA_PIEZAS_O_REPARAR,
                 ropa,
                 true,
-                admin);
+                admin,
+                "https://neffelle.com/cdn/shop/files/IMG_7830.jpg?v=1753264724&width=1946");
         crearProducto(
-                "Pantalón Vaquero",
+                "Pantalón Vaquero Levis",
                 "Pantalón vaquero azul oscuro",
                 59.99,
                 EstadoProducto.COMO_NUEVO,
                 ropa,
                 false,
-                admin);
+                admin, "https://www.ouka.es/wp-content/uploads/2025/12/pantalon-vaquero-hombre-levis-511-slim-take-it-from-the-top-azul-2.png");
         crearProducto(
-                "Sudadera Deportiva", "Sudadera gris de poliéster", 49.99, EstadoProducto.NUEVO, ropa, true, admin);
+                "Sudadera Adidas", "Sudadera azul tribanda", 49.99, EstadoProducto.NUEVO, ropa, true, admin, "https://media.gotrendier.mx/media/p/2022/05/14/n_96f1b564-d3f5-11ec-a83b-02e73d0d4401.jpeg");
 
         log.info("9 productos creados (3 por categoría). Inicialización completada.");
     }
@@ -134,9 +157,19 @@ public class DataInitializer {
             EstadoProducto estado,
             Categoria categoria,
             boolean envioDisponible,
-            Usuario vendedor) {
-        Producto producto = new Producto(titulo, descripcion, precio, estado, categoria, envioDisponible, vendedor);
+            Usuario vendedor,
+            String urlImagen) {
+        Producto producto = new Producto(
+                titulo,
+                descripcion,
+                precio,
+                estado,
+                categoria,
+                envioDisponible,
+                vendedor,
+                urlImagen);
         producto.setDisponible(true);
+        producto.setVisualizaciones(random.nextInt(501));
         repositorioProductos.save(producto);
         log.debug("Producto creado: titulo={}, categoria={}", titulo, categoria.getNombre());
     }
