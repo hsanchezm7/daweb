@@ -92,7 +92,7 @@ function MisProductos() {
 
   return (
     <div className="mis-productos">
-      <div className="mb-4">
+      <div className="mb-5">
         <h2 className="mb-2">Mis productos</h2>
         <p className="text-muted m-0">Consulta tus productos anunciados.</p>
       </div>

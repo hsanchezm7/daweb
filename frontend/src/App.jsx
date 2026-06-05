@@ -13,6 +13,8 @@ import Usuarios from '@/pages/admin/usuarios/Usuarios';
 import Buscar from '@/pages/buscar/Buscar';
 import Error404 from '@/pages/error404/Error404';
 import Inicio from '@/pages/inicio/Inicio';
+import MisCompras from '@/pages/compras/MisCompras';
+import MisVentas from '@/pages/ventas/MisVentas';
 import MiCuenta from '@/pages/mi-cuenta/MiCuenta';
 import MisProductos from '@/pages/mis-productos/MisProductos';
 import Unauthorized from '@/pages/unauthorized/Unauthorized';
@@ -40,6 +42,8 @@ function App() {
         >
           <Route path="/panel" element={<PanelLayout />}>
             <Route index element={<Navigate to="mi-cuenta" replace />} />
+            <Route path="compras" element={<MisCompras />} />
+            <Route path="ventas" element={<MisVentas />} />
             <Route path="mi-cuenta" element={<MiCuenta />} />
             <Route path="productos" element={<MisProductos />} />
           </Route>

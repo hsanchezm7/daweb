@@ -24,13 +24,13 @@ function Menu() {
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={NavLink} to="/panel/mis-compras" className="menu-link">
+          <Nav.Link as={NavLink} to="/panel/compras" className="menu-link">
             <BagCheckFill className="me-2" aria-hidden="true" />
             <span>Mis compras</span>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={NavLink} to="/panel/mis-ventas" className="menu-link">
+          <Nav.Link as={NavLink} to="/panel/ventas" className="menu-link">
             <Wallet2 className="me-2" aria-hidden="true" />
             <span>Mis ventas</span>
           </Nav.Link>

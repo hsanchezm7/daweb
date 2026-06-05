@@ -83,7 +83,7 @@ function Compraventas() {
 
   return (
     <Container className="compraventas" fluid>
-      <div className="mb-4">
+      <div className="mb-5">
         <h2 className="mb-2">Compraventas</h2>
         <p className="text-muted m-0">
           Consultas las compraventas realizadas en la aplicación. Busca por

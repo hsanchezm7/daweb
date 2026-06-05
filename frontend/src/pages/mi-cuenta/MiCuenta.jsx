@@ -149,7 +149,7 @@ function MiCuenta() {
 
   return (
     <div className="mi-cuenta">
-      <div className="mb-4">
+      <div className="mb-5">
         <h2 className="mb-2">Mi cuenta</h2>
         <p className="text-muted m-0">Actualiza tus datos de cuenta.</p>
       </div>
