@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { Alert, Card, Modal } from 'react-bootstrap';
 import { PlusCircleDotted } from 'react-bootstrap-icons';
 
-import GridProductos, {
-  VISTAS_GRID,
-} from '@/components/grid-productos/GridProductos';
+import { TIPO_CARD } from '@/components/card-producto/CardProducto';
+import GridProductos from '@/components/grid-productos/GridProductos';
 import CrearProducto from '@/forms/producto/CrearProducto';
 import useApiPrivate from '@/hooks/useApiPrivate';
+import useAuth from '@/hooks/useAuth';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
-import useAuth from '@/hooks/useAuth';
 
 import './MisProductos.css';
 
@@ -104,7 +103,7 @@ function MisProductos() {
         className="mis-productos-grid"
         nuevoProductoCard={renderNuevoProductoCard()}
         productos={misProductos}
-        vista={VISTAS_GRID.MIS_PRODUCTOS}
+        tipoCard={TIPO_CARD.MIS_PRODUCTOS}
       />
 
       <Modal

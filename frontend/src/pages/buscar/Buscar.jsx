@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { Alert, Col, Container, Offcanvas, Row } from 'react-bootstrap';
 import { useOutletContext } from 'react-router-dom';
 
+import { TIPO_CARD } from '@/components/card-producto/CardProducto';
+import GridProductos from '@/components/grid-productos/GridProductos';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
 
 import Filtro from '../../components/filtro/Filtro';
-import GridProductos, {
-  VISTAS_GRID,
-} from '../../components/grid-productos/GridProductos';
 import './Buscar.css';
 
 function Buscar() {
@@ -42,7 +41,7 @@ function Buscar() {
       try {
         const [categorias, estadosValor] = await Promise.all([
           productService.getCategoriasProductos(),
-          productService.getEstadosProducto()
+          productService.getEstadosProducto(),
         ]);
         setOpcionesCategoria(categorias);
         setOpcionesEstado(estadosValor);
@@ -91,7 +90,7 @@ function Buscar() {
             lg="auto"
             className="d-none d-lg-block mt-4 mt-lg-5 pe-lg-4 buscar-sidebar-divider"
           >
-            <Filtro 
+            <Filtro
               opcionesCategoria={opcionesCategoria}
               opcionesEstado={opcionesEstado}
               filtros={filtros}
@@ -109,7 +108,7 @@ function Buscar() {
               <GridProductos
                 className="mt-lg-5"
                 productos={productos}
-                vista={VISTAS_GRID.BUSCAR}
+                tipoCard={TIPO_CARD.BUSCAR}
               />
             </div>
           </Col>
@@ -117,12 +116,17 @@ function Buscar() {
       </Container>
 
       {/* offcanvas lateral para pantallas pequenas */}
-      <Offcanvas show={showMenu} onHide={handleClose} placement="start" className="d-lg-none p-3">
+      <Offcanvas
+        show={showMenu}
+        onHide={handleClose}
+        placement="start"
+        className="d-lg-none p-3"
+      >
         <Offcanvas.Header closeButton className="mt-1">
           <Offcanvas.Title>Filtros</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="p-0">
-          <Filtro 
+          <Filtro
             opcionesCategoria={opcionesCategoria}
             opcionesEstado={opcionesEstado}
             filtros={filtros}
