@@ -12,7 +12,7 @@ export const FEATURED_CAROUSELS = [
     titulo: 'Los más vistos',
     params: {
       size: MAX_FEATURED_PRODUCTS,
-      sort: 'fecha,desc', // Asumiendo que se puede ordenar por fecha
+      sort: 'visualizaciones,desc',
     },
   },
   {
@@ -21,7 +21,7 @@ export const FEATURED_CAROUSELS = [
     titulo: 'Novedades',
     params: {
       size: MAX_FEATURED_PRODUCTS,
-      sort: 'fecha,desc', // Asumiendo que se puede ordenar por fecha
+      sort: 'fechaPublicacion,desc',
     },
   },
   {

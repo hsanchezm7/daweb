@@ -46,7 +46,7 @@ function Inicio() {
             <div key={c.id} className="mb-5">
               <CarouselProductos
                 productos={productos}
-                titulo={cancelAnimationFrame.titulo}
+                titulo={productos.titulo}
               />
             </div>
           );

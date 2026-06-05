@@ -11,9 +11,13 @@ export const TIPO_CARD = {
   BUSCAR: 'BUSCAR',
 };
 
-function CardProducto({ producto, tipoCard = TIPO_CARD.BUSCAR }) {
+function CardProducto({
+  producto,
+  tipoCard = TIPO_CARD.BUSCAR,
+  es_popular = false,
+}) {
   const imagenMostrar =
-    producto.imagen || 'https://placehold.co/600x400/000000/FFF';
+    producto.urlImagen || 'https://placehold.co/600x400/000000/FFF';
   const descripcionMostrar =
     producto.descripcion || 'Descripción no disponible por el momento.';
 
@@ -57,16 +61,41 @@ function CardProducto({ producto, tipoCard = TIPO_CARD.BUSCAR }) {
         onMouseMove={handleCardMouseMove}
         onMouseLeave={handleCardMouseLeave}
       >
-        {/* overlay trigger junto a tooltip para mostrar texto de envío disponible al pasar por encima */}
-        <OverlayTrigger
-          key="top"
-          placement="top"
-          overlay={<Tooltip id="tooltip-top">Envío disponible</Tooltip>}
-        >
-          <div className="card-icon">
-            <FontAwesomeIcon icon={faTruckFast} />
-          </div>
-        </OverlayTrigger>
+        <div className="top-left-icons">
+          {tipoCard === TIPO_CARD.MIS_PRODUCTOS && (
+            <div className="card-icon icon-views">
+              <i className="bi bi-eye"></i> {producto.visualizaciones}
+            </div>
+          )}
+        </div>
+        
+        <div className="top-right-icons">
+          {es_popular && (
+            <OverlayTrigger
+              key="popular"
+              placement="top"
+              overlay={<Tooltip id="tooltip-popular">{`${producto.visualizaciones} visualizaciones`}</Tooltip>}
+            >
+              <div className="card-icon icon-fire">
+                <i className="bi bi-fire"></i>
+              </div>
+            </OverlayTrigger>
+          )}
+
+          {producto.envioDisponible && (
+            <OverlayTrigger
+              key="envio"
+              placement="top"
+              overlay={
+                <Tooltip id="tooltip-envio">Envío disponible</Tooltip>
+              }
+            >
+              <div className="card-icon">
+                <FontAwesomeIcon icon={faTruckFast} />
+              </div>
+            </OverlayTrigger>
+          )}
+        </div>
 
         {/* TODO: badge con el estado del producto */}
         <Card.Img

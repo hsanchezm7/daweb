@@ -1,9 +1,8 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import CardProducto from '@/components/card-producto/CardProducto';
 
@@ -18,8 +17,8 @@ function CarouselProductos({ productos = [], titulo = '' }) {
 
       <div className="card-wrapper">
         <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          loop={true}
+          modules={[Autoplay, Navigation, Pagination]}
+          loop={productos.length > 3}
           speed={700}
           spaceBetween={30}
           autoplay={{
