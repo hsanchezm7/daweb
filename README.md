@@ -51,36 +51,28 @@ Este cliente web ofrece a los usuarios una interfaz visual para navegar por el c
 
 Para ejecutar el proyecto es necesario tener instalado:
 
-- [Node.js v20.20+](https://nodejs.org/) como entorno de ejecución.
-- [npm](https://www.npmjs.com) o [Yarn](https://yarnpkg.com) como gestor de dependencias.
+- [Docker](https://www.docker.com/) y Docker Compose.
+- El [backend](https://github.com/hsanchezm7/arso) de la aplicación, incluido automáticamente como submódulo.
 
-### Instalación
+### Instalación y Uso
 
 1. Clonar el repositorio
 
    ```sh
-   git clone https://github.com/hsanchezm7/daweb
+   git clone --recurse-submodules https://github.com/hsanchezm7/daweb
+   cd daweb
    ```
 
-2. Entrar al directorio del cliente
+2. Levantar la plataforma
 
    ```sh
-   cd daweb/frontend
+   docker compose up -d --build
    ```
 
-3. Instalar las dependencias
+3. Acceder al [cliente web](http://localhost:5173).
 
-   ```sh
-   npm install
-   ```
-
-4. Compilar y servir la aplicación
-
-   ```sh
-   npm run build && npm run preview
-   ```
-
-La previsualización estará disponible en `http://localhost:4173`.
+> [!NOTE]  
+> La aplicación puede tardar varios minutos en iniciarse si es el primer arranque debido a la inicialización de datos.
 
 <p align="right">(<a href="#readme-top">volver arriba</a>)</p>
 
@@ -89,13 +81,7 @@ La previsualización estará disponible en `http://localhost:4173`.
 
 ### Entorno de desarrollo
 
-Si necesitas ejecutar la aplicación en modo desarrollo (con recarga en caliente), puedes utilizar:
-
-```sh
-npm run dev
-```
-
-Esto iniciará el servidor de desarrollo en `http://localhost:5173`.
+Para usar el entorno de desarrollo de Vite, consultar [frontend](frontend/).
 
 ### Estructura del proyecto
 
@@ -107,7 +93,11 @@ daweb                     # Raíz del repositorio
 │   ├── src               # Código fuente del cliente
 │   ├── package.json      # Módulos y dependencias
 │   └── vite.config.js    # Configuración de Vite
-└── backend               # Servidor
+└── backend               # Servidor (submódulo Git)
 ```
 
 <p align="right">(<a href="#readme-top">volver arriba</a>)</p>
+
+### Datos inicializados
+
+Consultar [seeder](backend/seeder).
