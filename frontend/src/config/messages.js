@@ -8,6 +8,7 @@ export const VALIDATION_MESSAGES = {
     INVALID: 'Introduce un número de teléfono válido',
   },
   PRECIO_NEGATIVO: 'El precio del producto no puede ser negativo',
+  INVALID_URL: 'Por favor, introduce una URL válida',
 };
 
 export const AUTH_MESSAGES = {

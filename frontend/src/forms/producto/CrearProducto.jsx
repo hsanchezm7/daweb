@@ -8,6 +8,8 @@ import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
 
+import './CrearProducto.css';
+
 function CrearProducto({ onSubmit, onCancel }) {
   useDocumentTitle('Nuevo producto');
 
@@ -21,6 +23,7 @@ function CrearProducto({ onSubmit, onCancel }) {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [estado, setEstado] = useState('');
+  const [urlImagen, setUrlImagen] = useState('');
   const [opcionesCategoria, setOpcionesCategoria] = useState([]);
   const [opcionesEstado, setOpcionesEstado] = useState({});
   const [categoriaId, setCategoriaId] = useState('');
@@ -76,6 +79,7 @@ function CrearProducto({ onSubmit, onCancel }) {
         precio: parseFloat(precio),
         estado,
         categoriaId,
+        urlImagen,
         envioDisponible,
       };
 
@@ -87,6 +91,7 @@ function CrearProducto({ onSubmit, onCancel }) {
       setPrecio('');
       setEstado('');
       setCategoriaId('');
+      setUrlImagen('');
       setEnvioDisponible(false);
 
       if (onSubmit) onSubmit(e);
@@ -213,12 +218,18 @@ function CrearProducto({ onSubmit, onCancel }) {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/*
         <Form.Group className="mb-3" controlId="productoImagen">
           <Form.Label>Imagen (URL)</Form.Label>
-          <Form.Control type="url" placeholder="https://" />
+          <Form.Control
+            type="url"
+            value={urlImagen}
+            onChange={(e) => setUrlImagen(e.target.value)}
+            placeholder="https://"
+          />
+          <Form.Control.Feedback type="invalid">
+            {VALIDATION_MESSAGES.INVALID_URL}
+          </Form.Control.Feedback>
         </Form.Group>
-        */}
 
         <Form.Group className="mb-3" controlId="productoEnvio">
           <Form.Check
