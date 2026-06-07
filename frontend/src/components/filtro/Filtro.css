@@ -16,5 +16,6 @@
 }
 
 .filtro {
-  width: 300px;
+  width: 350px;
+  max-width: 100%;
 }

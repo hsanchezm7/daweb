@@ -35,7 +35,6 @@ function CrearProducto({ onSubmit, onCancel }) {
     const loadCategorias = async () => {
       try {
         const categorias = await productService.getCategoriasProductos();
-        console.log(categorias);
         setOpcionesCategoria(categorias);
       } catch (err) {
         console.error('Error al cargar las categorias de productos:', err);
@@ -45,7 +44,7 @@ function CrearProducto({ onSubmit, onCancel }) {
     const loadEstados = async () => {
       try {
         const estadosValor = await productService.getEstadosProducto();
-        console.log(estadosValor);
+        
         setOpcionesEstado(estadosValor);
       } catch (err) {
         console.error('Error al cargar los estados de producto:', err);

@@ -13,7 +13,9 @@ const createCompraventaService = (apiInstance) => ({
   },
   getCompras: async (params = {}) => {
     try {
-      const response = await apiInstance.get(`/compraventas/compras`, { params });
+      const response = await apiInstance.get(`/compraventas/compras`, {
+        params,
+      });
       return response.data;
     } catch (error) {
       console.error(
@@ -25,7 +27,9 @@ const createCompraventaService = (apiInstance) => ({
   },
   getVentas: async (params = {}) => {
     try {
-      const response = await apiInstance.get(`/compraventas/ventas`, { params });
+      const response = await apiInstance.get(`/compraventas/ventas`, {
+        params,
+      });
       return response.data;
     } catch (error) {
       console.error(

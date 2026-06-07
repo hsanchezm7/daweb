@@ -11,7 +11,7 @@ function GridProductos({
 }) {
   return (
     <Container fluid className={className}>
-      <Row xs={1} sm={1} md={2} lg={2} xl={3} xxl={4} className="g-5">
+      <Row xs={1} sm={1} md={2} lg={2} xl={3} xxl={4} className="g-4">
         {nuevoProductoCard ? (
           <Col key="lead-card">{nuevoProductoCard}</Col>
         ) : null}

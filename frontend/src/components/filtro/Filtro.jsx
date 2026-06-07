@@ -21,12 +21,14 @@ function Filtro({
       </div>
 
       <Row className="justify-content-center m-0">
-        <Col xs={12} md={9} lg={12} className="p-0">
+        <Col xs={12} md={9} lg={12} className="px-2 w-100">
           <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
             <Accordion.Item eventKey="0">
               <Accordion.Header>Precio</Accordion.Header>
               <Accordion.Body>
-                <Form.Label>Ajusta el rango de precios</Form.Label>
+                <Form.Label className="text-muted">
+                  Ajusta el rango de precios
+                </Form.Label>
                 <div className="d-flex gap-3 align-items-center">
                   {/* TODO: ajustar valores min y max de productos de forma dinámica.
               Pedir a la API, para el filtro, el precio min y máximo */}
@@ -39,7 +41,7 @@ function Filtro({
             <Accordion.Item eventKey="1">
               <Accordion.Header>Estado</Accordion.Header>
               <Accordion.Body>
-                <Form.Label>
+                <Form.Label className="text-muted">
                   Selecciona el estado mínimo del producto
                 </Form.Label>
                 <Form.Select
@@ -63,7 +65,9 @@ function Filtro({
             <Accordion.Item eventKey="2">
               <Accordion.Header>Categoría</Accordion.Header>
               <Accordion.Body>
-                <Form.Label>Selecciona la categoría del producto</Form.Label>
+                <Form.Label className="text-muted">
+                  Selecciona la categoría del producto
+                </Form.Label>
                 <Typeahead
                   id="filtro-categoria-typeahead"
                   labelKey="nombre"
