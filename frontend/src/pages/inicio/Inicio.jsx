@@ -43,10 +43,10 @@ function Inicio() {
           if (productos.length === 0) return null;
           
           return (
-            <div key={c.id} className="mb-5">
+            <div key={c.id} className="mb-4">
               <CarouselProductos
                 productos={productos}
-                titulo={productos.titulo}
+                titulo={c.titulo}
               />
             </div>
           );

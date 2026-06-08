@@ -33,7 +33,7 @@ function PanelLayout() {
             >
               <Menu />
             </Col>
-            <Col xs={12} lg>
+            <Col xs={12} lg={9}>
               <div className="panel-content p-3">
                 <Outlet />
               </div>
@@ -44,11 +44,16 @@ function PanelLayout() {
       <Footer></Footer>
 
       {/* offcanvas lateral para pantallas pequenas */}
-      <Offcanvas show={showMenu} onHide={handleClose} placement="start" className="d-lg-none p-3">
+      <Offcanvas
+        show={showMenu}
+        onHide={handleClose}
+        placement="start"
+        className="d-lg-none p-3"
+      >
         <Offcanvas.Header closeButton className="mt-1">
           <Offcanvas.Title>Menú</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body className="p-0">
+        <Offcanvas.Body className="p-2">
           <Menu />
         </Offcanvas.Body>
       </Offcanvas>

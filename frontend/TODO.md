@@ -1,5 +1,23 @@
 # TODO
 
+## adicional
+
+- [ ] **paginación en  MisProductos, MisCompras y MisVentas**
+
+- [ ] **permitir ordenar productos en Buscar**
+
+- [ ] **búsqueda con query**
+
+- [ ] **url de imágenes para todos los productos (seeder.py backend)**
+
+- [ ] **ocultar apartado Administración de Menu si no admin**
+
+- [ ] **terminar Header**
+
+- [ ] **terminar Footer**
+
+- [ ] **hacer /404 y /unauthorized**
+
 Estructura de vistas, rutas y componentes basada en el modelo de **PcComponentes**.
 
 ---

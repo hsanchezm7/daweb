@@ -13,7 +13,7 @@ function CarouselProductos({ productos = [], titulo = '' }) {
 
   return (
     <div className="carousel-productos">
-      {titulo && <h2 className="carousel-productos-titulo">{titulo}</h2>}
+      {titulo && <h3 className="carousel-productos-titulo">{titulo}</h3>}
 
       <div className="card-wrapper">
         <Swiper

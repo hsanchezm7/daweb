@@ -8,8 +8,8 @@ import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
 
-import Filtro from '../../components/filtro/Filtro';
-import Paginator from '../../components/paginator/Paginator';
+import Filtro from '@/components/filtro/Filtro';
+import Paginator from '@/components/paginator/Paginator';
 import './Buscar.css';
 
 function Buscar() {
@@ -73,7 +73,6 @@ function Buscar() {
 
         setProductos(productosList);
         setPageInfo(page);
-        console.log(page);
       } catch (error) {
         console.error('Error al cargar los productos:', error);
         setErrMsg('Error al cargar los productos');

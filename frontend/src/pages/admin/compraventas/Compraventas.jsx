@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  Col,
-  Container,
-  Form,
-  Pagination,
-  Row,
-  Table,
-} from 'react-bootstrap';
+import { Alert, Col, Container, Form, Row, Table } from 'react-bootstrap';
 import { ArrowDownUp, ArrowLeftRight } from 'react-bootstrap-icons';
 import { Typeahead } from 'react-bootstrap-typeahead';
 
+import Paginator from '@/components/paginator/Paginator';
 import { formatDateTimeFromBackend } from '@/config/datepicker';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
@@ -28,10 +21,10 @@ function Compraventas() {
 
   const [compraventas, setCompraventas] = useState([]);
   const [pageInfo, setPageInfo] = useState({
-    size: 0,
-    totalElements: 0,
-    totalPages: 0,
-    number: 0,
+    size: 16, // response y request
+    totalElements: 0, // solo response
+    totalPages: 0, // solo response
+    number: 0, // response y request
   });
 
   const [opcionesUsuarios, setOpcionesUsuarios] = useState([]);
@@ -42,6 +35,10 @@ function Compraventas() {
   const handleIntercambio = () => {
     setIdVendedor(idComprador);
     setIdComprador(idVendedor);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPageInfo((prev) => ({ ...prev, number: newPage }));
   };
 
   useEffect(() => {
@@ -65,13 +62,16 @@ function Compraventas() {
         if (idComprador) params.idComprador = idComprador;
         // params.page y params.size se añadirán al hacer la paginación
 
+        params.size = pageInfo.size;
+        params.page = pageInfo.number;
+
         const data = await compraventaService.getCompraventas(params);
 
         const compraventas = data._embedded?.compraventaResumenList || [];
-        const pageInfo = data.page;
+        const page = data.page;
 
         setCompraventas(compraventas);
-        setPageInfo(pageInfo);
+        setPageInfo(page);
       } catch (error) {
         console.error('Error al cargar las compraventas:', error);
         setErrMsg('Error al cargar las compraventas');
@@ -79,16 +79,37 @@ function Compraventas() {
     };
 
     loadCompraventas();
-  }, [idVendedor, idComprador]); // dependencias
+  }, [idVendedor, idComprador, pageInfo.number, pageInfo.size]); // dependencias
 
   return (
     <Container className="compraventas" fluid>
-      <div className="mb-5">
-        <h2 className="mb-2">Compraventas</h2>
-        <p className="text-muted m-0">
-          Consultas las compraventas realizadas en la aplicación. Busca por
-          vendedor, por comprador, o por ambos.
-        </p>
+      <div className="mb-5 d-flex flex-column flex-md-row justify-content-md-between align-items-md-end gap-3">
+        <div>
+          <h2 className="mb-2">Compraventas</h2>
+          <p className="text-muted m-0">
+            Consultas las compraventas realizadas en la aplicación. Busca por
+            vendedor, por comprador, o por ambos.
+          </p>
+        </div>
+        <div className="d-flex align-items-end gap-2">
+          <span className="text-muted text-nowrap mb-1">Mostrar:</span>
+          <Form.Select
+            aria-label="Items por página"
+            value={pageInfo.size}
+            onChange={(e) => {
+              setPageInfo((prev) => ({
+                ...prev,
+                size: e.target.value,
+                number: 0,
+              }));
+            }}
+            style={{ width: 'auto' }}
+          >
+            <option value="6">6 ítems</option>
+            <option value="12">12 ítems</option>
+            <option value="24">24 ítems</option>
+          </Form.Select>
+        </div>
       </div>
 
       <Row className="mb-4 align-items-md-end">
@@ -228,16 +249,7 @@ function Compraventas() {
         </Table>
       )}
 
-      {/* TODO: Crear componente Paginador para reusar en todo el frontend */}
-      <Pagination className="compraventas-pagination mt-4">
-        <Pagination.First />
-        <Pagination.Prev />
-        <Pagination.Ellipsis />
-        <Pagination.Item>{1}</Pagination.Item>
-        <Pagination.Ellipsis />
-        <Pagination.Next />
-        <Pagination.Last />
-      </Pagination>
+      <Paginator pageInfo={pageInfo} onPageChange={handlePageChange} />
     </Container>
   );
 }

@@ -10,7 +10,7 @@ function Footer() {
       <footer className="d-flex flex-column flex-md-row justify-content-between align-items-center py-3 my-2 border-top w-100 gap-3 gap-md-0">
         <div className="col-md-4 d-flex justify-content-center justify-content-md-start align-items-center">
           <span className="mb-0 text-center text-md-start text-body-secondary lh-1">
-            &copy; {new Date().getFullYear()} swapIt. Todos los derechos reservados
+            &copy; {new Date().getFullYear()} swapIt. Todos los derechos reservados.
           </span>
         </div>
 

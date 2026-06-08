@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import BlockAuth from '@/components/auth/BlockAuth';
 import PersistLogin from '@/components/auth/PersistLogin';
 import RequireAuth from '@/components/auth/RequireAuth';
 import { Roles } from '@/config/roles';
@@ -11,13 +12,13 @@ import PanelLayout from '@/layouts/panel-layout/PanelLayout';
 import Compraventas from '@/pages/admin/compraventas/Compraventas';
 import Usuarios from '@/pages/admin/usuarios/Usuarios';
 import Buscar from '@/pages/buscar/Buscar';
+import MisCompras from '@/pages/compras/MisCompras';
 import Error404 from '@/pages/error404/Error404';
 import Inicio from '@/pages/inicio/Inicio';
-import MisCompras from '@/pages/compras/MisCompras';
-import MisVentas from '@/pages/ventas/MisVentas';
 import MiCuenta from '@/pages/mi-cuenta/MiCuenta';
 import MisProductos from '@/pages/mis-productos/MisProductos';
 import Unauthorized from '@/pages/unauthorized/Unauthorized';
+import MisVentas from '@/pages/ventas/MisVentas';
 import VerProducto from '@/pages/ver-producto/VerProducto';
 
 import './App.css';
@@ -25,18 +26,20 @@ import './App.css';
 function App() {
   return (
     <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Inicio />} />
-        <Route path="/buscar" element={<Buscar />} />
-        <Route path="/producto/:id" element={<VerProducto />} />
-      </Route>
-
-      <Route element={<AuthLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Register />} />
-      </Route>
-
       <Route element={<PersistLogin />}>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/buscar" element={<Buscar />} />
+          <Route path="/producto/:id" element={<VerProducto />} />
+        </Route>
+
+        <Route element={<BlockAuth />}>
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Register />} />
+          </Route>
+        </Route>
+
         <Route
           element={<RequireAuth allowedRoles={[Roles.USUARIO, Roles.ADMIN]} />}
         >
