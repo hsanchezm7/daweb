@@ -1,0 +1,658 @@
+% !TeX spellcheck = es_ES
+\documentclass[11pt]{article}
+
+\include{style}
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage[autostyle]{csquotes}
+\renewcommand{\thesubfigure}{\arabic{subfigure}}
+
+\begin{document}
+
+\title{
+\vspace{-5ex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=72mm]{figures/umu-logo}
+\end{figure}
+
+{\Large \textsc{Universidad de Murcia}}\\
+{\Large Facultad de Informática}\\ [12.5ex]
+{\Large \textsc{Prácticas de}\\ [1ex]}
+{\Huge Desarrollo de Aplicaciones Web}\\ [1ex]
+{\Large \textsc{4º de Grado en Ingeniería Informática}}\\
+{\Large \textsc{Profesor: Salvador Manzanares Guillén}}\\
+{\Large \textsc{Curso 2025/2026}} \\
+\vspace{10ex}
+}
+
+\author{
+    {\Large Pablo Hernández}\\[0.5ex]
+    24421778X\\
+    \texttt{pablo.h.c1@um.es}
+    \and
+    {\Large Hugo Sánchez Martínez}\\[0.5ex]
+    24450997L\\
+    \texttt{hugo.s.m@um.es}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\nouppercase{\rightmark} \hfill \textbf{\nouppercase{\leftmark}}}   % Encabezado en la página izquierda (even) sin mayúsculas
+\fancyhead[RO]{\nouppercase{\rightmark}}  % Encabezado en la página derecha (odd) sin mayúsculas
+\setlength{\headheight}{25pt}  % Ajusta la altura del encabezado
+\fancyfoot[R]{H. Sánchez}
+\fancyfoot[C]{\thepage}
+
+\date{\vspace{-10ex}}
+\maketitle
+\thispagestyle{empty} % Elimina el número de página de la portada
+\clearpage
+
+\thispagestyle{empty} % Elimina el número de página del ToC
+\tableofcontents
+\clearpage
+\thispagestyle{empty} % Elimina el número de página del ToC
+\listoffigures
+\clearpage
+\setcounter{page}{1}
+
+\thispagestyle{empty}
+
+\hrule
+\vspace{-5.4ex}
+\begin{abstract}
+    \vspace{2ex}
+    Este documento especifica la implementación de las prácticas de la asignatura de Desarrollo de Aplicaciones Web del último curso del grado en Ingeniería Informática de la Universidad de Murcia. \\
+
+    Dicha práctica consiste en el diseño de un frontend para la aplicación
+    desarrollada en la asignatura de Arquitectura del Software del grado.
+    \vspace{0.5ex}
+\end{abstract}
+\hrule
+\vspace{4ex}
+
+\section{Introducción}
+
+  Este proyecto se basa en la implementación y desarrollo de un cliente
+  ``\textit{frontend}'' basado principalmente en el framework React.js y la
+  libraríe de componentes Bootstrap. Dicha interfaz complementa el backend basado
+  en microservicios realizado en la asignatura de Arquitectura del Software.
+
+\section{Requisitos}
+
+  Para garantizar la correcta instalación y puesta en marcha del servicio, el
+  entorno debe cumplir con los siguientes requisitos previos:
+
+  \begin{itemize}
+      \item \textbf{Node.js} (v20.20 o superior): Para ejecutar el cliente. \href{https://nodejs.org/}{Descargar}.
+      \item \textbf{Docker}: Para levantar los servicios del servidor. \href{https://www.docker.com/}{Descargar}.
+  \end{itemize}
+
+  El resto de las dependencias específicas del proyecto serán descargadas y
+  resueltas automáticamente por las herramientas mencionadas durante el proceso
+  de instalación.
+
+\section{Instalación y ejecución}
+
+  El proceso de despliegue de la aplicación se divide en dos partes principales:
+  los servicios del backend y la interfaz del frontend.
+
+  Los servicios correspondientes al primero están contenerizados para asegurar un
+  entorno de ejecución consistente. Dicha infraestructura se despliega y orquesta
+  mediante Docker Compose. Para levantar estos servicios, basta con ejecutar el
+  siguiente comando desde el directorio \texttt{backend/}:
+
+  \begin{lstlisting}[style=BashStyle]
+    $ docker compose up -d
+\end{lstlisting}
+
+  Para detener el servidor:
+
+  \begin{lstlisting}[style=BashStyle]
+    $ docker compose down
+\end{lstlisting}
+
+  Para levantar el cliente (frontend), es necesario, desde su carpeta
+  correspondiente \texttt{frontend/}, instalar las dependencias y arrancar en
+  modo de desarrollo con:
+
+  \begin{lstlisting}[style=BashStyle]
+    $ npm install && npm run dev
+\end{lstlisting}
+
+\section{Tecnologías utilizadas}
+
+  Para el desarrollo de la interfaz de usuario, se ha empleado \textbf{React}
+  como biblioteca principal. Este \textit{framework} permite la construcción de
+  una arquitectura robusta basada en componentes reutilizables.
+  Complementariamente, el diseño visual y la estructuración de la interfaz se han
+  implementado mediante la librería \textbf{React-Bootstrap}, que integra
+  componentes estilizados de Bootstrap directamente en el ecosistema de React.
+
+  El ecosistema de desarrollo se sustenta sobre un entorno de ejecución
+  \textbf{Node.js}, que proporciona la infraestructura necesaria para la gestión
+  de dependencias. Como herramienta de construcción y empaquetado, se ha
+  seleccionado \textbf{Vite}.
+
+  Para lograr un comportamiento correspondiente al de una \textit{Single Page
+      Application} (SPA), la navegación interna ha sido gestionada mediante
+  \textbf{React Router}. Específicamente, se ha implementado su modo de
+  enrutamiento declarativo.
+
+  Finalmente, para la gestión del ciclo de vida del código fuente, se ha
+  utilizado el sistema de control de versiones \textbf{Git}, que proporciona un
+  historial de cambios y un entorno de colaboración con trazabilidad.
+
+\section{Modelado de datos}
+
+  \subsection{Diagrama Entidad-Relación}
+
+  \subsection{Diagrama de clases}
+
+\section{Descripción de la funcionalidad del sistema}
+
+  % TODO: usar historias de usuario
+
+  \subsection{Gestión de acceso y roles}
+
+      % TODO: explicar autenticación
+
+  \subsection{Funcionalidades del usuario vendedor}
+
+  \subsection{Funcionalidades del usuario comprador}
+
+  \subsection{Funcionalidades del administrador}
+
+      % TODO: ¿HACER?\subsection{Funcionalidades del usuario general}
+
+      \clearpage
+
+\section{Arquitectura de la aplicación}
+
+  El backend de la aplicación corresponde al sistema distribuido desarrollado
+  durante las prácticas de la asignatura de Arquitectura del Software. Es una
+  arquitectura basada en microservicios, donde cada componente es responsable de
+  un dominio de negocio específico. Los microservicios se comunican usando
+  interfaces como Retrofit y un broker de mensajes RabbitMQ. Toda la comunicación
+  se centraliza usando el microservicio \textit{pasarela}, que actúa de API
+  Gateway para el resto.
+
+  A continuación se detallan brevemente los diferentes servicios que componen la
+  arquitectura y los \textit{endpoints} que exponen en sus controladores.
+
+  \subsection{Servicio de usuarios}
+
+      Este servicio se encarga de la gestión del ciclo de vida de los usuarios en el
+      sistema. Permite dar de alta a nuevos usuarios, así como consultar y actualizar
+      sus datos personales.
+
+      \setlength{\tabcolsep}{15pt}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{l l}
+              \hline
+              \textbf{HTTP} & \textbf{Endpoint}         \\
+              \hline
+              \textit{GET}  & \texttt{/usuarios}        \\
+              \textit{POST} & \texttt{/usuarios}        \\
+              \textit{GET}  & \texttt{/usuarios/\{id\}} \\
+              \textit{PUT}  & \texttt{/usuarios/\{id\}} \\
+              \hline
+          \end{tabular}
+          \caption{Endpoints expuestos por el servicio de usuarios.}
+          \label{tab:endpoints-usuarios}
+      \end{table}
+
+  \subsection{Servicio de productos}
+
+      El servicio de productos gestiona el catálogo de artículos disponibles en la
+      plataforma. Entre su funcionalidad, encontramos la creación de nuevos
+      productos, la consulta y modificación de los mismos, la gestión de su estado de
+      recogida, así como el registro de visualizaciones de cada producto.
+
+      \setlength{\tabcolsep}{15pt}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{l l}
+              \hline
+              \textbf{HTTP} & \textbf{Endpoint}                              \\
+              \hline
+              \textit{GET}  & \texttt{/productos}                            \\
+              \textit{POST} & \texttt{/productos}                            \\
+              \textit{GET}  & \texttt{/productos/\{id\}}                     \\
+              \textit{PUT}  & \texttt{/productos/\{id\}}                     \\
+              \textit{PUT}  & \texttt{/productos/\{id\}/recogida}            \\
+              \textit{POST} & \texttt{/productos/\{id\}/visualizaciones}     \\
+              \textit{GET}  & \texttt{/productos/historial/\{mes\}/\{anio\}} \\
+              \hline
+          \end{tabular}
+          \caption{Endpoints expuestos por el servicio de productos.}
+          \label{tab:endpoints-productos}
+      \end{table}
+
+  \subsection{Servicio de compraventa}
+
+      Para gestionar las transacciones entre compradores y vendedores, se define un
+      servicio dedicado, que permite registrar nuevas operaciones de compraventa y
+      recuperar el historial de transacciones tanto desde la perspectiva del
+      comprador como del vendedor.
+
+      \setlength{\tabcolsep}{15pt}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{l l}
+              \hline
+              \textbf{HTTP} & \textbf{Endpoint}                              \\
+              \hline
+              \textit{GET}  & \texttt{/compraventas}                         \\
+              \textit{POST} & \texttt{/compraventas}                         \\
+              \textit{GET}  & \texttt{/compraventas/\{id\}}                  \\
+              \textit{GET}  & \texttt{/compraventas/compras/\{idComprador\}} \\
+              \textit{GET}  & \texttt{/compraventas/ventas/\{idVendedor\}}   \\
+              \hline
+          \end{tabular}
+          \caption{Endpoints expuestos por el servicio de compraventas.}
+          \label{tab:endpoints-compraventas}
+      \end{table}
+
+  \subsection{Servicio de valoraciones}
+
+      Este servicio permite a los usuarios calificar y dejar comentarios sobre otros
+      usuarios tras haber finalizado una transacción. Proporciona operaciones para
+      registrar nuevas valoraciones y consultarlas en base al vendedor o al
+      comprador.
+
+      \setlength{\tabcolsep}{15pt}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{l l}
+              \hline
+              \textbf{HTTP} & \textbf{Endpoint}                                    \\
+              \hline
+              \textit{POST} & \texttt{/api/valoraciones}                           \\
+              \textit{GET}  & \texttt{/api/valoraciones/\{id\}}                    \\
+              \textit{GET}  & \texttt{/api/valoraciones/vendedor/\{vendedorId\}}   \\
+              \textit{GET}  & \texttt{/api/valoraciones/comprador/\{compradorId\}} \\
+              \hline
+          \end{tabular}
+          \caption{Endpoints expuestos por el servicio de valoraciones.}
+          \label{tab:endpoints-valoraciones}
+      \end{table}
+
+  \subsection{Pasarela de la aplicación}
+
+      La pasarela (API Gateway) actúa como punto de entrada único para las peticiones
+      al servidor. Además de enrutar las llamadas a los microservicios
+      correspondientes, se encarga la autenticación y de la gestión de sesiones
+      mediante el uso de tokens JWT. Sin embargo, la autorización de roles
+      corresponde a cada microservicio.
+
+      \setlength{\tabcolsep}{15pt}
+      \begin{table}[h]
+          \centering
+          \begin{tabular}{l l}
+              \hline
+              \textbf{HTTP} & \textbf{Endpoint} \\
+              \hline
+              \textit{POST} & \texttt{/login}   \\
+              \textit{POST} & \texttt{/refresh} \\
+              \textit{POST} & \texttt{/logout}  \\
+              \hline
+          \end{tabular}
+          \caption{Endpoints de autenticación expuestos por la pasarela.}
+          \label{tab:endpoints-pasarela}
+      \end{table}
+
+      \clearpage
+
+\section{Diseño e implementación de la interfaz}
+
+  \subsection{Sistema de plantillas, páginas, formularios y componentes}
+
+      El diseño de la aplicación se ha conseguido siguiendo un enfoque modular,
+      haciendo uso de componentes y \textit{layouts} (plantillas de diseño),
+      aprovechando las capacidades de React y React Router.
+
+      Los componentes representan piezas de interfaz independientes y reutilizables,
+      como pueden ser el \texttt{Header}, el \texttt{Footer} o el menú lateral
+      \texttt{Menu}. Aislar la lógica de estos componentes a ficheros dedicados ha
+      facilitado enormemente el desarrollo gracias a la escalabilidad que
+      proporciona, y ha resultado vital para el mantenimiento del código.
+
+      Para estructurar las vistas, se han definido diferentes plantillas que actúan
+      como envoltorios para las rutas. Por ejemplo, el \texttt{MainLayout} define la
+      estructura base con un encabezado, un contenedor central y un pie de página.
+      Como cada página que emplee esta plantilla renderiza un componente principal
+      distinto, se hace uso del elemento \texttt{<Outlet />} de React Router.
+
+      Para el panel, se han podido juntas las vistas de administración de usuario
+      gracias a definir un \texttt{PanelLayout}. Este layout divide la vista en dos
+      columnas: una barra lateral fija que contiene el componente \texttt{Menu} y una
+      sección principal donde se carga el contenido específico mediante su propio
+      \texttt{<Outlet />}.
+
+  \subsection{Análisis global de las vistas de la aplicación con React Router}
+
+      La navegación de la aplicación en el lado del cliente se gestiona utilizando
+      \textbf{React Router}. Esta biblioteca permite definir rutas de distinta forma
+      (\textit{Data}, \textit{Framework} y \textit{Declarative}). A pesar de sus
+      limitaciones frente al resto, se ha escogido el enfoque declarativo debido a su
+      sencillez y porque es el usado en las prácticas.
+
+      De esta forma, podemos asociar cada URL de navegación con la jerarquía de
+      componentes que debe renderizarse, indicando, en una misma porción de código,
+      todo lo que necesitamos para la correcta navegación.
+
+      En el componente principal, se emplea el contenedor \texttt{<Routes>} para
+      agrupar todas las rutas de la aplicación, anidándolas bajo distintos
+      envoltorios (plantillas) junto con reglas de autorización:
+
+      \begin{lstlisting}[style=ReactStyle]
+    // App.jsx
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Inicio />} />
+        <Route path="/buscar" element={<Buscar />} />
+      </Route>
+
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Register />} />
+      </Route>
+      ...
+    </Routes>
+\end{lstlisting}
+
+      Como se observa en el código, el enrutamiento se organiza lógicamente
+      estructurando las distintas páginas como componentes hijos de su plantilla
+      correspondiente. A continuación muestra como se agrupan cada una de las vistas:
+
+      % TODO: Añadir las rutas que faltan
+      \begin{itemize}
+          \item \textbf{\texttt{MainLayout}}: Plantilla base con encabezado y pie de página. Engloba:
+                \begin{itemize}
+                    \item \texttt{/}: Vista principal de aterrizaje (\texttt{Inicio}).
+                    \item \texttt{/buscar}: Motor de búsqueda y catálogo general de productos (\texttt{Buscar}).
+                \end{itemize}
+          \item \textbf{\texttt{AuthLayout}}: Plantilla más simple que la anterior, que recoge los formularios de autenticación. Engloba:
+                \begin{itemize}
+                    \item \texttt{/login}: Formulario de inicio de sesión (\texttt{Login}).
+                    \item \texttt{/signup}: Formulario de creación de cuenta (\texttt{Register}).
+                \end{itemize}
+          \item \textbf{\texttt{PanelLayout}}: Plantilla de vistas privadas. Están protegidas mediante el componente \texttt{RequireAuth}, y se dividen en:
+                \begin{itemize}
+                    \item Panel de usuarios. Requieren el rol \texttt{Roles.USUARIO}.
+                          \begin{itemize}
+                              \item \texttt{/panel/mi-cuenta}: Gestión de los datos del perfil (\texttt{MiCuenta}).
+                              \item \texttt{/panel/productos}: Gestión de los artículos puestos a la venta (\texttt{MisProductos}).
+                          \end{itemize}
+                    \item Panel de administradores. Requieren el rol \texttt{Roles.ADMIN}.
+                          \begin{itemize}
+                              \item \texttt{/panel/admin/usuarios}: Vista de administración de usuarios.
+                              \item \texttt{/panel/admin/compraventas}: Vista de administración de transacciones.
+                          \end{itemize}
+                \end{itemize}
+          \item \textbf{Otras vistas}: También se incluyen páginas adicionales que se invocan ante errores de autorización o de páginas no encontradas.
+                \begin{itemize}
+                    \item \texttt{/404}: Vista a la que se redirige cuando la ruta solicitada no existe (\texttt{Error404}).
+                    \item \texttt{/unauthorized}: Vista mostrada cuando el usuario carece de permisos de rol suficientes para un recurso específico (\texttt{Unauthorized}).
+                \end{itemize}
+      \end{itemize}
+
+  \subsection{Sistema de rejillas con Bootstrap Grid}
+
+      Para la visualización de los productos en las vistas de búsqueda e inicio de la
+      aplicación, se ha implementado un sistema de rejilla adaptable y dinámico en el
+      componente \texttt{GridProductos}. Este componente aprovecha las ventajas de
+      los componentes \texttt{Container}, \texttt{Row} y \texttt{Col} de la
+      biblioteca React Bootstrap.
+
+      El \textit{responsiveness} se ha logrado usando puntos de ruptura
+      (\textit{breakpoints}) para los distintos tamaños de pantalla. Así, por
+      ejemplo, tendremos filas de cuatro productos en pantallas \texttt{xxl} (\(\ge
+      1400\ px\)) o filas de un único producto en pantallas \texttt{xs} o \texttt{sm}
+      (\(< 768\ px\)). De esta forma, la cantidad de tarjetas de productos por fila
+      varía dinámicamente en función del ancho de la pantalla del dispositivo.
+
+      \begin{lstlisting}[style=ReactStyle]
+  return (
+    <Container fluid className={className}>
+      <Row xs={1} sm={1} md={2} lg={2} xl={3} xxl={4} className="g-4">
+        {nuevoProductoCard ? (
+          <Col key="lead-card">{nuevoProductoCard}</Col>
+        ) : null}
+        {PRODUCTOS.map((producto) => (
+          <Col key={producto.id}>
+            <Card className="h-100 rounded-5 overflow-hidden shadow-sm">
+              ...
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
+\end{lstlisting}
+
+      De forma adicional, se hace uso de la clase de utilidad de Boostrap
+      \texttt{g-4} (\textit{gutter-4}) que define un \textit{padding} horizontal y
+      vertical para crear separación entres las tarjetas.
+
+  \subsection{Autenticación y autorización}
+
+      Las aplicaciones React mantienen el estado de sus componentes únicamente
+      mientras la aplicación permanece en ejecución. Cuando la página se recarga o el
+      usuario inicia una nueva sesión en el navegador, dicho estado se pierde. Por
+      este motivo, las aplicaciones que requieren autenticación deben utilizar
+      mecanismos de almacenamiento persistente que permitan conservar la información
+      de sesión. En React existen, principalmente, tres zonas en las que guardar
+      información:
+
+      \begin{itemize}
+          \item \textbf{In-memory state}: Guarda el estado de los componentes. Se pierde al renderizar otros componentes, por ejemplo, refrescando la página.
+          \item \textbf{Local Storage}: Es un sistema de información persistente del navegador. Guarda información entre las distintas sesiones.
+          \item \textbf{Cookies}: Son pequeños fragmentos de información almacenados por el navegador. A diferencia del anterior, se envían automáticamente al servidor en cada petición HTTP.
+      \end{itemize}
+
+      Una primera idea sería tener un token JWT suministrado por el backend al
+      acceder a \texttt{/login}. Este token no se podría almacenar en memoria, ya que
+      se perdería, por lo que habría que almacenarlo en el Local Storage del
+      navegador. Este enfoque conlleva diversos problemas de seguridad, ya que el
+      \textit{Local Storage} es accesible directamente desde JavaScript. Esto implica
+      que, en caso de una vulnerabilidad de tipo \textbf{\textit{Cross-Site
+              Scripting} (XSS)}, un atacante podría obtener el token y suplantar la identidad
+      del usuario. Por este motivo, almacenar tokens de autenticación en el navegador
+      sin protección adicional no es una buena práctica.
+
+      Una alternativa más robusta consistiría en el uso de una \texttt{cookie}
+      configurada con el atributo \texttt{HttpOnly}, que bloquea el acceso de
+      JavaScript y soluciona el problema mencionado. Esta opción es la recomendada
+      por la asignatura de Arquitectura del Software. Pero presenta un problema
+      evidente: durante el ciclo de vida de la cookie, estamos confiando plenamente
+      en el usuario. Si la duración de vida es corta, implementaríamos un mecanismo
+      para actualizar el token con un endpoint \texttt{/refresh}, pero nunca
+      llegaríamos a volver a solicitar las credenciales al usuario. Si la duración de
+      vida es larga, tendríamos que confiar en el usuario durante dicho período de
+      tiempo. Guardar las credenciales del usuario de forma persistente tampoco es
+      una opción viable. Además, somos vulnerables a un segundo tipo de ataque,
+      \textbf{\textit{Cross-Site Request Forgery} (CSRF)}, pues estamos enviando la
+      cookie en cada petición.
+
+      En la actualidad, existe una solución híbrida que combina ambos conceptos para
+      equilibrar la protección contra ataques XSS y CSRF con la flexibilidad que
+      exige una API moderna. Dicho estándar propone un enfoque con dos tokens:
+
+      \begin{itemize}
+          \item \textbf{Access Token}: De corta duración (10 o 15 minutos), es generado por el backend al iniciar sesión. El cliente (en nuestro caso, la aplicación React) almacena este token únicamente en memoria y lo envía en la cabecera \texttt{Authorization: Bearer <token>} en cada petición a la API. Al no estar en el almacenamiento persistente, se la exposición frente a un ataque XSS, y al no ser una cookie, es inmune al CSRF.
+
+          \item \textbf{Refresh Token}: De larga duración (unos 7 días), también es generado por el backend y establecido al iniciar sesión. Cuando el token de acceso expira y se pierde de la memoria, el cliente realiza una petición a \texttt{/refresh} para renovar dicho token.
+      \end{itemize}
+
+      En el lado del cliente, se ha desarrollado un componente interceptor
+      \texttt{RequireAuth}, que envuelve las rutas protegidas y verifica si el
+      usuario autenticado posee al menos uno de los roles permitidos
+      (\texttt{allowedRoles}) especificados en la definición del enrutador de React
+      Router. Si el usuario cuenta con los permisos necesarios, se renderiza la vista
+      solicitada (componente \texttt{<Outlet />}). En caso de tener los permisos de
+      rol necesarios, se le redirige a \texttt{/unauthorized}. Si directamente, el
+      usuario no estaba ``\textit{logueado}'', se le redirige a la vista para iniciar
+      sesión.
+
+      \begin{lstlisting}[style=ReactStyle]
+    // RequireAuth.jsx
+    const RequireAuth = ({ allowedRoles }) => {
+      const { auth } = useAuth();
+      const location = useLocation();
+
+      return auth?.roles?.find((role) => allowedRoles?.includes(role)) ? (
+        <Outlet />
+      ) : auth?.usuario ? (
+        <Navigate to="/unauthorized" state={{ from: location }} replace />
+      ) : (
+        <Navigate to="/login" state={{ from: location }} replace />
+      );
+    };
+\end{lstlisting}
+
+      \subsubsection{Gestión y ciclo de vida de los tokens}
+
+          La sincronización de las peticiones HTTP privadas y la actualización de las
+          credenciales expiradas se lleva a cabo mediante interceptores de Axios y hooks
+          personalizados:
+
+          \begin{itemize}
+              \item \textbf{Hook \texttt{useRefreshToken}}: Expone una función para solicitar la renovación del token de acceso. Realiza una petición al endpoint de renovación (\texttt{/refresh}), el cual lee el Refresh Token, enviado automáticamente por el navegador.
+              \item \textbf{Hook \texttt{useApiPrivate}}: Configura una instancia de Axios dedicada a realizar peticiones HTTP autenticadas. Esta instancia incluye dos interceptores:
+                    \begin{itemize}
+                        \item \textbf{Interceptor de petición (\textit{Request Interceptor})}: Es necesario para inyectar de forma automática la cabecera \texttt{Authorization: Bearer <token>} con el Access Token actual antes de que la petición salga al servidor.
+                        \item \textbf{Interceptor de respuesta (\textit{Response Interceptor})}: Es posible que el Access Token haya caducado, pues su \textit{lifespan} es bastante corto. El backend informará con un error HTTP \texttt{401 Unauthorized}. Es aquí donde éste interceptor actúa, iniciando el proceso de renovación llamando al hook definido anteriormente como \texttt{useRefreshToken}, actualizando la cabecera de la petición original con el nuevo Access Token y volviéndola a intentar (una única vez).
+                    \end{itemize}
+          \end{itemize}
+
+          Se puede dar el caso en el que, o bien por caducidad o por invalidez, el
+          Refresh Token almacenado en la cookie del navegador ya no sea válido. En este
+          caso, el frontend debe darse cuenta de que el usuario ha perdido su sesión
+          persistente, y que debe volver a identificarse con sus credenciales en el
+          servidor. El interceptor analiza la respuesta ante un intento de renovación, y
+          redirige al usuario forzosamente al formulario de \texttt{/login} en caso de un
+          Refresh Token inválido.
+
+          \begin{lstlisting}[style=ReactStyle]
+    // useApiPrivate.jsx
+    const requestId = instancePrivate.interceptors.request.use(
+      (config) => {
+        config.headers['Authorization'] ??= `Bearer ${authRef.current?.accessToken}`;
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    const responseId = instancePrivate.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const prevReq = error?.config;
+
+        if (error?.response?.status === 401 && !prevReq?.sent) {
+          prevReq.sent = true; // un único intento
+
+          try {
+            refreshPromise ??= refreshRef.current().finally(() => refreshPromise = null);
+            prevReq.headers['Authorization'] = `Bearer ${await refreshPromise}`;
+            return instancePrivate(prevReq);
+          } catch { // limpiar auth y redirigir a /login
+            setAuth({}); navigate('/login', { replace: true });
+          }
+        }
+
+        return Promise.reject(error);
+      }
+    );
+\end{lstlisting}
+
+  \subsection{Comunicación con el servidor}
+
+      % TODO
+
+  \subsection{Otros aspectos y tecnologías}
+
+      El desarrollo de este proyecto no hubiese sido posible sin el uso de algunas
+      tecnologías y técnicas que han permitido complementar el cliente y mejorar la
+      experiencia de usuario.
+
+      La implementación de la autenticación se ha realizado en base al
+      \href{https://www.youtube.com/playlist?list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd}{curso
+          de gestión de accesoy autenticación} de Dave Gray en Youtube.
+
+      A medida que la jerarquía de carpetas se vuelve más profunda, vimos que una
+      buena práctica en estos entornos es usar \textbf{rutas absolutas} en vez de
+      rutas relativas~\cite{salteadorneo_alias}. Para implementarlo, se han
+      configurado rutas absolutas mediante el uso de alias (\texttt{@/}). Esto ha
+      requerido configurar Vite en el archivo \texttt{vite.config.js}, ya que es el
+      \textit{bundler} empleado, y definir la resolución de los distintos directorios
+      en \texttt{jsconfig.json}, aunque este último es solo para el analizador
+      estático ESLint.
+
+      También se han usado librerías externas de código abierto para mejorar la
+      experiencia de usuario. Algunos ejemplos son los componentes
+      \textbf{DatePicker} de \href{https://getdatepicker.com/}{Tempus Dominus} o
+      \textbf{International Telephone Input} para números de teléfono
+      \href{https://getdatepicker.com/}{Intl-Tel-Input}. Estos componentes han
+      resultado un acierto para facilitar la validación de dichos campos e introducir
+      restricciones que, de otras formas, habría que configurar manualmente.
+
+      Para algunos campos de selección de los formularios, como las categorías, se ha
+      importado el componente \textbf{Typeahead} de
+      \href{https://getdatepicker.com/}{React Bootstrap Typeahead}. Esta librería
+      profundiza el input de selección ofreciendo búsquedas, renderizado personaliado
+      y otras funciones que no se han utilizado como paginación.
+
+      La animación ``\textit{3D tilt}'' de las cartas de productos está fuertemente
+      inspirada en la implementación de Jeroen Reumkens de su blog
+      \href{https://www.frontend.fyi/tutorials/css-3d-perspective-animations}{Frontend.yi}.
+      Gracias a React, no necesitamos de librerías externas pesadas de 3D como
+      Three.js.
+
+      Los carruseles de productos se han implementado con la librería
+      \href{https://swiperjs.com/}{Swiper.js}. Aunque Bootstrap ofrece esta función,
+      únicamente permite slides completos. Esto obligaría a actualizar todos los
+      productos en cada slide (no muy UX-\textit{friendly}). Con Swiper y React
+      podemos definir un carrusel de forma sencilla y usar módulos de navegación y
+      \textit{autoplay}, controlar la velocidad, los breakpoints de responsiveness,
+      etc.
+
+      \clearpage
+
+\section{Conclusiones y valoraciones personales}
+
+  El desarrollo de este práctica ha resultado muy útil para
+
+\section{Bitácora}
+
+  A continuación, se comenta la distribución del trabajo entre las clases
+  prácticas presenciales y el trabajo autónomo. El control de horas es una
+  aproximación cercana a la duración real de cada actividad.
+
+  \setlength{\tabcolsep}{15pt} % Espacio entre columnas
+  \begin{table}[H]
+      \centering
+      \begin{tabular}{c c c}
+          \hline
+          \textbf{Actividad}     & \textbf{Presencial} & \textbf{Trabajo autónomo} \\
+          \hline
+          \textit{Análisis}      & 0                   & 0                         \\
+          \textit{Desarrollo}    & 0                   & 0                         \\
+          \textit{Documentación} & 0                   & 0                         \\
+          \hline
+          \textbf{Total}         & \textbf{0 horas}    & \textbf{0 horas}          \\
+          \hline
+      \end{tabular}
+      \caption{Distribución de horas entre actividades presenciales y trabajo autónomo.}
+      \label{tab:distribucion-horas}
+  \end{table}
+
+  \bibliographystyle{unsrt}
+  \bibliography{bibliography}
+
+  \clearpage
+
+\end{document}
