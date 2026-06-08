@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import useApiPrivate from '@/hooks/useApiPrivate';
+import useAuth from '@/hooks/useAuth';
+import createCompraventaService from '@/services/compraventaService';
 import createProductService from '@/services/productService';
 
 import './VerProducto.css';
@@ -11,9 +14,27 @@ const VerProducto = () => {
   const { id } = useParams();
   const apiPrivate = useApiPrivate();
   const productService = createProductService(apiPrivate);
-
+  const compraventaService = createCompraventaService(apiPrivate);
+  const { auth } = useAuth();
+  const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [errMsg, setErrMsg] = useState('');
+
+  const esDueño = producto?.vendedorId === auth?.usuario;
+  const estaDisponible = producto?.disponible;
+
+  const botonComprar = async () => {
+    if (!auth?.accessToken) {
+      navigate('/login');
+    } else {
+      try {
+        await compraventaService.realizarCompra(id);
+        setProducto({ ...producto, disponible: false });
+      } catch (error) {
+        console.error('Error al guardar la compra', error);
+      }
+    }
+  };
 
   useEffect(() => {
     const getProducto = async () => {
@@ -29,7 +50,7 @@ const VerProducto = () => {
     if (id) {
       getProducto();
     }
-  }, [id, productService]);
+  }, [id]);
   return (
     <div className="ver-producto-pagina">
       {errMsg && <div className="alert alert-danger">{errMsg}</div>}
@@ -70,12 +91,15 @@ const VerProducto = () => {
                   </p>
                 </div>
                 <div className="producto-acciones">
-                  <Button
-                    variant="primary"
-                    className="btn-comprar w-100 py-3 fw-bold rounded-3 text-uppercase shadow-sm"
-                  >
-                    Comprar ahora
-                  </Button>
+                  {!esDueño && estaDisponible && (
+                    <Button
+                      variant="primary"
+                      className="btn-comprar w-100 py-3 fw-bold rounded-3 text-uppercase shadow-sm"
+                      onClick={botonComprar}
+                    >
+                      Comprar ahora
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

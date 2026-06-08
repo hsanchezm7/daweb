@@ -8,7 +8,6 @@ import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createCompraventaService from '@/services/compraventaService';
 import createProductService from '@/services/productService';
 
-
 import './MisVentas.css';
 
 function MisVentas() {
@@ -31,7 +30,7 @@ function MisVentas() {
   useEffect(() => {
     const loadMisVentas = async () => {
       try {
-        const params = {}
+        const params = {};
         const data = await compraventaService.getVentas(params);
 
         const ventas = data._embedded?.compraventaResumenList || [];
@@ -69,7 +68,6 @@ function MisVentas() {
         productos={MisVentas}
         tipoCard={TIPO_CARD.MIS_PRODUCTOS}
       />
-
     </div>
   );
 }

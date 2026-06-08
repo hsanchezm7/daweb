@@ -45,7 +45,13 @@ function Usuarios() {
       {errMsg ? (
         <Alert variant="danger">{errMsg}</Alert>
       ) : (
-        <Table striped hover responsive className="usuarios-table align-middle" size='sm'>
+        <Table
+          striped
+          hover
+          responsive
+          className="usuarios-table align-middle"
+          size="sm"
+        >
           <thead>
             <tr>
               <th>ID</th>

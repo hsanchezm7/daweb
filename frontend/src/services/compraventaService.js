@@ -39,6 +39,18 @@ const createCompraventaService = (apiInstance) => ({
       throw error;
     }
   },
+  realizarCompra: async (idProducto) => {
+    try {
+      const response = await apiInstance.post(`/compraventas`, { idProducto });
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al realizar la compra:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
 });
 
 export default createCompraventaService;

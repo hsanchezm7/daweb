@@ -3,13 +3,13 @@ import { Alert, Col, Container, Form, Offcanvas, Row } from 'react-bootstrap';
 import { useOutletContext } from 'react-router-dom';
 
 import { TIPO_CARD } from '@/components/card-producto/CardProducto';
+import Filtro from '@/components/filtro/Filtro';
 import GridProductos from '@/components/grid-productos/GridProductos';
+import Paginator from '@/components/paginator/Paginator';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
 import createProductService from '@/services/productService';
 
-import Filtro from '@/components/filtro/Filtro';
-import Paginator from '@/components/paginator/Paginator';
 import './Buscar.css';
 
 function Buscar() {

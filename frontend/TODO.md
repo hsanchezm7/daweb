@@ -38,10 +38,10 @@ Accesibles para todos los visitantes.
     - ~~Sidebar lateral izquierdo con filtros (categorías, precio, estado).~~
     - ~~Grid de resultados con `CardProducto`.~~
     
-- [ ] **Ver Producto (`/producto/:id`)**: 
-    - Detalle técnico del producto con imagen.
-    - Botón de "Comprar" (solo visible si el usuario no es el dueño). Si no está registrado,
-    redirige a "Login/Registro"
+- [x] **Ver Producto (`/producto/:id`)**: 
+    - ~~Detalle técnico del producto con imagen.~~
+    - ~~Botón de "Comprar" (solo visible si el usuario no es el dueño). Si no está registrado,
+    redirige a "Login/Registro"~~
     
 - [X] ~~**Login (`/iniciar-sesion`)**: Formulario de acceso.~~
 
