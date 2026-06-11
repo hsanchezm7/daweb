@@ -44,7 +44,6 @@ function CrearProducto({ onSubmit, onCancel }) {
     const loadEstados = async () => {
       try {
         const estadosValor = await productService.getEstadosProducto();
-        
         setOpcionesEstado(estadosValor);
       } catch (err) {
         console.error('Error al cargar los estados de producto:', err);

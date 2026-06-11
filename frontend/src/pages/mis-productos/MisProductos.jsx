@@ -30,6 +30,7 @@ function MisProductos() {
   });
 
   const [errMsg, setErrMsg] = useState('');
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -37,6 +38,7 @@ function MisProductos() {
   const handleSubmit = (event) => {
     event.preventDefault();
     handleCloseModal();
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -51,8 +53,6 @@ function MisProductos() {
         const productos = data._embedded?.productoResumenList || [];
         const pageInfo = data.page;
 
-        console.log(productos);
-
         setMisProductos(productos);
         setPageInfo(pageInfo);
       } catch (error) {
@@ -62,7 +62,7 @@ function MisProductos() {
     };
 
     loadMisProductos();
-  }, []);
+  }, [refreshTrigger]);
 
   const renderNuevoProductoCard = () => (
     <Card className="h-100 rounded-5 overflow-hidden shadow-sm mis-productos-nuevo">

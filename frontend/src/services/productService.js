@@ -67,6 +67,19 @@ const createProductService = (apiInstance) => ({
       throw error;
     }
   },
+
+  deleteProduct: async (id) => {
+    try {
+      const response = await apiInstance.delete(`/productos/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al eliminar el producto:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
 });
 
 export default createProductService;

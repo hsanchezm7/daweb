@@ -36,6 +36,17 @@ const VerProducto = () => {
     }
   };
 
+  const botonEditar = async () => {};
+
+  const botonEliminar = async () => {
+    try {
+      await productService.deleteProduct(id);
+      navigate('/panel/productos');
+    } catch (error) {
+      console.error('Error al eliminar el producto', error);
+    }
+  };
+
   useEffect(() => {
     const getProducto = async () => {
       try {
@@ -90,7 +101,7 @@ const VerProducto = () => {
                     {producto.descripcion}
                   </p>
                 </div>
-                <div className="producto-acciones">
+                <div className="producto-acciones d-flex gap-3">
                   {!esDueño && estaDisponible && (
                     <Button
                       variant="primary"
@@ -98,6 +109,24 @@ const VerProducto = () => {
                       onClick={botonComprar}
                     >
                       Comprar ahora
+                    </Button>
+                  )}
+                  {esDueño && estaDisponible && (
+                    <Button
+                      variant="secondary"
+                      className="btn-editar w-50 py-3 fw-bold rounded-3 text-uppercase shadow-sm"
+                      onClick={botonEditar}
+                    >
+                      Editar producto
+                    </Button>
+                  )}
+                  {esDueño && estaDisponible && (
+                    <Button
+                      variant="danger"
+                      className="btn-eliminar w-30 py-3 fw-bold rounded-3 text-uppercase shadow-sm"
+                      onClick={botonEliminar}
+                    >
+                      Eliminar producto
                     </Button>
                   )}
                 </div>
