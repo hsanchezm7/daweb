@@ -41,6 +41,19 @@ const createProductService = (apiInstance) => ({
     }
   },
 
+  updateProduct: async (id, data) => {
+    try {
+      const response = await apiInstance.put(`/productos/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al modificar el producto:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
+
   // rutas públicas
   getEstadosProducto: async () => {
     try {

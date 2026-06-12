@@ -10,6 +10,7 @@ function GridProductos({
   productos = [],
   tipoCard = '',
   onDelete,
+  onEdit,
 }) {
   return (
     <Container fluid className={className}>
@@ -31,6 +32,7 @@ function GridProductos({
                 producto={producto}
                 tipoCard={tipoCard}
                 onDelete={onDelete}
+                onEdit={onEdit}
               />
             </Col>
           );

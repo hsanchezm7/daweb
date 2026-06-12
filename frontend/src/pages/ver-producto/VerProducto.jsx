@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import ModificarProducto from '@/forms/producto/ModificarProducto';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useAuth from '@/hooks/useAuth';
 import createCompraventaService from '@/services/compraventaService';
@@ -16,12 +17,16 @@ const VerProducto = () => {
   const productService = createProductService(apiPrivate);
   const compraventaService = createCompraventaService(apiPrivate);
   const { auth } = useAuth();
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [errMsg, setErrMsg] = useState('');
 
   const esDueño = producto?.vendedorId === auth?.usuario;
   const estaDisponible = producto?.disponible;
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   const botonComprar = async () => {
     if (!auth?.accessToken) {
@@ -36,7 +41,17 @@ const VerProducto = () => {
     }
   };
 
-  const botonEditar = async () => {};
+  const botonEditar = handleOpenModal;
+
+  const handleSubmitEdicion = async () => {
+    handleCloseModal();
+    try {
+      const data = await productService.getProduct(id);
+      setProducto(data);
+    } catch (error) {
+      console.error('Error al actualizar el producto:', error);
+    }
+  };
 
   const botonEliminar = async () => {
     try {
@@ -139,6 +154,25 @@ const VerProducto = () => {
         </>
       ) : (
         <p>Cargando detalles del producto...</p>
+      )}
+
+      {producto && (
+        <Modal
+          show={showModal}
+          onHide={handleCloseModal}
+          centered
+          dialogClassName="mis-productos-nuevo-modal"
+          contentClassName="rounded-4"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Modificar producto</Modal.Title>
+          </Modal.Header>
+          <ModificarProducto
+            producto={producto}
+            onSubmit={handleSubmitEdicion}
+            onCancel={handleCloseModal}
+          />
+        </Modal>
       )}
     </div>
   );

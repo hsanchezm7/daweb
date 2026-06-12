@@ -1,9 +1,11 @@
-import { Button, Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { useState } from 'react';
+import { Button, Card, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import ModificarProducto from '@/forms/producto/ModificarProducto';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import createProductService from '@/services/productService';
 
@@ -19,15 +21,20 @@ function CardProducto({
   tipoCard = TIPO_CARD.BUSCAR,
   es_popular = false,
   onDelete,
+  onEdit,
 }) {
   const imagenMostrar =
     producto.urlImagen ||
     'https://placehold.co/600x400?text=Sin%0AImagen&font=roboto';
   const descripcionMostrar = producto.descripcion || 'Sin descripción.';
 
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const apiPrivate = useApiPrivate();
   const productService = createProductService(apiPrivate);
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   // efecto del botón
   const handleMouseMove = (e) => {
@@ -69,6 +76,15 @@ function CardProducto({
       }
     } catch (error) {
       console.error('Error al eliminar el producto', error);
+    }
+  };
+
+  const botonEditar = handleOpenModal;
+
+  const handleSubmitEdicion = async () => {
+    handleCloseModal();
+    if (onEdit) {
+      onEdit();
     }
   };
 
@@ -135,7 +151,11 @@ function CardProducto({
               placement="top"
               overlay={<Tooltip id="tooltip-editar">Editar producto</Tooltip>}
             >
-              <button type="button" className="card-icon icon-editar border-0">
+              <button
+                type="button"
+                className="card-icon icon-editar border-0"
+                onClick={botonEditar}
+              >
                 <i className="bi bi-pencil"></i>
               </button>
             </OverlayTrigger>
@@ -168,6 +188,23 @@ function CardProducto({
           </div>
         </Card.Body>
       </Card>
+
+      <Modal
+        show={showModal}
+        onHide={handleCloseModal}
+        centered
+        dialogClassName="mis-productos-nuevo-modal"
+        contentClassName="rounded-4"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modificar producto</Modal.Title>
+        </Modal.Header>
+        <ModificarProducto
+          producto={producto}
+          onSubmit={handleSubmitEdicion}
+          onCancel={handleCloseModal}
+        />
+      </Modal>
     </div>
   );
 }
