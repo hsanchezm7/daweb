@@ -95,6 +95,26 @@
   --bs-btn-border-radius: 100px;
 }
 
+.card-icon.icon-borrar {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.card-icon.icon-borrar:hover {
+  color: #dc3545;
+  background-color: #f8d7da;
+}
+
+.card-icon.icon-editar {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.card-icon.icon-editar:hover {
+  color: #0dcaf0;
+  background-color: #cff4fc;
+}
+
 .card-producto .btn-primary.btn-dynamic-hover {
   position: relative;
   overflow: hidden;

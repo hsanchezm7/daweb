@@ -30,7 +30,7 @@ function MisCompras() {
   useEffect(() => {
     const loadMisCompras = async () => {
       try {
-        const params = {}
+        const params = {};
         const data = await compraventaService.getCompras(params);
 
         const compras = data._embedded?.compraventaResumenList || [];
@@ -58,7 +58,9 @@ function MisCompras() {
     <div className="mis-compras">
       <div className="mb-5">
         <h2 className="mb-2">Mis compras</h2>
-        <p className="text-muted m-0">Consulta tus compras con otros usuarios de la plataforma.</p>
+        <p className="text-muted m-0">
+          Consulta tus compras con otros usuarios de la plataforma.
+        </p>
       </div>
 
       {errMsg && <Alert variant="danger">{errMsg}</Alert>}
@@ -66,9 +68,8 @@ function MisCompras() {
       <GridProductos
         className="compras-grid"
         productos={MisCompras}
-        tipoCard={TIPO_CARD.MIS_PRODUCTOS}
+        //tipoCard={TIPO_CARD.MIS_PRODUCTOS}
       />
-
     </div>
   );
 }

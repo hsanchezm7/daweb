@@ -104,6 +104,7 @@ function MisProductos() {
         nuevoProductoCard={renderNuevoProductoCard()}
         productos={misProductos}
         tipoCard={TIPO_CARD.MIS_PRODUCTOS}
+        onDelete={() => setRefreshTrigger((prev) => prev + 1)}
       />
 
       <Modal

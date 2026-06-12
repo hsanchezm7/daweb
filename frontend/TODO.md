@@ -53,7 +53,7 @@ Accesibles para todos los visitantes.
 
 - [X] ~~**Mis Productos (`/mis-productos`)**:~~ ~~**TODO**: arreglar backend para permitir productos y filtrar por usuario vendedor.~~ 
     - ~~Botón para "Crear Producto"~~.
-    - Debe permitir para cada producto: "Editar" y "Eliminar". Implementar con botones o iconos, por ejemplo.
+    - ~~Debe permitir para cada producto: "Editar" y "Eliminar". Implementar con botones o iconos, por ejemplo.~~
     - ~~Pestañas para: *En venta*, *Vendidos* (opcional).~~
     
 - [X] ~~**Nuevo Producto (`/nuevo-producto`)**: Formulario de creación.~~

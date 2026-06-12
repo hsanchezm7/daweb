@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import useApiPrivate from '@/hooks/useApiPrivate';
+import createProductService from '@/services/productService';
+
 import './CardProducto.css';
 
 export const TIPO_CARD = {
@@ -15,6 +18,7 @@ function CardProducto({
   producto,
   tipoCard = TIPO_CARD.BUSCAR,
   es_popular = false,
+  onDelete,
 }) {
   const imagenMostrar =
     producto.urlImagen ||
@@ -22,6 +26,8 @@ function CardProducto({
   const descripcionMostrar = producto.descripcion || 'Sin descripción.';
 
   const navigate = useNavigate();
+  const apiPrivate = useApiPrivate();
+  const productService = createProductService(apiPrivate);
 
   // efecto del botón
   const handleMouseMove = (e) => {
@@ -54,6 +60,18 @@ function CardProducto({
     ev.currentTarget.style.setProperty('--y-rotation', `0deg`);
   };
 
+  const botonEliminar = async () => {
+    try {
+      await productService.deleteProduct(producto.id);
+      console.log('Producto eliminado');
+      if (onDelete) {
+        onDelete();
+      }
+    } catch (error) {
+      console.error('Error al eliminar el producto', error);
+    }
+  };
+
   return (
     <div key={producto.id} className="card-3d-wrapper">
       <Card
@@ -68,7 +86,6 @@ function CardProducto({
             </div>
           )}
         </div>
-
         <div className="top-right-icons">
           {es_popular && (
             <OverlayTrigger
@@ -93,6 +110,34 @@ function CardProducto({
               <div className="card-icon">
                 <FontAwesomeIcon icon={faTruckFast} />
               </div>
+            </OverlayTrigger>
+          )}
+
+          {tipoCard === TIPO_CARD.MIS_PRODUCTOS && (
+            <OverlayTrigger
+              key="borrar"
+              placement="top"
+              overlay={<Tooltip id="tooltip-borrar">Borrar producto</Tooltip>}
+            >
+              <button
+                type="button"
+                className="card-icon icon-borrar border-0"
+                onClick={botonEliminar}
+              >
+                <i className="bi bi-trash"></i>
+              </button>
+            </OverlayTrigger>
+          )}
+
+          {tipoCard === TIPO_CARD.MIS_PRODUCTOS && (
+            <OverlayTrigger
+              key="editar"
+              placement="top"
+              overlay={<Tooltip id="tooltip-editar">Editar producto</Tooltip>}
+            >
+              <button type="button" className="card-icon icon-editar border-0">
+                <i className="bi bi-pencil"></i>
+              </button>
             </OverlayTrigger>
           )}
         </div>

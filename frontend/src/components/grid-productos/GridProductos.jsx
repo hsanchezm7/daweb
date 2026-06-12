@@ -1,13 +1,15 @@
 import { Col, Container, Row } from 'react-bootstrap';
 
-import './GridProductos.css';
 import CardProducto from '@/components/card-producto/CardProducto';
+
+import './GridProductos.css';
 
 function GridProductos({
   className = '',
   nuevoProductoCard = null,
   productos = [],
-  tipoCard ='',
+  tipoCard = '',
+  onDelete,
 }) {
   return (
     <Container fluid className={className}>
@@ -23,9 +25,15 @@ function GridProductos({
           </Col>
         )}
         {productos.map((producto) => {
-          return <Col key={producto.id} >
-            <CardProducto producto={producto} tipoCard={tipoCard} />
-          </Col>;
+          return (
+            <Col key={producto.id}>
+              <CardProducto
+                producto={producto}
+                tipoCard={tipoCard}
+                onDelete={onDelete}
+              />
+            </Col>
+          );
         })}
       </Row>
     </Container>
