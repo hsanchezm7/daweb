@@ -1,5 +1,6 @@
 import { Button, Container, Dropdown, Form, Image } from 'react-bootstrap';
 import {
+  ArrowRightCircleFill,
   BagCheckFill,
   BoxArrowRight,
   BoxSeam,
@@ -7,6 +8,7 @@ import {
   List,
   PeopleFill,
   PersonFill,
+  PersonPlus,
 } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -40,7 +42,7 @@ function Header({ onMenuToggle }) {
       <Container
         fluid
         className="d-grid gap-3 align-items-center"
-        style={{ gridTemplateColumns: '1fr 2fr 1fr' }}
+        style={{ gridTemplateColumns: '1fr 1fr 1fr' }}
       >
         {/* col-1: logo brand */}
         <div className="d-flex align-items-center">
@@ -84,6 +86,7 @@ function Header({ onMenuToggle }) {
                     to="/panel/admin/usuarios"
                     variant="outline-dark"
                     className="d-flex align-items-center gap-2 me-2"
+                    size="sm"
                   >
                     <PeopleFill aria-hidden="true" />
                     <span className="d-none d-xl-inline">Usuarios</span>
@@ -93,6 +96,7 @@ function Header({ onMenuToggle }) {
                     to="/panel/admin/compraventas"
                     variant="outline-dark"
                     className="d-flex align-items-center gap-2 me-3"
+                    size="sm"
                   >
                     <BoxSeam aria-hidden="true" />
                     <span className="d-none d-xl-inline">Compraventas</span>
@@ -105,6 +109,7 @@ function Header({ onMenuToggle }) {
                     to="/panel/productos"
                     variant="outline-dark"
                     className="d-flex align-items-center gap-2 me-2"
+                    size="sm"
                   >
                     <Grid aria-hidden="true" />
                     <span className="d-none d-xl-inline">Mis productos</span>
@@ -114,6 +119,7 @@ function Header({ onMenuToggle }) {
                     to="/panel/compras"
                     variant="outline-dark"
                     className="d-flex align-items-center gap-2 me-3"
+                    size="sm"
                   >
                     <BagCheckFill aria-hidden="true" />
                     <span className="d-none d-xl-inline">Mis compras</span>
@@ -146,7 +152,10 @@ function Header({ onMenuToggle }) {
                     Mi cuenta
                   </Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout} className="text-danger d-flex align-items-center gap-2">
+                  <Dropdown.Item
+                    onClick={handleLogout}
+                    className="text-danger d-flex align-items-center gap-2"
+                  >
                     <BoxArrowRight aria-hidden="true" />
                     Cerrar sesión
                   </Dropdown.Item>
@@ -159,12 +168,24 @@ function Header({ onMenuToggle }) {
                 as={Link}
                 to="/signup"
                 variant="outline-dark"
-                className="me-2"
+                className="d-flex align-items-center gap-2 me-2"
+                size="sm"
               >
-                Crear cuenta
+                <PersonPlus className="d-lg-none" aria-hidden="true" />
+                <span className="d-none d-lg-inline">Crear cuenta</span>
               </Button>
-              <Button as={Link} to="/login" variant="dark">
-                Iniciar sesión
+              <Button
+                as={Link}
+                to="/login"
+                variant="dark"
+                className="d-flex align-items-center gap-2"
+                size="sm"
+              >
+                <ArrowRightCircleFill
+                  className="d-lg-none"
+                  aria-hidden="true"
+                />
+                <span className="d-none d-lg-inline">Iniciar sesión</span>
               </Button>
             </>
           )}

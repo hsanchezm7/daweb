@@ -40,28 +40,32 @@ function App() {
           </Route>
         </Route>
 
-        <Route
-          element={<RequireAuth allowedRoles={[Roles.USUARIO, Roles.ADMIN]} />}
-        >
-          <Route path="/panel" element={<PanelLayout />}>
+        <Route path="/panel" element={<PanelLayout />}>
+          <Route
+            element={
+              <RequireAuth allowedRoles={[Roles.USUARIO, Roles.ADMIN]} />
+            }
+          >
             <Route index element={<Navigate to="mi-cuenta" replace />} />
             <Route path="compras" element={<MisCompras />} />
             <Route path="ventas" element={<MisVentas />} />
             <Route path="mi-cuenta" element={<MiCuenta />} />
             <Route path="productos" element={<MisProductos />} />
           </Route>
-        </Route>
-
-        <Route element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}>
-          <Route path="/panel" element={<PanelLayout />}>
-            <Route path="admin/usuarios" element={<Usuarios />} />
-            <Route path="admin/compraventas" element={<Compraventas />} />
+          <Route
+            path="admin"
+            element={<RequireAuth allowedRoles={[Roles.ADMIN]} />}
+          >
+            <Route path="usuarios" element={<Usuarios />} />
+            <Route path="compraventas" element={<Compraventas />} />
           </Route>
         </Route>
       </Route>
 
-      <Route path="/404" element={<Error404 />} />
-      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route element={<MainLayout />}>
+        <Route path="/404" element={<Error404 />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+      </Route>
       <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );

@@ -16,7 +16,7 @@
 
 - [ ] **terminar Footer**
 
-- [ ] **hacer /404 y /unauthorized**
+- [X] **hacer /404 y /unauthorized**
 
 Estructura de vistas, rutas y componentes basada en el modelo de **PcComponentes**.
 
