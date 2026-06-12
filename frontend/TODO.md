@@ -8,11 +8,11 @@
 
 - [ ] **búsqueda con query**
 
-- [ ] **url de imágenes para todos los productos (seeder.py backend)**
+- [X] **url de imágenes para todos los productos (seeder.py backend)**
 
 - [ ] **ocultar apartado Administración de Menu si no admin**
 
-- [ ] **terminar Header**
+- [X] **terminar Header**
 
 - [ ] **terminar Footer**
 

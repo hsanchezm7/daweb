@@ -17,9 +17,9 @@ function CardProducto({
   es_popular = false,
 }) {
   const imagenMostrar =
-    producto.urlImagen || 'https://placehold.co/600x400/000000/FFF';
-  const descripcionMostrar =
-    producto.descripcion || 'Descripción no disponible por el momento.';
+    producto.urlImagen ||
+    'https://placehold.co/600x400?text=Sin%0AImagen&font=roboto';
+  const descripcionMostrar = producto.descripcion || 'Sin descripción.';
 
   const navigate = useNavigate();
 
@@ -68,13 +68,15 @@ function CardProducto({
             </div>
           )}
         </div>
-        
+
         <div className="top-right-icons">
           {es_popular && (
             <OverlayTrigger
               key="popular"
               placement="top"
-              overlay={<Tooltip id="tooltip-popular">{`${producto.visualizaciones} visualizaciones`}</Tooltip>}
+              overlay={
+                <Tooltip id="tooltip-popular">{`${producto.visualizaciones} visualizaciones`}</Tooltip>
+              }
             >
               <div className="card-icon icon-fire">
                 <i className="bi bi-fire"></i>
@@ -86,9 +88,7 @@ function CardProducto({
             <OverlayTrigger
               key="envio"
               placement="top"
-              overlay={
-                <Tooltip id="tooltip-envio">Envío disponible</Tooltip>
-              }
+              overlay={<Tooltip id="tooltip-envio">Envío disponible</Tooltip>}
             >
               <div className="card-icon">
                 <FontAwesomeIcon icon={faTruckFast} />

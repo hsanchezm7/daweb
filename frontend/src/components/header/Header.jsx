@@ -1,11 +1,17 @@
-import { Container, Dropdown, Form, Image } from 'react-bootstrap';
-import { List } from 'react-bootstrap-icons';
-import { useNavigate } from 'react-router-dom';
-
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Container, Dropdown, Form, Image } from 'react-bootstrap';
+import {
+  BagCheckFill,
+  BoxArrowRight,
+  BoxSeam,
+  Grid,
+  List,
+  PeopleFill,
+  PersonFill,
+} from 'react-bootstrap-icons';
+import { Link, useNavigate } from 'react-router-dom';
 
 import swapitLogo from '@/assets/swapit-logo.svg';
+import { Roles } from '@/config/roles';
 import useAuth from '@/hooks/useAuth';
 import authService from '@/services/authService';
 
@@ -15,14 +21,15 @@ function Header({ onMenuToggle }) {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
 
+  const isAuthenticated = !!auth?.accessToken;
+  const isAdmin = auth?.roles?.includes(Roles.ADMIN);
+
   const handleLogout = async () => {
     try {
       await authService.logout();
     } catch (err) {
       console.error('Error al cerrar sesión:', err);
     } finally {
-      console.log('Cerrando sesión...');
-
       setAuth({});
       navigate('/login', { replace: true });
     }
@@ -46,12 +53,12 @@ function Header({ onMenuToggle }) {
               <List className="mx-2" size={28} />
             </button>
           )}
-          <a
-            href="/"
+          <Link
+            to="/"
             className="d-flex align-items-center link-body-emphasis text-decoration-none"
           >
             <img src={swapitLogo} alt="swapIt Logo" height="36" />
-          </a>
+          </Link>
         </div>
 
         {/* col-2: barra búsqueda */}
@@ -65,38 +72,102 @@ function Header({ onMenuToggle }) {
           </Form>
         </div>
 
-        {/* col-3: perfil */}
-        <div className="d-flex align-items-center justify-content-end">
-          <Dropdown align="end">
-            <Dropdown.Toggle
-              variant="link"
-              id="dropdown-profile"
-              className="text-decoration-none shadow-none p-0"
-              style={{ border: 'none' }}
-            >
-              <Image
-                src={`https://api.dicebear.com/10.x/thumbs/svg?borderRadius=50&scale=0.70&backgroundColorFill=linear&backgroundColorFillStops=2&seed=${auth?.usuario}`}
-                alt={auth?.nombre}
-                width="32"
-                height="32"
-                roundedCircle
-              />
-            </Dropdown.Toggle>
+        {/* col-3: acciones de usuario */}
+        <div className="d-flex align-items-center justify-content-end gap-2">
+          {isAuthenticated ? (
+            <>
+              {/* botones según rol */}
+              {isAdmin ? (
+                <>
+                  <Button
+                    as={Link}
+                    to="/panel/admin/usuarios"
+                    variant="outline-dark"
+                    className="d-flex align-items-center gap-2 me-2"
+                  >
+                    <PeopleFill aria-hidden="true" />
+                    <span className="d-none d-xl-inline">Usuarios</span>
+                  </Button>
+                  <Button
+                    as={Link}
+                    to="/panel/admin/compraventas"
+                    variant="outline-dark"
+                    className="d-flex align-items-center gap-2 me-3"
+                  >
+                    <BoxSeam aria-hidden="true" />
+                    <span className="d-none d-xl-inline">Compraventas</span>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    as={Link}
+                    to="/panel/productos"
+                    variant="outline-dark"
+                    className="d-flex align-items-center gap-2 me-2"
+                  >
+                    <Grid aria-hidden="true" />
+                    <span className="d-none d-xl-inline">Mis productos</span>
+                  </Button>
+                  <Button
+                    as={Link}
+                    to="/panel/compras"
+                    variant="outline-dark"
+                    className="d-flex align-items-center gap-2 me-3"
+                  >
+                    <BagCheckFill aria-hidden="true" />
+                    <span className="d-none d-xl-inline">Mis compras</span>
+                  </Button>
+                </>
+              )}
 
-            <Dropdown.Menu className="text-small shadow">
-              <Dropdown.Item href="#/new-project">New project...</Dropdown.Item>
-              <Dropdown.Item href="#/settings">Settings</Dropdown.Item>
-              <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={handleLogout}>
-                <FontAwesomeIcon
-                  icon={faArrowRightFromBracket}
-                  className="me-2"
-                />
-                Cerrar sesión
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+              {/* Avatar con dropdown */}
+              <Dropdown align="end">
+                <Dropdown.Toggle
+                  variant="link"
+                  id="dropdown-profile"
+                  className="text-decoration-none shadow-none p-0 ms-1"
+                  style={{ border: 'none' }}
+                >
+                  <Image
+                    src={`https://api.dicebear.com/10.x/thumbs/svg?borderRadius=50&scale=0.70&backgroundColorFill=linear&backgroundColorFillStops=2&seed=${auth?.usuario}`}
+                    alt={auth?.nombre ?? 'Perfil'}
+                    width="32"
+                    height="32"
+                    roundedCircle
+                  />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="text-small shadow">
+                  <Dropdown.Header>{auth?.nombre}</Dropdown.Header>
+                  <Dropdown.Divider />
+                  <Dropdown.Item as={Link} to="/panel/mi-cuenta">
+                    <PersonFill className="me-2" aria-hidden="true" />
+                    Mi cuenta
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleLogout} className="text-danger d-flex align-items-center gap-2">
+                    <BoxArrowRight aria-hidden="true" />
+                    Cerrar sesión
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </>
+          ) : (
+            <>
+              <Button
+                as={Link}
+                to="/signup"
+                variant="outline-dark"
+                className="me-2"
+              >
+                Crear cuenta
+              </Button>
+              <Button as={Link} to="/login" variant="dark">
+                Iniciar sesión
+              </Button>
+            </>
+          )}
         </div>
       </Container>
     </header>

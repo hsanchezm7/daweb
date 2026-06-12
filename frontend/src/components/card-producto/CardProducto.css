@@ -91,6 +91,10 @@
   gap: 6px;
 }
 
+.card-producto .btn {
+  --bs-btn-border-radius: 100px;
+}
+
 .card-producto .btn-primary.btn-dynamic-hover {
   position: relative;
   overflow: hidden;
