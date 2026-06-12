@@ -72,7 +72,10 @@ const VerProducto = () => {
               <div className="producto-foto-container">
                 <img
                   className="producto-foto"
-                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80"
+                  src={
+                    producto.urlImagen ||
+                    'https://placehold.co/600x400?text=Sin%0AImagen&font=roboto'
+                  }
                   alt={producto.titulo}
                 />
               </div>
