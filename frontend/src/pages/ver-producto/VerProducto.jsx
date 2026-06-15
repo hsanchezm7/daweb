@@ -147,6 +147,11 @@ const VerProducto = () => {
                       Eliminar producto
                     </Button>
                   )}
+                  {!estaDisponible && (
+                    <p className="text-secondary fw-bold fs-5 mt-3 text-center">
+                      Producto no disponible
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

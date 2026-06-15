@@ -34,11 +34,11 @@ Accesibles para todos los visitantes.
     - Acceso al menú lateral de usuario si está logueado.
     
 - [ ] ~~**Buscar (`/buscar`)**: ~~ 
-    - **TODO**: Recibe el parámetro `q` del buscador.
+    - ~~**TODO**: Recibe el parámetro `q` del buscador.~~
     - ~~Sidebar lateral izquierdo con filtros (categorías, precio, estado).~~
     - ~~Grid de resultados con `CardProducto`.~~
     
-- [x] **Ver Producto (`/producto/:id`)**: 
+- [x] ~~**Ver Producto (`/producto/:id`)**:~~
     - ~~Detalle técnico del producto con imagen.~~
     - ~~Botón de "Comprar" (solo visible si el usuario no es el dueño). Si no está registrado,
     redirige a "Login/Registro"~~
@@ -58,7 +58,7 @@ Accesibles para todos los visitantes.
     
 - [X] ~~**Nuevo Producto (`/nuevo-producto`)**: Formulario de creación.~~
 
-- [ ] **Editar Producto (`/editar-producto/:id`)**: Variante del formulario de creación con datos precargados.
+- [X] ~~**Editar Producto (`/editar-producto/:id`)**: Variante del formulario de creación con datos precargados.~~
 
 ### vistas de administración (admin)
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button, Container, Dropdown, Form, Image } from 'react-bootstrap';
 import {
   ArrowRightCircleFill,
@@ -10,7 +11,7 @@ import {
   PersonFill,
   PersonPlus,
 } from 'react-bootstrap-icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import swapitLogo from '@/assets/swapit-logo.svg';
 import { Roles } from '@/config/roles';
@@ -22,6 +23,16 @@ import './Header.css';
 function Header({ onMenuToggle }) {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const [busqueda, setBusqueda] = useState(searchParams.get('query') || '');
+
+  const handleBuscar = (e) => {
+    e.preventDefault();
+    if (busqueda.trim()) {
+      navigate(`/buscar?query=${encodeURIComponent(busqueda.trim())}`);
+    }
+  };
 
   const isAuthenticated = !!auth?.accessToken;
   const isAdmin = auth?.roles?.includes(Roles.ADMIN);
@@ -65,11 +76,13 @@ function Header({ onMenuToggle }) {
 
         {/* col-2: barra búsqueda */}
         <div className="d-flex align-items-center justify-content-center">
-          <Form className="w-100" role="search">
+          <Form className="w-100" role="search" onSubmit={handleBuscar}>
             <Form.Control
               type="search"
               placeholder="Buscar..."
               aria-label="Buscar"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
             />
           </Form>
         </div>

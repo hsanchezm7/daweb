@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, Col, Container, Form, Offcanvas, Row } from 'react-bootstrap';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
 
 import { TIPO_CARD } from '@/components/card-producto/CardProducto';
 import Filtro from '@/components/filtro/Filtro';
@@ -19,6 +19,8 @@ function Buscar() {
   const productService = createProductService(apiPrivate);
 
   const { showMenu, handleClose } = useOutletContext();
+  const [searchParams] = useSearchParams();
+  const queryParam = searchParams.get('query') || '';
 
   const [productos, setProductos] = useState([]);
   const [pageInfo, setPageInfo] = useState({
@@ -60,7 +62,7 @@ function Buscar() {
         const params = {};
         if (filtros.categoriaId) params.categoriaId = filtros.categoriaId;
         if (filtros.estado) params.estado = filtros.estado;
-        // TODO: aplicar query params (búsqueda por nombre)
+        if (queryParam) params.texto = queryParam;
 
         // paginación
         params.size = pageInfo.size;
@@ -80,7 +82,7 @@ function Buscar() {
     };
 
     loadProductos();
-  }, [filtros, pageInfo.number, pageInfo.size]);
+  }, [filtros, pageInfo.number, pageInfo.size, queryParam]);
 
   const handleFiltroChange = (key, value) => {
     setFiltros((prev) => ({ ...prev, [key]: value }));
@@ -111,10 +113,10 @@ function Buscar() {
             <div className="buscar-content p-3">
               {errMsg && <Alert variant="danger">{errMsg}</Alert>}
 
-              {/* TODO: sustituir la query de búsqueda en el texto */}
               <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-md-end pb-3 mb-5 border-bottom gap-3">
                 <h2 className="m-0">
-                  {pageInfo.totalElements} resultados para "query"
+                  {pageInfo.totalElements} resultados{' '}
+                  {queryParam ? `para "${queryParam}"` : ''}
                 </h2>
                 <div className="d-flex align-items-center gap-2">
                   <span className="text-muted text-nowrap">Mostrar:</span>
