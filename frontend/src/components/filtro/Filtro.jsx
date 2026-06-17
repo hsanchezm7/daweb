@@ -6,23 +6,36 @@ import './Filtro.css';
 function Filtro({
   opcionesCategoria = [],
   opcionesEstado = {},
+  opcionesRangoPrecios = { min: 0, max: 0 },
   filtros = {},
   onFiltroChange,
+  onClearFiltros,
 }) {
-  const { categoriaId = '', estado = '' } = filtros;
+  const {
+    categoriaId = '',
+    estado = '',
+    descripcion = '',
+    precioMaximo = '',
+  } = filtros;
+  const minPrecio = Math.floor(opcionesRangoPrecios?.min || 0);
+  const maxPrecio = Math.ceil(opcionesRangoPrecios?.max || 1000);
+  const valorActual = precioMaximo !== '' ? precioMaximo : maxPrecio;
 
   return (
     <div className="filtro p-3 d-flex flex-column gap-4">
-      {/* TODO: lógica de botones */}
       <div className="d-flex gap-2 align-self-center">
-        <Button variant="outline-dark" className="py-2 px-4 text-nowrap">
+        <Button
+          variant="outline-dark"
+          className="py-2 px-4 text-nowrap"
+          onClick={onClearFiltros}
+        >
           <span className="small">Limpiar filtros</span>
         </Button>
       </div>
 
       <Row className="justify-content-center m-0">
         <Col xs={12} md={9} lg={12} className="px-2 w-100">
-          <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen>
+          <Accordion defaultActiveKey={['0', '1', '2', '3']} alwaysOpen>
             <Accordion.Item eventKey="0">
               <Accordion.Header>Precio</Accordion.Header>
               <Accordion.Body>
@@ -30,11 +43,18 @@ function Filtro({
                   Ajusta el rango de precios
                 </Form.Label>
                 <div className="d-flex gap-3 align-items-center">
-                  {/* TODO: ajustar valores min y max de productos de forma dinámica.
-              Pedir a la API, para el filtro, el precio min y máximo */}
-                  <span className="small text-nowrap">Mín €</span>
-                  <Form.Range className="flex-grow-1" />
-                  <span className="small text-nowrap">Máx €</span>
+                  <span className="small text-nowrap">{minPrecio} €</span>
+                  <Form.Range
+                    className="flex-grow-1"
+                    min={minPrecio}
+                    max={maxPrecio}
+                    value={valorActual}
+                    onChange={(e) =>
+                      onFiltroChange &&
+                      onFiltroChange('precioMaximo', e.target.value)
+                    }
+                  />
+                  <span className="small text-nowrap">{valorActual} €</span>
                 </div>
               </Accordion.Body>
             </Accordion.Item>
@@ -93,6 +113,23 @@ function Filtro({
                       </div>
                     </div>
                   )}
+                />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="3">
+              <Accordion.Header>Descripción</Accordion.Header>
+              <Accordion.Body>
+                <Form.Label className="text-muted">
+                  Indica la descripción del producto
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Descripción"
+                  value={descripcion}
+                  onChange={(e) =>
+                    onFiltroChange &&
+                    onFiltroChange('descripcion', e.target.value)
+                  }
                 />
               </Accordion.Body>
             </Accordion.Item>

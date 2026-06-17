@@ -81,6 +81,19 @@ const createProductService = (apiInstance) => ({
     }
   },
 
+  getRangoPrecios: async () => {
+    try {
+      const response = await api.get(`/productos/rango-precios`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al obtener el rango de precios:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
+
   deleteProduct: async (id) => {
     try {
       const response = await apiInstance.delete(`/productos/${id}`);

@@ -34,20 +34,29 @@ function Buscar() {
 
   const [opcionesCategoria, setOpcionesCategoria] = useState([]);
   const [opcionesEstado, setOpcionesEstado] = useState({});
+  const [opcionesRangoPrecios, setOpcionesRangoPrecios] = useState({
+    min: 0,
+    max: 0,
+  });
   const [filtros, setFiltros] = useState({
     categoriaId: '',
     estado: '',
+    descripcion: '',
+    precioMaximo: '',
   });
 
   useEffect(() => {
     const loadFiltrosData = async () => {
       try {
-        const [categorias, estadosValor] = await Promise.all([
+        const [categorias, estadosValor, rangoPrecios] = await Promise.all([
           productService.getCategoriasProductos(),
           productService.getEstadosProducto(),
+          productService.getRangoPrecios(),
         ]);
         setOpcionesCategoria(categorias);
         setOpcionesEstado(estadosValor);
+        setOpcionesRangoPrecios(rangoPrecios);
+        setFiltros((prev) => ({ ...prev, precioMaximo: rangoPrecios.max }));
       } catch (err) {
         console.error('Error al cargar datos para filtros:', err);
       }
@@ -61,7 +70,9 @@ function Buscar() {
       try {
         const params = {};
         if (filtros.categoriaId) params.categoriaId = filtros.categoriaId;
-        if (filtros.estado) params.estado = filtros.estado;
+        if (filtros.estado) params.estadoMinimo = filtros.estado;
+        if (filtros.descripcion) params.descripcion = filtros.descripcion;
+        if (filtros.precioMaximo) params.precioMaximo = filtros.precioMaximo;
         if (queryParam) params.texto = queryParam;
 
         // paginación
@@ -93,6 +104,16 @@ function Buscar() {
     setPageInfo((prev) => ({ ...prev, number: newPage }));
   };
 
+  const handleClearFiltros = () => {
+    setFiltros({
+      categoriaId: '',
+      estado: '',
+      descripcion: '',
+      precioMaximo: opcionesRangoPrecios?.max || '',
+    });
+    setPageInfo((prev) => ({ ...prev, number: 0 }));
+  };
+
   return (
     <>
       <Container className="buscar-body py-5 mt-0">
@@ -105,8 +126,10 @@ function Buscar() {
             <Filtro
               opcionesCategoria={opcionesCategoria}
               opcionesEstado={opcionesEstado}
+              opcionesRangoPrecios={opcionesRangoPrecios}
               filtros={filtros}
               onFiltroChange={handleFiltroChange}
+              onClearFiltros={handleClearFiltros}
             />
           </Col>
           <Col xs={12} lg>

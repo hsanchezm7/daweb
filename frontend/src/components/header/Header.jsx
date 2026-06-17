@@ -31,6 +31,8 @@ function Header({ onMenuToggle }) {
     e.preventDefault();
     if (busqueda.trim()) {
       navigate(`/buscar?query=${encodeURIComponent(busqueda.trim())}`);
+    } else {
+      navigate('/buscar');
     }
   };
 
