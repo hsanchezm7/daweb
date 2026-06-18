@@ -6,7 +6,7 @@
 
 - [ ] **permitir ordenar productos en Buscar**
 
-- [ ] **búsqueda con query**
+- [X] **búsqueda con query**
 
 - [X] **url de imágenes para todos los productos (seeder.py backend)**
 
@@ -17,6 +17,10 @@
 - [ ] **terminar Footer**
 
 - [X] **hacer /404 y /unauthorized**
+
+- [ ] **POST Visualización al ver producto**. Que el vendedor no cuente.
+
+- [ ] **Toasts para confirmar edición y creación de productos, compras realizadas, etc.** Usar React Hot Toast.
 
 Estructura de vistas, rutas y componentes basada en el modelo de **PcComponentes**.
 

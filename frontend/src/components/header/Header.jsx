@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Container, Dropdown, Form, Image } from 'react-bootstrap';
 import {
   ArrowRightCircleFill,
@@ -26,6 +26,10 @@ function Header({ onMenuToggle }) {
   const [searchParams] = useSearchParams();
 
   const [busqueda, setBusqueda] = useState(searchParams.get('query') || '');
+
+  useEffect(() => {
+    setBusqueda(searchParams.get('query') || '');
+  }, [searchParams]);
 
   const handleBuscar = (e) => {
     e.preventDefault();

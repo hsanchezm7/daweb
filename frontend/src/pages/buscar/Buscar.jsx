@@ -41,7 +41,6 @@ function Buscar() {
   const [filtros, setFiltros] = useState({
     categoriaId: '',
     estado: '',
-    descripcion: '',
     precioMaximo: '',
   });
 
@@ -55,8 +54,14 @@ function Buscar() {
         ]);
         setOpcionesCategoria(categorias);
         setOpcionesEstado(estadosValor);
-        setOpcionesRangoPrecios(rangoPrecios);
-        setFiltros((prev) => ({ ...prev, precioMaximo: rangoPrecios.max }));
+
+        const rango = {
+          min: Math.floor(rangoPrecios?.min || 0),
+          max: Math.ceil(rangoPrecios?.max || 0),
+        };
+        
+        setOpcionesRangoPrecios(rango);
+        setFiltros((prev) => ({ ...prev, precioMaximo: rango.max }));
       } catch (err) {
         console.error('Error al cargar datos para filtros:', err);
       }
@@ -71,7 +76,6 @@ function Buscar() {
         const params = {};
         if (filtros.categoriaId) params.categoriaId = filtros.categoriaId;
         if (filtros.estado) params.estadoMinimo = filtros.estado;
-        if (filtros.descripcion) params.descripcion = filtros.descripcion;
         if (filtros.precioMaximo) params.precioMaximo = filtros.precioMaximo;
         if (queryParam) params.texto = queryParam;
 
@@ -108,7 +112,6 @@ function Buscar() {
     setFiltros({
       categoriaId: '',
       estado: '',
-      descripcion: '',
       precioMaximo: opcionesRangoPrecios?.max || '',
     });
     setPageInfo((prev) => ({ ...prev, number: 0 }));

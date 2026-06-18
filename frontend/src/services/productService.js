@@ -83,7 +83,7 @@ const createProductService = (apiInstance) => ({
 
   getRangoPrecios: async () => {
     try {
-      const response = await api.get(`/productos/rango-precios`);
+      const response = await api.get(`/productos/metricas/precios`);
       return response.data;
     } catch (error) {
       console.error(

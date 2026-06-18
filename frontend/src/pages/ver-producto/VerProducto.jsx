@@ -20,6 +20,7 @@ const VerProducto = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
+  const [estados, setEstados] = useState({});
   const [errMsg, setErrMsg] = useState('');
 
   const esDueño = producto?.vendedorId === auth?.usuario;
@@ -63,18 +64,21 @@ const VerProducto = () => {
   };
 
   useEffect(() => {
-    const getProducto = async () => {
+    const fetchData = async () => {
       try {
-        const data = await productService.getProduct(id);
-        console.log(data);
+        const [data, estadosData] = await Promise.all([
+          productService.getProduct(id),
+          productService.getEstadosProducto(),
+        ]);
         setProducto(data);
+        setEstados(estadosData);
       } catch (error) {
         console.error('Error al ver el producto:', error);
         setErrMsg('Error al ver el producto');
       }
     };
     if (id) {
-      getProducto();
+      fetchData();
     }
   }, [id]);
   return (
@@ -105,7 +109,7 @@ const VerProducto = () => {
                       {producto.precio}€
                     </h2>
                     <span className="badge bg-light text-dark px-3 py-2 rounded-pill border">
-                      Estado: {producto.estado}
+                      Estado: {estados[producto.estado] || producto.estado}
                     </span>
                   </div>
                 </div>

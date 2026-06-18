@@ -15,9 +15,6 @@ function ModificarProducto({ producto, onSubmit, onCancel }) {
 
   const [descripcion, setDescripcion] = useState(producto?.descripcion || '');
   const [precio, setPrecio] = useState(producto?.precio || '');
-  const [disponibilidad, setDisponibilidad] = useState(
-    producto?.disponible !== undefined ? producto.disponible : true
-  );
 
   const [precioNegativo, setPrecioNegativo] = useState(false);
 
@@ -41,7 +38,6 @@ function ModificarProducto({ producto, onSubmit, onCancel }) {
       const payload = {
         descripcion,
         precio: parseFloat(precio),
-        disponibilidad,
       };
 
       await productService.updateProduct(producto.id, payload);
@@ -103,15 +99,6 @@ function ModificarProducto({ producto, onSubmit, onCancel }) {
           </InputGroup>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="productoDisponibilidad">
-          <Form.Check
-            type="switch"
-            label="Producto disponible para la venta"
-            name="disponibilidad"
-            checked={disponibilidad}
-            onChange={(e) => setDisponibilidad(e.target.checked)}
-          />
-        </Form.Group>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={onCancel}>
