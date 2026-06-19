@@ -5,3 +5,10 @@ html {
 body {
   overflow-y: scroll;
 }
+
+/* Move the Sonner close button to the right */
+[data-sonner-toast] [data-close-button] {
+  left: auto !important;
+  right: 0 !important;
+  transform: translate(35%, -35%) !important;
+}
