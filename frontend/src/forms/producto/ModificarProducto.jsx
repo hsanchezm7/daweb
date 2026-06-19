@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Alert, Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { CheckCircle, XCircle } from 'react-bootstrap-icons';
 
+import { toast } from 'sonner';
+
 import { VALIDATION_MESSAGES } from '@/config/messages';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import createProductService from '@/services/productService';
@@ -44,7 +46,10 @@ function ModificarProducto({ producto, onSubmit, onCancel }) {
 
       setValidated(false);
 
-      if (onSubmit) onSubmit(e);
+      if (onSubmit) {
+        onSubmit(e);
+        toast.success('Producto modificado correctamente');
+      }
     } catch (err) {
       setValidated(false);
       setErrMsg(
@@ -52,6 +57,7 @@ function ModificarProducto({ producto, onSubmit, onCancel }) {
           err.response?.data?.error ||
           'Ha ocurrido un error al modificar el producto.'
       );
+      toast.error('Error al modificar el producto');
     }
   };
 
@@ -98,7 +104,6 @@ function ModificarProducto({ producto, onSubmit, onCancel }) {
             </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
-
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={onCancel}>

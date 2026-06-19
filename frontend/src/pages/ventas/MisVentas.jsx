@@ -66,7 +66,7 @@ function MisVentas() {
       <GridProductos
         className="ventas-grid"
         productos={MisVentas}
-        tipoCard={TIPO_CARD.MIS_PRODUCTOS}
+        tipoCard={TIPO_CARD.MIS_VENTAS}
       />
     </div>
   );

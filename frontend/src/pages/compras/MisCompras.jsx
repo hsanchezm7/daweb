@@ -68,7 +68,7 @@ function MisCompras() {
       <GridProductos
         className="compras-grid"
         productos={MisCompras}
-        //tipoCard={TIPO_CARD.MIS_PRODUCTOS}
+        tipoCard={TIPO_CARD.MIS_VENTAS}
       />
     </div>
   );

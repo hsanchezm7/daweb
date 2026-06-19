@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'sonner';
 
 import ModificarProducto from '@/forms/producto/ModificarProducto';
 import useApiPrivate from '@/hooks/useApiPrivate';
@@ -14,6 +15,7 @@ import './CardProducto.css';
 export const TIPO_CARD = {
   MIS_PRODUCTOS: 'MIS_PRODUCTOS',
   BUSCAR: 'BUSCAR',
+  MIS_VENTAS: 'MIS_VENTAS',
 };
 
 function CardProducto({
@@ -70,12 +72,13 @@ function CardProducto({
   const botonEliminar = async () => {
     try {
       await productService.deleteProduct(producto.id);
-      console.log('Producto eliminado');
+      toast.success('Producto eliminado correctamente');
       if (onDelete) {
         onDelete();
       }
     } catch (error) {
       console.error('Error al eliminar el producto', error);
+      toast.error('Error al eliminar el producto');
     }
   };
 
@@ -96,7 +99,8 @@ function CardProducto({
         onMouseLeave={handleCardMouseLeave}
       >
         <div className="top-left-icons">
-          {tipoCard === TIPO_CARD.MIS_PRODUCTOS && (
+          {(tipoCard === TIPO_CARD.MIS_PRODUCTOS ||
+            tipoCard === TIPO_CARD.MIS_VENTAS) && (
             <div className="card-icon icon-views">
               <i className="bi bi-eye"></i> {producto.visualizaciones}
             </div>
@@ -181,7 +185,8 @@ function CardProducto({
               onMouseMove={handleMouseMove}
               onClick={() => navigate(`/producto/${producto.id}`)}
             >
-              {tipoCard === TIPO_CARD.MIS_PRODUCTOS
+              {tipoCard === TIPO_CARD.MIS_PRODUCTOS ||
+              tipoCard === TIPO_CARD.MIS_VENTAS
                 ? 'Ver detalles'
                 : 'Comprar ahora'}
             </Button>

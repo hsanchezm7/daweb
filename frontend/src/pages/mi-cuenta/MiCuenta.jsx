@@ -5,6 +5,7 @@ import { CalendarFill, CheckCircle } from 'react-bootstrap-icons';
 import IntlTelInput from '@intl-tel-input/react';
 import { es as esPhoneLocale } from 'intl-tel-input/locale';
 import 'intl-tel-input/styles';
+import { toast } from 'sonner';
 
 import {
   createBirthDatePicker,
@@ -144,6 +145,7 @@ function MiCuenta() {
           err.response?.data?.error ||
           ACCOUNT_MESSAGES.UPDATE_ERROR
       );
+      toast.error('Error al actualizar los datos');
     }
   };
 

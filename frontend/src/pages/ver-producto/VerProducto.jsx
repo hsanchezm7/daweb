@@ -3,6 +3,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'sonner';
+
 import ModificarProducto from '@/forms/producto/ModificarProducto';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useAuth from '@/hooks/useAuth';
@@ -36,8 +38,10 @@ const VerProducto = () => {
       try {
         await compraventaService.realizarCompra(id);
         setProducto({ ...producto, disponible: false });
+        toast.success('Producto comprado correctamente');
       } catch (error) {
         console.error('Error al guardar la compra', error);
+        toast.error('Error al comprar el producto');
       }
     }
   };
@@ -58,6 +62,7 @@ const VerProducto = () => {
     try {
       await productService.deleteProduct(id);
       navigate('/panel/productos');
+      toast.success('Producto eliminado correctamente');
     } catch (error) {
       console.error('Error al eliminar el producto', error);
     }

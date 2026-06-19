@@ -59,7 +59,6 @@ function Buscar() {
           min: Math.floor(rangoPrecios?.min || 0),
           max: Math.ceil(rangoPrecios?.max || 0),
         };
-        
         setOpcionesRangoPrecios(rango);
         setFiltros((prev) => ({ ...prev, precioMaximo: rango.max }));
       } catch (err) {

@@ -3,6 +3,8 @@ import { Alert, Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { CheckCircle, XCircle } from 'react-bootstrap-icons';
 import { Typeahead } from 'react-bootstrap-typeahead';
 
+import { toast } from 'sonner';
+
 import { VALIDATION_MESSAGES } from '@/config/messages';
 import useApiPrivate from '@/hooks/useApiPrivate';
 import useDocumentTitle from '@/hooks/useDocumentTitle';
@@ -92,7 +94,10 @@ function CrearProducto({ onSubmit, onCancel }) {
       setUrlImagen('');
       setEnvioDisponible(false);
 
-      if (onSubmit) onSubmit(e);
+      if (onSubmit) {
+        onSubmit(e);
+        toast.success('Producto creado correctamente');
+      }
     } catch (err) {
       setValidated(false);
       setErrMsg(
@@ -100,6 +105,7 @@ function CrearProducto({ onSubmit, onCancel }) {
           err.response?.data?.error ||
           'Ha ocurrido un error al crear el producto.'
       );
+      toast.error('Error al crear el producto');
     }
   };
 
