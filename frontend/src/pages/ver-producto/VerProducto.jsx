@@ -77,6 +77,16 @@ const VerProducto = () => {
         ]);
         setProducto(data);
         setEstados(estadosData);
+
+        try {
+          await productService.addVisualizacion(id);
+          setProducto((prev) => ({
+            ...prev,
+            visualizaciones: prev.visualizaciones + 1,
+          }));
+        } catch (err) {
+          console.error('Error al registrar visualización:', err);
+        }
       } catch (error) {
         console.error('Error al ver el producto:', error);
         setErrMsg('Error al ver el producto');

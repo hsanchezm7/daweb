@@ -77,6 +77,7 @@ function Buscar() {
         if (filtros.estado) params.estadoMinimo = filtros.estado;
         if (filtros.precioMaximo) params.precioMaximo = filtros.precioMaximo;
         if (queryParam) params.texto = queryParam;
+        params.disponible = true;
 
         // paginación
         params.size = pageInfo.size;

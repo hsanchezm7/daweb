@@ -106,6 +106,19 @@ const createProductService = (apiInstance) => ({
       throw error;
     }
   },
+
+  addVisualizacion: async (id) => {
+    try {
+      const response = await api.post(`/productos/${id}/visualizaciones`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error al registrar visualización:',
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
 });
 
 export default createProductService;

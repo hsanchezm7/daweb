@@ -46,6 +46,7 @@ function MisProductos() {
       try {
         const params = {};
         params.idVendedor = auth.usuario;
+        params.disponible = true;
         // params.page y params.size se añadirán al hacer la paginación
 
         const data = await productService.getProductos(params);
