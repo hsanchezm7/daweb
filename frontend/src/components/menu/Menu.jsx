@@ -9,9 +9,15 @@ import {
 } from 'react-bootstrap-icons';
 import { NavLink } from 'react-router-dom';
 
+import { Roles } from '@/config/roles';
+import useAuth from '@/hooks/useAuth';
+
 import './Menu.css';
 
 function Menu() {
+  const { auth } = useAuth();
+  const isAdmin = auth?.roles?.includes(Roles.ADMIN);
+
   return (
     <div className="menu p-3">
       {/* usuario */}
@@ -47,31 +53,34 @@ function Menu() {
           </Nav.Link>
         </Nav.Item>
       </Nav>
-
       {/* administración */}
-      <h6 className="menu-title">Administración</h6>
-      <Nav className="flex-column menu-list">
-        <Nav.Item>
-          <Nav.Link
-            as={NavLink}
-            to="/panel/admin/usuarios"
-            className="menu-link"
-          >
-            <PeopleFill className="me-2" aria-hidden="true" />
-            <span>Usuarios</span>
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            as={NavLink}
-            to="/panel/admin/compraventas"
-            className="menu-link"
-          >
-            <BoxSeam className="me-2" aria-hidden="true" />
-            <span>Compraventas</span>
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
+      {isAdmin && (
+        <>
+          <h6 className="menu-title">Administración</h6>
+          <Nav className="flex-column menu-list">
+            <Nav.Item>
+              <Nav.Link
+                as={NavLink}
+                to="/panel/admin/usuarios"
+                className="menu-link"
+              >
+                <PeopleFill className="me-2" aria-hidden="true" />
+                <span>Usuarios</span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                as={NavLink}
+                to="/panel/admin/compraventas"
+                className="menu-link"
+              >
+                <BoxSeam className="me-2" aria-hidden="true" />
+                <span>Compraventas</span>
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </>
+      )}
     </div>
   );
 }

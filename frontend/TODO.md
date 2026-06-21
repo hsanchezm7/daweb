@@ -10,7 +10,7 @@
 
 - [X] **url de imágenes para todos los productos (seeder.py backend)**
 
-- [ ] **ocultar apartado Administración de Menu si no admin**
+- [X] **ocultar apartado Administración de Menu si no admin**
 
 - [X] **terminar Header**
 
@@ -20,7 +20,7 @@
 
 - [ ] **POST Visualización al ver producto**. Que el vendedor no cuente.
 
-- [ ] **Toasts para confirmar edición y creación de productos, compras realizadas, etc.** Usar React Hot Toast.
+- [x] **Toasts para confirmar edición y creación de productos, compras realizadas, etc.** Usar React Hot Toast.
 
 Estructura de vistas, rutas y componentes basada en el modelo de **PcComponentes**.
 
