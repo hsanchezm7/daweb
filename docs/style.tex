@@ -3,8 +3,6 @@
 %%%%% --------------------------------------------- %%%%%
 %	   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS       %
 %%%%% --------------------------------------------- %%%%%
-
-
 \usepackage{amsmath,amsfonts,stmaryrd,amssymb} % Math packages
 \usepackage{fancyhdr}
 \usepackage{enumerate} % Custom item numbers for enumerations
@@ -67,7 +65,7 @@
     keywordstyle=[2]\color{lStandard},
     keywordstyle=[3]\color{lTool}\bfseries,
     numberstyle=\tiny\color{gray},
-    stringstyle=\color{lString}, % <--- Aquí es donde daba el error
+    stringstyle=\color{lString},
     basicstyle=\fontfamily{pcr}\selectfont\scriptsize\color{black},
     breakatwhitespace=false,
     breaklines=true,
@@ -82,9 +80,8 @@
     language=bash,
     frame=single,
     rulecolor=\color{gray!30},
-    upquote=true,               % Comillas rectas
+    upquote=true,
     columns=fullflexible,
-    % Literate para acentos y para forzar comillas seguras
     literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1,
     morekeywords={if, then, else, elif, fi, for, in, do, done, while, until, function, case, esac, return, local, export},
     morekeywords=[2]{ls, cd, pwd, cp, mv, rm, mkdir, cat, grep, sed, awk, echo, printf, read, source, alias, sudo},
@@ -164,7 +161,12 @@
 \usepackage{aeguill}
 \usepackage{tikzpeople}
 \usepackage{url}
-
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage[autostyle]{csquotes}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\renewcommand{\thesubfigure}{\arabic{subfigure}}
 \usepackage{pgfplots}
 
 \usepackage[linktoc=none]{hyperref} % para enlaces. linktoc deshabilita indice
@@ -173,9 +175,9 @@
 	linkcolor=blue,
 	citecolor=blue,
 	urlcolor={blue!80!black}, % urls
-	pdftitle={Práctica FFMPEG - Sistemas Multimedia},
-	pdfsubject={Simu},
-	pdfauthor={Hugo Sánchez Martínez}
+	pdftitle={Prácticas - Desarrollo de Alicaciones Web},
+	pdfsubject={Daweb},
+	pdfauthor={Pablo Hernández Cervantes, Hugo Sánchez Martínez}
 }
 
 \usepackage[spanish, es-nodecimaldot]{babel} % Paquete de español

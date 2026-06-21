@@ -31,12 +31,16 @@ function CardProducto({
   const descripcionMostrar = producto.descripcion || 'Sin descripción.';
 
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
   const apiPrivate = useApiPrivate();
   const productService = createProductService(apiPrivate);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  const handleOpenDeleteModal = () => setShowDeleteModal(true);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   // efecto del botón
   const handleMouseMove = (e) => {
@@ -72,6 +76,7 @@ function CardProducto({
   const botonEliminar = async () => {
     try {
       await productService.deleteProduct(producto.id);
+      handleCloseDeleteModal();
       toast.success('Producto eliminado correctamente');
       if (onDelete) {
         onDelete();
@@ -79,6 +84,7 @@ function CardProducto({
     } catch (error) {
       console.error('Error al eliminar el producto', error);
       toast.error('Error al eliminar el producto');
+      handleCloseDeleteModal();
     }
   };
 
@@ -142,7 +148,7 @@ function CardProducto({
               <button
                 type="button"
                 className="card-icon icon-borrar border-0"
-                onClick={botonEliminar}
+                onClick={handleOpenDeleteModal}
               >
                 <i className="bi bi-trash"></i>
               </button>
@@ -209,6 +215,29 @@ function CardProducto({
           onSubmit={handleSubmitEdicion}
           onCancel={handleCloseModal}
         />
+      </Modal>
+
+      <Modal
+        show={showDeleteModal}
+        onHide={handleCloseDeleteModal}
+        centered
+        contentClassName="rounded-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Eliminar producto</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={botonEliminar}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

@@ -21,6 +21,7 @@ import MisProductos from '@/pages/mis-productos/MisProductos';
 import Unauthorized from '@/pages/unauthorized/Unauthorized';
 import MisVentas from '@/pages/ventas/MisVentas';
 import VerProducto from '@/pages/ver-producto/VerProducto';
+import OAuth2RedirectHandler from '@/pages/oauth2/OAuth2RedirectHandler';
 
 import './App.css';
 
@@ -28,6 +29,7 @@ function App() {
   return (
     <Routes>
       <Route element={<PersistLogin />}>
+        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route element={<MainLayout />}>
           <Route path="/" element={<Inicio />} />
           <Route path="/buscar" element={<Buscar />} />

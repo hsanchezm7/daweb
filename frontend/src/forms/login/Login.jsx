@@ -69,6 +69,7 @@ function Login() {
       {/* github OAuth2 */}
       <Button
         variant="dark"
+        href="http://localhost:8080/oauth2/authorization/github"
         className="w-100 mb-4 py-2 d-inline-flex gap-2 align-items-center justify-content-center"
       >
         <FontAwesomeIcon icon={faGithub} />

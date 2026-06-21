@@ -2,10 +2,6 @@
 \documentclass[11pt]{article}
 
 \include{style}
-\usepackage{subcaption}
-\usepackage{parskip}
-\usepackage[autostyle]{csquotes}
-\renewcommand{\thesubfigure}{\arabic{subfigure}}
 
 \begin{document}
 
@@ -27,7 +23,7 @@
 }
 
 \author{
-    {\Large Pablo Hernández}\\[0.5ex]
+    {\Large Pablo Hernández Cervantes}\\[0.5ex]
     24421778X\\
     \texttt{pablo.h.c1@um.es}
     \and
@@ -41,7 +37,7 @@
 \fancyhead[LE]{\nouppercase{\rightmark} \hfill \textbf{\nouppercase{\leftmark}}}   % Encabezado en la página izquierda (even) sin mayúsculas
 \fancyhead[RO]{\nouppercase{\rightmark}}  % Encabezado en la página derecha (odd) sin mayúsculas
 \setlength{\headheight}{25pt}  % Ajusta la altura del encabezado
-\fancyfoot[R]{H. Sánchez}
+\fancyfoot[R]{P. Hernández, H. Sánchez}
 \fancyfoot[C]{\thepage}
 
 \date{\vspace{-10ex}}
@@ -53,8 +49,6 @@
 \tableofcontents
 \clearpage
 \thispagestyle{empty} % Elimina el número de página del ToC
-\listoffigures
-\clearpage
 \setcounter{page}{1}
 
 \thispagestyle{empty}
@@ -74,52 +68,76 @@
 
 \section{Introducción}
 
-  Este proyecto se basa en la implementación y desarrollo de un cliente
-  ``\textit{frontend}'' basado principalmente en el framework React.js y la
-  libraríe de componentes Bootstrap. Dicha interfaz complementa el backend basado
+  Este proyecto se basa en la implementación y desarrollo de un cliente web
+  \textit{frontend} basado principalmente en el \textit{framework} React.js y la
+  librería de componentes Bootstrap. Dicha interfaz complementa el backend basado
   en microservicios realizado en la asignatura de Arquitectura del Software.
 
-\section{Requisitos}
+\section{Inicio rápido}
 
-  Para garantizar la correcta instalación y puesta en marcha del servicio, el
-  entorno debe cumplir con los siguientes requisitos previos:
+  \subsection{Requisitos}
+
+      Para ejecutar el proyecto es necesario tener instalado:
+
+      \begin{itemize}
+          \item \textbf{Docker y Docker Compose}: Para levantar los servicios del servidor. \href{https://www.docker.com}{Descargar}.
+          \item El \textbf{backend} de la aplicación, ya incluido como submódulo de Git en el
+                repositorio. \href{https://github.com/hsanchezm7/arso}{Descargar}.
+      \end{itemize}
+
+  \subsection{Instalación y Uso}
+
+      \begin{enumerate}
+          \item Clonar el repositorio
+
+                \begin{lstlisting}[style=BashStyle, numbers=none]
+    $ git clone --recurse-submodules https://github.com/hsanchezm7/daweb
+    $ cd daweb
+\end{lstlisting}
+
+          \item Levantar la plataforma
+
+                \begin{lstlisting}[style=BashStyle, numbers=none]
+    $ docker compose up -d --build
+\end{lstlisting}
+
+          \item Acceder al cliente web en \href{http://localhost:5173}{http://localhost:5173}.
+      \end{enumerate}
+
+      \begin{info}[Observaciones]
+          La aplicación puede tardar varios minutos en iniciarse si es el primer arranque debido a la inicialización de datos.
+      \end{info}
+
+\section{Entorno de desarrollo}
+
+  Si en lugar de construir el proyecto se desea ejecutar el entorno de desarrollo
+  en local, se deben cumplir los siguientes requisitos previos:
 
   \begin{itemize}
-      \item \textbf{Node.js} (v20.20 o superior): Para ejecutar el cliente. \href{https://nodejs.org/}{Descargar}.
-      \item \textbf{Docker}: Para levantar los servicios del servidor. \href{https://www.docker.com/}{Descargar}.
+      \item \textbf{Node.js} (v20.20 o superior): Entorno de ejecución para la aplicación. \href{https://nodejs.org/}{Descargar}.
+      \item \textbf{npm o Yarn}: Gestor de dependencias para instalar los paquetes del proyecto. \href{https://www.npmjs.com/}{npm} / \href{https://yarnpkg.com/}{Yarn}.
   \end{itemize}
 
-  El resto de las dependencias específicas del proyecto serán descargadas y
-  resueltas automáticamente por las herramientas mencionadas durante el proceso
-  de instalación.
+  \begin{enumerate}
+      \item Instalar las dependencias locales
 
-\section{Instalación y ejecución}
-
-  El proceso de despliegue de la aplicación se divide en dos partes principales:
-  los servicios del backend y la interfaz del frontend.
-
-  Los servicios correspondientes al primero están contenerizados para asegurar un
-  entorno de ejecución consistente. Dicha infraestructura se despliega y orquesta
-  mediante Docker Compose. Para levantar estos servicios, basta con ejecutar el
-  siguiente comando desde el directorio \texttt{backend/}:
-
-  \begin{lstlisting}[style=BashStyle]
-    $ docker compose up -d
+            \begin{lstlisting}[style=BashStyle, numbers=none]
+$ npm install
 \end{lstlisting}
 
-  Para detener el servidor:
+      \item Ejecutar el servidor de desarrollo
 
-  \begin{lstlisting}[style=BashStyle]
-    $ docker compose down
+            \begin{lstlisting}[style=BashStyle, numbers=none]
+$ npm run dev
 \end{lstlisting}
 
-  Para levantar el cliente (frontend), es necesario, desde su carpeta
-  correspondiente \texttt{frontend/}, instalar las dependencias y arrancar en
-  modo de desarrollo con:
+      \item Acceder al cliente web en \href{http://localhost:5173}{http://localhost:5173}.
+  \end{enumerate}
 
-  \begin{lstlisting}[style=BashStyle]
-    $ npm install && npm run dev
-\end{lstlisting}
+  \begin{info}[Observaciones]
+      Este proceso solo muestra la ejecución del frontend em modo desarrollo. Para un correcto funcionamiento, es
+      necesario también lanzar el backend de la aplicación.
+  \end{info}
 
 \section{Tecnologías utilizadas}
 
@@ -144,29 +162,109 @@
   utilizado el sistema de control de versiones \textbf{Git}, que proporciona un
   historial de cambios y un entorno de colaboración con trazabilidad.
 
-\section{Modelado de datos}
-
-  \subsection{Diagrama Entidad-Relación}
-
-  \subsection{Diagrama de clases}
-
 \section{Descripción de la funcionalidad del sistema}
 
-  % TODO: usar historias de usuario
-
   \subsection{Gestión de acceso y roles}
+      La gestión de acceso (autenticación) y los roles (autorización) en el sistema
+      del lado del cliente (Frontend) se ha implementado siguiendo los estándares de
+      seguridad modernos, apoyándose principalmente en \textbf{React Router v6} y la
+      \textbf{API Context} de React.
 
-      % TODO: explicar autenticación
+      La aplicación utiliza un contexto global denominado \texttt{AuthContext}
+      (provisto por el componente \texttt{AuthProvider}). Este proveedor envuelve a
+      toda la aplicación desde el punto de entrada (\texttt{main.jsx}) y se encarga
+      de almacenar en memoria volátil el estado de la sesión actual del usuario.
+      Concretamente, almacena:
+      \begin{itemize}
+          \item El \textit{token} de acceso (\texttt{accessToken}).
+          \item Los roles asignados al usuario (\texttt{roles}).
+          \item El identificador único del usuario (\texttt{usuario}).
+      \end{itemize}
 
-  \subsection{Funcionalidades del usuario vendedor}
+      El sistema emplea un mecanismo seguro de doble \textit{token} (Access Token y
+      Refresh Token). Para evitar la pérdida de sesión al recargar la página en el
+      navegador se ha diseñado el componente \texttt{PersistLogin}.
 
-  \subsection{Funcionalidades del usuario comprador}
+      Este componente actúa como un intermediario en el árbol de rutas. Durante el
+      ciclo de vida inicial de la carga, \texttt{PersistLogin} comprueba si existe un
+      \texttt{accessToken} en memoria; de no ser así, realiza una petición silenciosa
+      al servidor mediante el \textit{hook} \texttt{useRefreshToken} para solicitar
+      uno nuevo. Este proceso asume que el servidor valida un \textit{Refresh Token}
+      almacenado de forma segura. Una vez renovado el token, o si la renovación
+      falla, el componente permite que el resto de la aplicación continúe su
+      renderizado.
 
-  \subsection{Funcionalidades del administrador}
+      Para proteger las rutas privadas y asegurar que cada usuario acceda
+      exclusivamente a los recursos que su rol le permite, se utiliza el patrón de
+      Rutas Protegidas (\textit{Protected Routes}) a través del componente
+      \texttt{RequireAuth}.
 
-      % TODO: ¿HACER?\subsection{Funcionalidades del usuario general}
+      El comportamiento de este interceptor de navegación se resume en los siguientes
+      escenarios:
+      \begin{enumerate}
+          \item \textbf{Comprobación de roles:} Recibe como parámetro un vector con los roles autorizados para una ruta específica.
+          \item \textbf{Acceso concedido:} Si el usuario dispone de una sesión activa y su rol coincide con alguno de los autorizados, el componente renderiza la vista solicitada.
+          \item \textbf{Acceso denegado (Error 403):} Si el usuario está autenticado pero no posee el rol requerido (por ejemplo, un Vendedor intentando acceder al panel de Administración), el sistema lo redirige inmediatamente a la vista \texttt{/unauthorized}.
+          \item \textbf{No autenticado (Error 401):} Si el usuario no ha iniciado sesión, es redirigido a la pantalla de \texttt{/login}.
+      \end{enumerate}
 
-      \clearpage
+  \subsection{Historias de Usuario}
+
+      \subsubsection{Funcionalidades del usuario vendedor}
+          \begin{table}[H]
+              \centering
+              \begin{tabularx}{\textwidth}{|l|p{3.5cm}|X|}
+                  \hline
+                  \textbf{ID} & \textbf{Título}         & \textbf{Historia de Usuario}                                                                                                                                                                                                                      \\ \hline
+                  HU-01       & Publicar producto       & \textbf{Como} \textit{vendedor} \textbf{quiero} poder publicar un nuevo producto rellenando un formulario con sus datos (nombre, descripción, precio, etc) \textbf{para} ponerlo en venta en la plataforma y que otros usuarios puedan comprarlo. \\ \hline
+                  HU-02       & Listar mis productos    & \textbf{Como} \textit{vendedor} \textbf{quiero} ver una lista con todos los productos que he subido a la plataforma \textbf{para} llevar un control visual rápido de mi catálago.                                                                 \\ \hline
+                  HU-03       & Eliminar producto       & \textbf{Como} \textit{vendedor} \textbf{quiero} poder eliminar o dar de baja uno de mis productos \textbf{para} retirarlo de la venta si he cambiado de opinión.                                                                                  \\ \hline
+                  HU-04       & Editar producto         & \textbf{Como} \textit{vendedor} \textbf{quiero} poder modificar la información de un producto que ya he publicado \textbf{para} corregir errores, cambiar precio, o actualizar descripción si es necesario.                                       \\ \hline
+                  HU-05       & Ver historial de ventas & \textbf{Como} \textit{vendedor} \textbf{quiero} acceder a una sección específica «Mis ventas» con el listado de productos que ya he vendido \textbf{para} llevar un registro histórico de mi actividad comercial.                                 \\ \hline
+              \end{tabularx}
+          \end{table}
+
+      \subsubsection{Funcionalidades del usuario comprador}
+          \begin{table}[H]
+              \centering
+              \begin{tabularx}{\textwidth}{|l|p{3.5cm}|X|}
+                  \hline
+                  \textbf{ID} & \textbf{Título}         & \textbf{Historia de Usuario}                                                                                                                                               \\ \hline
+                  HU-06       & Búsqueda de productos   & \textbf{Como} \textit{usuario} \textbf{quiero} poder buscar productos utilizando barras de búsqueda o filtros \textbf{para} encontrar rápidamente artículos de mi interés. \\ \hline
+                  HU-07       & Ver detalle de producto & \textbf{Como} \textit{usuario} \textbf{quiero} acceder a la ficha de un producto para ver su precio, fotos y descripción \textbf{para} evaluar si quiero comprarlo.        \\ \hline
+                  HU-08       & Realizar compra         & \textbf{Como} \textit{comprador} \textbf{quiero} poder pulsar el botón de comprar en un producto disponible \textbf{para} adquirirlo formalmente en la plataforma.         \\ \hline
+                  HU-09       & Historial de compras    & \textbf{Como} \textit{comprador} \textbf{quiero} acceder a la sección «Mis Compras» \textbf{para} llevar un registro de todos los artículos que he adquirido.              \\ \hline
+              \end{tabularx}
+          \end{table}
+
+      \subsubsection{Funcionalidades del administrador}
+
+          \begin{table}[H]
+              \centering
+              \begin{tabularx}{\textwidth}{|l|p{3.5cm}|X|}
+                  \hline
+                  \textbf{ID} & \textbf{Título}                  & \textbf{Historia de Usuario}                                                                                                                                                                                                  \\ \hline
+                  HU-10       & Listar todos los usuarios        & \textbf{Como} \textit{administrador} \textbf{quiero} acceder a un panel donde se listen todos los usuarios registrados en la plataforma \textbf{para} poder consultar sus datos básicos y si están enlazados mediante GitHub. \\ \hline
+                  HU-11       & Consultar transacciones globales & \textbf{Como} \textit{administrador} \textbf{quiero} ver un registro completo de todas las compraventas realizadas en la aplicación \textbf{para} llevar un control de la actividad económica de la plataforma.               \\ \hline
+                  HU-12       & Filtrar compraventas             & \textbf{Como} \textit{administrador} \textbf{quiero} poder buscar y filtrar las transacciones según un comprador o vendedor específico \textbf{para} auditar la actividad de usuarios concretos si fuese necesario.           \\ \hline
+              \end{tabularx}
+          \end{table}
+
+      \subsubsection{Funcionalidades del usuario general}
+          \begin{table}[H]
+              \centering
+              \begin{tabularx}{\textwidth}{|l|p{3.5cm}|X|}
+                  \hline
+                  \textbf{ID} & \textbf{Título}            & \textbf{Historia de Usuario}                                                                                                                                                         \\ \hline
+                  HU-13       & Registro de usuario        & \textbf{Como} \textit{visitante} \textbf{quiero} poder registrarme introduciendo mi correo y contraseña \textbf{para} crearme una cuenta y acceder a las funciones de usuario.       \\ \hline
+                  HU-14       & Iniciar sesión             & \textbf{Como} \textit{usuario registrado} \textbf{quiero} poder iniciar sesión con mis credenciales \textbf{para} acceder de forma segura a mi panel privado.                        \\ \hline
+                  HU-15       & Cerrar sesión              & \textbf{Como} \textit{usuario logueado} \textbf{quiero} poder cerrar mi sesión activa \textbf{para} proteger mi cuenta cuando termine de usar la plataforma.                         \\ \hline
+                  HU-16       & Modificar datos personales & \textbf{Como} \textit{usuario registrado} \textbf{quiero} poder actualizar mis datos como nombre o teléfono en "Mi Cuenta» \textbf{para} mantener mi información de contacto al día. \\ \hline
+                  HU-17       & Cambiar contraseña         & \textbf{Como} \textit{usuario registrado} \textbf{quiero} poder establecer una nueva contraseña desde mi perfil \textbf{para} mantener la seguridad de mi cuenta.                    \\ \hline
+              \end{tabularx}
+          \end{table}
+
+          \clearpage
 
 \section{Arquitectura de la aplicación}
 
@@ -336,7 +434,8 @@
 
       La navegación de la aplicación en el lado del cliente se gestiona utilizando
       \textbf{React Router}. Esta biblioteca permite definir rutas de distinta forma
-      (\textit{Data}, \textit{Framework} y \textit{Declarative}). A pesar de sus
+      (\textit{Data}, \textit{Framework} y
+      \textit{Declarative})~\cite{react_router_start_routing}. A pesar de sus
       limitaciones frente al resto, se ha escogido el enfoque declarativo debido a su
       sencillez y porque es el usado en las prácticas.
 
@@ -495,7 +594,7 @@
       Router. Si el usuario cuenta con los permisos necesarios, se renderiza la vista
       solicitada (componente \texttt{<Outlet />}). En caso de tener los permisos de
       rol necesarios, se le redirige a \texttt{/unauthorized}. Si directamente, el
-      usuario no estaba ``\textit{logueado}'', se le redirige a la vista para iniciar
+      usuario no estaba «\textit{logueado}», se le redirige a la vista para iniciar
       sesión.
 
       \begin{lstlisting}[style=ReactStyle]
@@ -569,10 +668,6 @@
     );
 \end{lstlisting}
 
-  \subsection{Comunicación con el servidor}
-
-      % TODO
-
   \subsection{Otros aspectos y tecnologías}
 
       El desarrollo de este proyecto no hubiese sido posible sin el uso de algunas
@@ -594,17 +689,18 @@
 
       También se han usado librerías externas de código abierto para mejorar la
       experiencia de usuario. Algunos ejemplos son los componentes
-      \textbf{DatePicker} de \href{https://getdatepicker.com/}{Tempus Dominus} o
+      \textbf{DatePicker} de \href{https://getdatepicker.com}{Tempus Dominus} o
       \textbf{International Telephone Input} para números de teléfono
-      \href{https://getdatepicker.com/}{Intl-Tel-Input}. Estos componentes han
+      \href{https://getdatepicker.com}{Intl-Tel-Input}. Estos componentes han
       resultado un acierto para facilitar la validación de dichos campos e introducir
       restricciones que, de otras formas, habría que configurar manualmente.
 
       Para algunos campos de selección de los formularios, como las categorías, se ha
       importado el componente \textbf{Typeahead} de
-      \href{https://getdatepicker.com/}{React Bootstrap Typeahead}. Esta librería
-      profundiza el input de selección ofreciendo búsquedas, renderizado personaliado
-      y otras funciones que no se han utilizado como paginación.
+      \href{https://github.com/ericgio/react-bootstrap-typeahead}{React Bootstrap
+          Typeahead}. Esta librería profundiza el input de selección ofreciendo
+      búsquedas, renderizado personaliado y otras funciones que no se han utilizado
+      como paginación.
 
       La animación ``\textit{3D tilt}'' de las cartas de productos está fuertemente
       inspirada en la implementación de Jeroen Reumkens de su blog
@@ -620,11 +716,35 @@
       \textit{autoplay}, controlar la velocidad, los breakpoints de responsiveness,
       etc.
 
+      También se ha incorporado la librería de notificaciones \textbf{Sonner} de
+      \href{https://sonner.emilkowal.ski}{Sonner (shadcn/ui)} para mejorar la
+      experiencia de usuario mediante notificaciones «\textit{Toast}». Esta
+      herramienta permite mostrar alertas de forma sencilla, ligera y altamente
+      personalizable, facilitando la retroalimentación inmediata en acciones como
+      creación, actualización o eliminación de registros que requieren de un
+      \textit{feedback} adicional.
+
       \clearpage
 
 \section{Conclusiones y valoraciones personales}
 
-  El desarrollo de este práctica ha resultado muy útil para
+  El desarrollo de este práctica ha resultado muy útil para comprender como
+  estructurar un cliente web respaldado por un backend basado en una arquitectura
+  de microservicios. Aprender a dividir la aplicación en bloques independientes
+  nos ha enseñado que aporta mucha más organización que un sistema monolítico.
+
+  Hemos aprendido como funciona la seguridad moderna al implementar un sistema
+  basado en tokens y a entender como las aplicaciones actuales matienen a los
+  usuarios conectador de forma segura.
+
+  Por último, con el uso de React hemos aprendido a diseñar una página web con
+  componentes reutilizables, a gestionar el estado de la aplicación, a comunicar
+  la interfaz gráfica con el backend de forma asíncrona y a crear rutas privadas
+  para que solo los usuarios autorizados puedan ver ciertas pantallas.
+
+  En definitiva, este proyecto nos ha servido para consolidar y aumentar los
+  conocimientos actualmente utilizados en el sector profesional sobre desarrollo
+  web.
 
 \section{Bitácora}
 
@@ -639,11 +759,11 @@
           \hline
           \textbf{Actividad}     & \textbf{Presencial} & \textbf{Trabajo autónomo} \\
           \hline
-          \textit{Análisis}      & 0                   & 0                         \\
-          \textit{Desarrollo}    & 0                   & 0                         \\
-          \textit{Documentación} & 0                   & 0                         \\
+          \textit{Análisis}      & 6                   & 16                        \\
+          \textit{Desarrollo}    & 40                  & 112                       \\
+          \textit{Documentación} & 1                   & 8                         \\
           \hline
-          \textbf{Total}         & \textbf{0 horas}    & \textbf{0 horas}          \\
+          \textbf{Total}         & \textbf{47 horas}   & \textbf{136 horas}        \\
           \hline
       \end{tabular}
       \caption{Distribución de horas entre actividades presenciales y trabajo autónomo.}

@@ -27,11 +27,17 @@
       <a href="#inicio-rápido">Inicio rápido</a>
       <ul>
         <li><a href="#requisitos">Requisitos</a></li>
-        <li><a href="#instalación">Instalación</a></li>
+        <li><a href="#instalación-y-uso">Instalación y Uso</a></li>
       </ul>
     </li>
-    <li><a href="#uso">Uso</a></li>
-    <li><a href="#estructura-del-proyecto">Estructura del proyecto</a></li>
+    <li>
+      <a href="#uso">Uso</a>
+      <ul>
+        <li><a href="#entorno-de-desarrollo">Entorno de desarrollo</a></li>
+        <li><a href="#estructura-del-proyecto">Estructura del proyecto</a></li>
+        <li><a href="#datos-inicializados">Datos inicializados</a></li>
+      </ul>
+    </li>
   </ol>
 </details>
 
@@ -96,8 +102,8 @@ daweb                     # Raíz del repositorio
 └── backend               # Servidor (submódulo Git)
 ```
 
-<p align="right">(<a href="#readme-top">volver arriba</a>)</p>
-
 ### Datos inicializados
 
 Consultar [seeder](backend/seeder).
+
+<p align="right">(<a href="#readme-top">volver arriba</a>)</p>

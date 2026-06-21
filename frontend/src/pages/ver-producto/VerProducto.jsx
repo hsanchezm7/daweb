@@ -20,6 +20,7 @@ const VerProducto = () => {
   const compraventaService = createCompraventaService(apiPrivate);
   const { auth } = useAuth();
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [estados, setEstados] = useState({});
@@ -30,6 +31,9 @@ const VerProducto = () => {
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  const handleOpenDeleteModal = () => setShowDeleteModal(true);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   const botonComprar = async () => {
     if (!auth?.accessToken) {
@@ -61,10 +65,13 @@ const VerProducto = () => {
   const botonEliminar = async () => {
     try {
       await productService.deleteProduct(id);
+      handleCloseDeleteModal();
       navigate('/panel/productos');
       toast.success('Producto eliminado correctamente');
     } catch (error) {
       console.error('Error al eliminar el producto', error);
+      toast.error('Error al eliminar el producto');
+      handleCloseDeleteModal();
     }
   };
 
@@ -161,7 +168,7 @@ const VerProducto = () => {
                     <Button
                       variant="danger"
                       className="btn-eliminar w-30 py-3 fw-bold rounded-3 text-uppercase shadow-sm"
-                      onClick={botonEliminar}
+                      onClick={handleOpenDeleteModal}
                     >
                       Eliminar producto
                     </Button>
@@ -198,6 +205,28 @@ const VerProducto = () => {
           />
         </Modal>
       )}
+
+      <Modal
+        show={showDeleteModal}
+        onHide={handleCloseDeleteModal}
+        centered
+        contentClassName="rounded-4"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Eliminar producto</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={botonEliminar}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
