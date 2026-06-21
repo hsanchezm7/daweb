@@ -13,6 +13,7 @@ import Compraventas from '@/pages/admin/compraventas/Compraventas';
 import Usuarios from '@/pages/admin/usuarios/Usuarios';
 import Buscar from '@/pages/buscar/Buscar';
 import MisCompras from '@/pages/compras/MisCompras';
+import About from '@/pages/about/About';
 import Error404 from '@/pages/error404/Error404';
 import Inicio from '@/pages/inicio/Inicio';
 import MiCuenta from '@/pages/mi-cuenta/MiCuenta';
@@ -63,6 +64,7 @@ function App() {
       </Route>
 
       <Route element={<MainLayout />}>
+        <Route path="/about" element={<About />} />
         <Route path="/404" element={<Error404 />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Route>

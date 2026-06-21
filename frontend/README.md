@@ -27,7 +27,3 @@ Para ejecutar el entorno local es necesario tener instalado:
    ```
 
 Iniciará el servidor de desarrollo de Vite en `http://localhost:5173`.
-
-## TODO
-
-Consultar [TODO](TODO.md).
